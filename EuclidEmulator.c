@@ -20,6 +20,8 @@ int main(int argc,char **argv) {
     const int nCoef[11] = {175,82,82,82,88,139,82,82,139,82,40};//{76,76,76,82,82,199,82,82};
     const double min[6] = {0.0215,0.1306,0.9283,0.6155,-1.3,0.7591};
     const double max[6] = {0.0235,0.1546,1.0027,0.7307,-0.7,0.8707};
+    const double lowerBound[6] = {0.0217,0.1326,0.9345,0.6251,-1.250,0.7684};
+    const double upperBound[6] = {0.0233,0.1526,0.9965,0.7211,-0.750,0.8614}; 
     CSM csm;
     double cp[6];
     double *coef[11];
@@ -49,11 +51,10 @@ int main(int argc,char **argv) {
     assert(argc == 8);
     for (ip=0;ip<6;++ip) {
       sscanf(argv[ip+1],"%lf",&cp[ip]);
-      assert(cp[ip] >= min[ip] && cp[ip] <= max[ip]);
-      fprintf(stderr,"%f\n",cp[ip]);
+      assert(cp[ip] >= lowerBound[ip] && cp[ip] <= upperBound[ip]);
     }
     sscanf(argv[7],"%lf",&z);
-    //assert(z<=5.0);
+    assert(z<=5.0);
 
     f = (double *) mmap (0, size, PROT_READ, MAP_PRIVATE, fd, 0);
     /*
@@ -187,10 +188,6 @@ int main(int argc,char **argv) {
     csm->val.dOmegaRad = omega_rad/(cp[3]*cp[3]);  /* omega_rad (lower case omega) / h^2 */
     csm->val.dOmegaDE = 1.0 - csm->val.dOmega0 - csm->val.dOmegaRad;
 
-    fprintf( stderr, "dOmega0: %.8f\n", csm->val.dOmega0);
-    fprintf( stderr, "dOmegaRad: %.8f\n", csm->val.dOmegaRad);
-    fprintf( stderr, "dOmegaDE: %.8f\n", csm->val.dOmegaDE); 
-
     t0 = csmExp2Time(csm,1.0);
     t200 = csmExp2Time(csm,1.0/201.0); /* time at redshift 200 */
     dDelta = (t0-t200)/nSteps; /* work out the timestep this cosmology would have */
@@ -198,8 +195,6 @@ int main(int argc,char **argv) {
     dti = (t-t200)/dDelta;  /* find the desired (incl fractional) timestep */
     iz = (int)floor(dti);
     x = dti - iz; /* this is the fractional step */
-
-    fprintf( stderr, "requested step for z = %f: %f\n", z,dti);
 
     for (j=0;j<nk;++j) {
         boost[j] = ((1-x)*mean[iz][j] + x*mean[iz+1][j]);
