@@ -5,12 +5,12 @@ import matplotlib.pyplot as plt
 # Read in data files
 # ===================
 CLASS_File = "EuclidRef.pk.dat"                 # contains two columns: k P(k)_linear
-THM_File   = "EuclidRef.pk_nl.dat"
+THM_File   = "EuclidRef.pk_nl.dat"              # contains two columns: k P(k)_non-linear
 EE_File    = "EXAMPLE_EucRefBoost.z0.5.dat"     # contains two columns: k B(k)
 
 k_Class, P_lin = np.loadtxt(CLASS_File, unpack=True)
-k_THM, P_THM = np.loadtxt(THM_File, unpack=True)
-k_EE, B = np.loadtxt(EE_File,unpack=True)
+k_THM, P_THM = np.loadtxt(THM_File, unpack=True)     # THM = Takahashi halo model, cf. Takahashi et al. (2012)
+k_EE, B = np.loadtxt(EE_File,unpack=True)            # EE = EuclidEmulator, cf. Knabenhans et al. (2018)
 
 # Interpolation of linear power spectrum
 # ======================================
@@ -24,8 +24,10 @@ interp_P_THM = 10**func_P_THM(np.log10(k_EE))
 
 # Compute fully non-linear power spectrum
 # =======================================
-
 P_nonlin = interp_P_lin * B
+
+# Compare EuclidEmulator to Takahashi
+# =======================================
 ratio = 100*(P_nonlin/interp_P_THM-1)
 
 # Store data in output file
