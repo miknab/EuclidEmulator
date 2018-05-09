@@ -1,9 +1,9 @@
 # EuclidEmulator
 This repository contains the main source code of the EuclidEmulator, a fast and accurate tool to estimate the non-linear correction to the matter power spectrum.
 
-Authors:   M. Knabenhans & J. Stadel
-Date:      May 2018
-Reference: Knabenhans et al., 2018, arXiv pre-print
+Authors:   M. Knabenhans & J. Stadel<br/>
+Date:      May 2018<br/>
+Reference: Knabenhans et al., 2018, arXiv pre-print<br/>
 
 ## Description
 EuclidEmulator is a tool for rapid and accurate estimation of the
@@ -27,22 +27,22 @@ For more details we refer to publication.
 For the emulation of the boost, the cosmological parameters have to be
 within the following ranges:
 
-0.0217 <= om_b    <= 0.0233
-0.1326 <= om_m    <= 0.1526
-0.9345 <= n_s     <= 0.9965
-0.6251 <= h       <= 0.7211
--1.250 <= w_0     <= -0.750
-0.7684 <= sigma_8 <= 0.8614
+0.0217 <= om_b    <= 0.0233<br/>
+0.1326 <= om_m    <= 0.1526<br/>
+0.9345 <= n_s     <= 0.9965<br/>
+0.6251 <= h       <= 0.7211<br/>
+-1.250 <= w_0     <= -0.750<br/>
+0.7684 <= sigma_8 <= 0.8614<br/>
 
 The redshift has to be 0 <= z <= 5.
 
 ## Code structure:
 The emulator source code consists of four files:
 
-ee.dat (!!! NEVER EVER CHANGE THIS FILE !!!)
-ee.c
-cosmo.c
-cosmo.h
+ee.dat (!!! NEVER EVER CHANGE THIS FILE !!!)<br/>
+ee.c<br/>
+cosmo.c<br/>
+cosmo.h<br/>
 
 In ee.dat, all the building blocks of the emulator are stored. This file
 forms the core of the emulator code. The numbers in ee.dat are the results
@@ -81,9 +81,9 @@ valued redshift z <= 5).
            emulates the boost for the Euclid reference cosmology at z=0.5.
 
 4) Computation of the full non-linear power spectrum:
-   (  i) Produce a linear power spectrum with a Boltzmann code.
+   (  i) Produce a linear power spectrum with a Boltzmann code.<br/>
    ( ii) Interpolate the linear power spectrum (we suggest a cubic spline
-         interpolation in log space.
+         interpolation in log space.<br/>
    (iii) Evaluate the interpolated liner power spectrum at the k modes of the
-         emulated boost.
+         emulated boost.<br/>
    ( iv) Multiply the boost with the resulting linear power spectrum.
