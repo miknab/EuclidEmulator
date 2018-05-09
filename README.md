@@ -3,7 +3,7 @@ This repository contains the main source code of the EuclidEmulator, a fast and 
 
 Authors:   M. Knabenhans & J. Stadel<br/>
 Date:      May 2018<br/>
-Reference: Knabenhans et al., 2018, arXiv pre-print<br/>
+Reference: Knabenhans et al., 2018, arXiv pre-print (submitted)<br/>
 
 ## Description
 EuclidEmulator is a tool for rapid and accurate estimation of the
@@ -65,11 +65,17 @@ valued redshift z <= 5).
 ### Auxiliary scripts and files
 In addition, the following files are in the EuclidEmulator repository:
 
-`GetPnonlin.py`<br/>
 `EuclidRef_Class.ini`<br/>
+`GetPnonlin.py`<br/>
 `example.sh`<br/>
 
-## User Guide
+`EuclidRef_Class.ini` is a CLASS parameter file specifying the relevant parameters for the Euclid reference cosmology. REMARK: &#937;<sub>rad</sub> is uniquely determined by the CMB temperature T<sub>CMB</sub>. Since &#937;<sub>rad</sub> was fixed for all cosmologies in the experimental design (cf. reference paper by Knabenhans et al., 2018; submitted), it must not be changed. Notice further, that the parameter A_s has to be chosen in accordance to the Emulator input parameter &#963;<sub>8</sub>. 
+
+The python script `GetPnonlin.py` reads in both, the linear power spectrum (produced by CAMB) and the boost factor, from the respective data files. It then interpolates the linear power spectrum (using cubic splines in log space) in order to evaluate the interpolated function at the k-points given in the boost factor file. The non-linear power spectrum is then computed therefrom and plotted. The result is shown in `ExamplePlot.pdf`. This plot shows one of the curves displayed in Knabenhans et al. (2018), Fig. 9.
+
+The bash script `example.sh` executes the two scripts described above: first, EuclidEmulator evaluates a boost factor for the Euclid reference cosmology at z=0.5. Second, CLASS is called to produce the corresponding linear power spectrum (together with a non-linear fit according to Takahashi's halo model, cf. Takahashi et al. 2012). Next, `GetPnonlin.py` is executed to combine the results.
+
+## User guide
 1. Prerequisites:<br/>
    * GNU Scientific Library (GSL)
    * Python2.7 (for post-processing only)
@@ -83,7 +89,7 @@ In addition, the following files are in the EuclidEmulator repository:
    the executable ee.
 
 3. Usage:<br/>
-   ./ee <om_b> <om_m> <n_s> <h> <w_0> <sigma_8> <z>
+   ./ee <om_b> <om_m> <n_s> <h> <w_0> <sigma_8> \<z\>
 
    This will print the resulting boost factor to standard output. To store
    it in a file, just use output redirection, i.e. append " > BoostFile.dat"
