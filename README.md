@@ -6,7 +6,6 @@ Date:      May 2018
 Reference: Knabenhans et al., 2018, arXiv pre-print
 
 # Description
-# -----------
 EuclidEmulator is a tool for rapid and accurate estimation of the
 non-linear correction ("boost") to the dark matter power spectrum.
 It is based on a spectral decomposition technique (called "sparse
@@ -25,7 +24,6 @@ all scales.
 For more details we refer to publication.
 
 # Parameter ranges:
-# -----------------
 For the emulation of the boost, the cosmological parameters have to be
 within the following ranges:
 
@@ -39,8 +37,6 @@ within the following ranges:
 The redshift has to be 0 <= z <= 5.
 
 # Code structure:
-# ---------------
-
 The emulator source code consists of four files:
 
 ee.dat (!!! NEVER EVER CHANGE THIS FILE !!!)
@@ -64,7 +60,6 @@ polation in redshift space (in order to allow the user to ask for any real-
 valued redshift z <= 5).
 
 # User Guide
-# ----------
 1) Prerequisites:
    GNU Scientific Library (GSL)
 
