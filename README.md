@@ -63,7 +63,7 @@ valued redshift z <= 5).
 ### Auxiliary scripts and files
 In addition, the following files are in the EuclidEmulator repository:
 
-`GetPnonlin`<br/>
+`GetPnonlin.py`<br/>
 `EuclidRef_Class.ini`<br/>
 `example.sh`<br/>
 
