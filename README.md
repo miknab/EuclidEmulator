@@ -69,7 +69,7 @@ In addition, the following files are in the EuclidEmulator repository:
 `GetPnonlin.py`<br/>
 `example.sh`<br/>
 
-`EuclidRef_Class.ini` is a CLASS parameter file specifying the relevant parameters for the Euclid reference cosmology. REMARK: &#937<sub>rad</sub> is uniquely determined by the CMB temperature. Since &#937;<sub>rad</sub> was fixed for all cosmologies in the experimental design (cf. reference paper by Knabenhans et al., 2018; submitted), it must not be changed. Notice further, that the parameter A_s has to be chosen in accordance to the Emulator input parameter &#963;<sub>8</sub>. 
+`EuclidRef_Class.ini` is a CLASS parameter file specifying the relevant parameters for the Euclid reference cosmology. REMARK: &#937;<sub>rad</sub> is uniquely determined by the CMB temperature. Since &#937;<sub>rad</sub> was fixed for all cosmologies in the experimental design (cf. reference paper by Knabenhans et al., 2018; submitted), it must not be changed. Notice further, that the parameter A_s has to be chosen in accordance to the Emulator input parameter &#963;<sub>8</sub>. 
 
 The python script `GetPnonlin.py` 
 
