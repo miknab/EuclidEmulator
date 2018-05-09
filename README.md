@@ -75,7 +75,7 @@ The python script `GetPnonlin.py` reads in both, the linear power spectrum (prod
 
 The bash script `example.sh` executes the two scripts described above: first, EuclidEmulator evaluates a boost factor for the Euclid reference cosmology at z=0.5. Second, CLASS is called to produce the corresponding linear power spectrum (together with a non-linear fit according to Takahashi's halo model, cf. Takahashi et al. 2012). Next, `GetPnonlin.py` is executed to combine the results.
 
-## User Guide
+## User guide
 1. Prerequisites:<br/>
    * GNU Scientific Library (GSL)
    * Python2.7 (for post-processing only)
@@ -89,7 +89,7 @@ The bash script `example.sh` executes the two scripts described above: first, Eu
    the executable ee.
 
 3. Usage:<br/>
-   ./ee <om_b> <om_m> <n_s> <h> <w_0> <sigma_8> <z>
+   ./ee <om_b> <om_m> <n_s> <h> <w_0> <sigma_8> \<z\>
 
    This will print the resulting boost factor to standard output. To store
    it in a file, just use output redirection, i.e. append " > BoostFile.dat"
