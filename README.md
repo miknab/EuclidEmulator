@@ -3,7 +3,7 @@ This repository contains the main source code of the EuclidEmulator, a fast and 
 
 Authors:   M. Knabenhans & J. Stadel<br/>
 Date:      May 2018<br/>
-Reference: Knabenhans et al., 2018, arXiv pre-print<br/>
+Reference: Knabenhans et al., 2018, arXiv pre-print (submitted)<br/>
 
 ## Description
 EuclidEmulator is a tool for rapid and accurate estimation of the
@@ -65,9 +65,13 @@ valued redshift z <= 5).
 ### Auxiliary scripts and files
 In addition, the following files are in the EuclidEmulator repository:
 
-`GetPnonlin.py`<br/>
 `EuclidRef_Class.ini`<br/>
+`GetPnonlin.py`<br/>
 `example.sh`<br/>
+
+`EuclidRef_Class.ini` is a CLASS parameter file specifying the relevant parameters for the Euclid reference cosmology. REMARK: \Omega_{rad} is uniquely determined by the CMB temperature. Since \Omega_{rad} was fixed for all cosmologies in the experimental design (cf. reference paper by Knabenhans et al., 2018; submitted), it must not be changed. Notice further, that the parameter A_s has to be chosen in accordance to the Emulator input parameter \sigma_8. 
+
+The python script `GetPnonlin.py` 
 
 ## User Guide
 1. Prerequisites:<br/>
