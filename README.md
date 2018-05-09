@@ -81,7 +81,7 @@ valued redshift z <= 5).
            emulates the boost for the Euclid reference cosmology at z=0.5.
 
 4. Computation of the full non-linear power spectrum:<br/>
-   i. Produce a linear power spectrum with a Boltzmann code.
-   ii. Interpolate the linear power spectrum (we suggest a cubic spline interpolation in log space.
-   iii. Evaluate the interpolated liner power spectrum at the k modes of the emulated boost.
-   iv. Multiply the boost with the resulting linear power spectrum.
+   1. Produce a linear power spectrum with a Boltzmann code.
+   2. Interpolate the linear power spectrum (we suggest a cubic spline interpolation in log space.
+   3. Evaluate the interpolated liner power spectrum at the k modes of the emulated boost.
+   4. Multiply the boost with the resulting linear power spectrum.
