@@ -5,7 +5,7 @@ Authors:   M. Knabenhans & J. Stadel
 Date:      May 2018
 Reference: Knabenhans et al., 2018, arXiv pre-print
 
-# Description
+## Description
 EuclidEmulator is a tool for rapid and accurate estimation of the
 non-linear correction ("boost") to the dark matter power spectrum.
 It is based on a spectral decomposition technique (called "sparse
