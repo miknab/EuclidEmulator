@@ -23,7 +23,7 @@ all scales.
 
 For more details we refer to publication.
 
-## Parameter ranges:
+## Parameter ranges
 For the emulation of the boost, the cosmological parameters have to be
 within the following ranges:
 
@@ -36,7 +36,7 @@ within the following ranges:
 
 The redshift has to be 0 <= z <= 5.
 
-## Code structure:
+## Code structure
 The emulator source code consists of four files:
 
 ee.dat (!!! NEVER EVER CHANGE THIS FILE !!!)<br/>
@@ -77,7 +77,7 @@ valued redshift z <= 5).
    it in a file, just use output redirection, i.e. append " > BoostFile.dat"
    to the command above.
 
-   REMARK: There is an example script named "example.sh". Running this script
+   REMARK: There is an example script named `example.sh`. Running this script
            emulates the boost for the Euclid reference cosmology at z=0.5.
 
 4. Computation of the full non-linear power spectrum:<br/>
@@ -85,3 +85,5 @@ valued redshift z <= 5).
    2. Interpolate the linear power spectrum (we suggest a cubic spline interpolation in log space.
    3. Evaluate the interpolated liner power spectrum at the k modes of the emulated boost.
    4. Multiply the boost with the resulting linear power spectrum.
+
+The script `example.sh` includes commands to perform step iv (assuming you have CLASS installed already and your CLASS file explanatory.ini has never been changed). Please change the path to the directory where your CLASS executable is located. Executing `example.sh` will sequentially compute the boost spectrum using EuclidEmulator, compute the corresponding linear power spectrum with CLASS, and finally call `GetPnonlin.py` to compute the non-linear power spectrum.
