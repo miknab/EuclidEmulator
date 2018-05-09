@@ -37,12 +37,13 @@ within the following ranges:
 The redshift has to be 0 <= z <= 5.
 
 ## Code structure
+### Main emulator code
 The emulator source code consists of four files:
 
-ee.dat (!!! NEVER EVER CHANGE THIS FILE !!!)<br/>
-ee.c<br/>
-cosmo.c<br/>
-cosmo.h<br/>
+`ee.dat` (!!! NEVER EVER CHANGE THIS FILE !!!)<br/>
+`ee.c`<br/>
+`cosmo.c`<br/>
+`cosmo.h`<br/>
 
 In ee.dat, all the building blocks of the emulator are stored. This file
 forms the core of the emulator code. The numbers in ee.dat are the results
@@ -58,6 +59,13 @@ the functions and coefficients stored in ee.dat. From this file, the executable
 The code stored in cosmo.c and cosmo.h, respectively, is used for the inter-
 polation in redshift space (in order to allow the user to ask for any real-
 valued redshift z <= 5).
+
+### Auxiliary scripts and files
+In addition, the following files are in the EuclidEmulator repository:
+
+`GetPnonlin`<br/>
+`EuclidRef_Class.ini`<br/>
+`example.sh`<br/>
 
 ## User Guide
 1. Prerequisites:<br/>
@@ -76,9 +84,6 @@ valued redshift z <= 5).
    This will print the resulting boost factor to standard output. To store
    it in a file, just use output redirection, i.e. append " > BoostFile.dat"
    to the command above.
-
-   REMARK: There is an example script named `example.sh`. Running this script
-           emulates the boost for the Euclid reference cosmology at z=0.5.
 
 4. Computation of the full non-linear power spectrum:<br/>
    1. Produce a linear power spectrum with a Boltzmann code.
