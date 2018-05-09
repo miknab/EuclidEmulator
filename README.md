@@ -23,7 +23,7 @@ all scales.
 
 For more details we refer to publication.
 
-# Parameter ranges:
+## Parameter ranges:
 For the emulation of the boost, the cosmological parameters have to be
 within the following ranges:
 
@@ -36,7 +36,7 @@ within the following ranges:
 
 The redshift has to be 0 <= z <= 5.
 
-# Code structure:
+## Code structure:
 The emulator source code consists of four files:
 
 ee.dat (!!! NEVER EVER CHANGE THIS FILE !!!)
@@ -59,7 +59,7 @@ The code stored in cosmo.c and cosmo.h, respectively, is used for the inter-
 polation in redshift space (in order to allow the user to ask for any real-
 valued redshift z <= 5).
 
-# User Guide
+## User Guide
 1) Prerequisites:
    GNU Scientific Library (GSL)
 
