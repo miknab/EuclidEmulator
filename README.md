@@ -27,7 +27,7 @@ For more details we refer to publication.
 For the emulation of the boost, the cosmological parameters have to be
 within the following ranges:
 
-0.0217 <= om_b    <= 0.0233<br/>
+$$$ 0.0217 <= om_b    <= 0.0233 $$$<br/>
 0.1326 <= om_m    <= 0.1526<br/>
 0.9345 <= n_s     <= 0.9965<br/>
 0.6251 <= h       <= 0.7211<br/>
