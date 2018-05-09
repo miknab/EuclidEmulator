@@ -2,6 +2,33 @@ import numpy as np
 from scipy.interpolate import CubicSpline
 import matplotlib.pyplot as plt
 
+"""
+PROGRAM:     GetPnonlin.py
+
+SYNOPSIS:    python GetPnonlin.py
+
+DESCRIPTION: This python script reads in three data files containing 
+             the linear power spectrum (produced by CLASS), the non-
+             linear power spectrum (produced by CLASS and Halofit), 
+             and the boost factor (produced by EuclidEmulator). From
+             the linear power spectrum and the boost, it computes the
+             fully non-linear power spectrum and compares it to the 
+             Halofit solution.
+
+             The resulting non-linear power spectrum is stored in an
+             output file.
+
+             A plot is generated that allows to visually compare the 
+             EuclidEmulator and the Halofit solutions. For the original
+             parameter settings (Euclid reference cosmology and redshift
+             z=0.5), the resulting plot is part of Fig. 9 in the paper
+             by Knabenhans et al. (2018).
+      
+AUTHOR:      M. Knabenhans
+
+DATE:        May, 2018
+"""
+
 # Read in data files
 # ===================
 CLASS_File = "EuclidRef.pk.dat"                 # contains two columns: k P(k)_linear
