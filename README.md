@@ -43,22 +43,22 @@ Input values outside this range will produce an error.
 The emulator source code consists of four files:
 
 `ee.dat` (!!! NEVER EVER CHANGE THIS FILE !!!)<br/>
-`ee.c`<br/>
+`EuclidEmulator.c`<br/>
 `cosmo.c`<br/>
 `cosmo.h`<br/>
 
-In ee.dat, all the building blocks of the emulator are stored. This file
+In `ee.dat`, all the building blocks of the emulator are stored. This file
 forms the core of the emulator code. The numbers in ee.dat are the results
 of the study described in Knabenhans et al. (2018). It includes the mean
 boost factor, the principal components, the normalized Legendre polynomials
 and the corresponding coefficients. MODIFYING THIS FILE WILL RESULT IN WRONG
 EMULATION RESULTS.
 
-The code in ee.c is just the front end that reads in, assembles and evaluates
+The code in `EuclidEmulator.c` is just the front end that reads in, assembles and evaluates
 the functions and coefficients stored in ee.dat. From this file, the executable
 "ee" is built via the Makefile.
 
-The code stored in cosmo.c and cosmo.h, respectively, is used for the inter-
+The code stored in `cosmo.c` and `cosmo.h, respectively, is used for the inter-
 polation in redshift space (in order to allow the user to ask for any real-
 valued redshift z <= 5).
 
