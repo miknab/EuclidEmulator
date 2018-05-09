@@ -71,8 +71,10 @@ In addition, the following files are in the EuclidEmulator repository:
 
 ## User Guide
 1. Prerequisites:<br/>
-   GNU Scientific Library (GSL)
-
+   * GNU Scientific Library (GSL)
+   * Python2.7 (for post-processing only)
+   * CLASS (for post-processing only)
+   
 2. Building the code:<br/>
    Type "make". An executable called "ee" will be created.
 
