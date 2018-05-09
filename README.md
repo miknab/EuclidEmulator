@@ -60,17 +60,17 @@ polation in redshift space (in order to allow the user to ask for any real-
 valued redshift z <= 5).
 
 ## User Guide
-1. Prerequisites:<\br>
+1. Prerequisites:<br/>
    GNU Scientific Library (GSL)
 
-2. Building the code:<\br>
+2. Building the code:<br/>
    Type "make". An executable called "ee" will be created.
 
    Make sure not to move the files cosmo.c, cosmo.h and ee.dat.
    They have to be in the same directory as EuclidEmulator.c and
    the executable ee.
 
-3. Usage:<\br>
+3. Usage:<br/>
    ./ee <om_b> <om_m> <n_s> <h> <w_0> <sigma_8> <z>
 
    This will print the resulting boost factor to standard output. To store
@@ -80,7 +80,7 @@ valued redshift z <= 5).
    REMARK: There is an example script named "example.sh". Running this script
            emulates the boost for the Euclid reference cosmology at z=0.5.
 
-4. Computation of the full non-linear power spectrum:<\br>
+4. Computation of the full non-linear power spectrum:<br/>
    i. Produce a linear power spectrum with a Boltzmann code.
    ii. Interpolate the linear power spectrum (we suggest a cubic spline interpolation in log space.
    iii. Evaluate the interpolated liner power spectrum at the k modes of the emulated boost.
