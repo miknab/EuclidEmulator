@@ -78,7 +78,7 @@ The bash script `example.sh` executes the two scripts described above: first, Eu
 ## User guide
 1. Prerequisites:<br/>
    * GNU Scientific Library (GSL)
-   * Python2.7 (for post-processing only)
+   * Python2.7 together with numpy, scipy and matplotlib (for post-processing only)
    * CLASS (for post-processing only)
    
 2. Building the code:<br/>
