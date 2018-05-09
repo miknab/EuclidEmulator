@@ -36,6 +36,8 @@ within the following ranges:
 
 The redshift has to be 0 <= z <= 5.
 
+Input values outside this range will produce an error.
+
 ## Code structure
 ### Main emulator code
 The emulator source code consists of four files:
