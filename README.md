@@ -8,11 +8,11 @@ Reference: Knabenhans et al., 2018, arXiv pre-print (submitted)<br/>
 ## Quick start
 To compile the code run "make". An executable called "ee" will be created. To run the executable type 
 
-`./ee <&#969;<sub>b</sub>> <&#969;<sub>m</sub>> <n<sub>s</sub>> <h> <w<sub>0</sub>> <&#963;<sub>8</sub>> \<z\>`
+./ee <&#969;<sub>b</sub>> <&#969;<sub>m</sub>> <n<sub>s</sub>> <h> <w<sub>0</sub>> <&#963;<sub>8</sub>> \<z\>
 
-where the seven parameter correspond to the five standard &#923CDM parameters, the DE equation of state parameter w<sub>0</sub> and redshift z.
+where the seven parameter correspond to the five standard &#923;CDM parameters, the DE equation of state parameter w<sub>0</sub> and redshift z.
 
-WE URGE EVERYONE TO READ THE SECTION ABOUT PITFALLS (see below).
+WE URGE EVERYONE TO READ AT LEAST THE SECTION ABOUT PITFALLS (see below).
 
 ## Description
 EuclidEmulator is a tool for rapid and accurate estimation of the
