@@ -27,8 +27,8 @@ For more details we refer to publication.
 For the emulation of the boost, the cosmological parameters have to be
 within the following ranges:
 
-0.0217 <= &#969<sub>b</sub>    <= 0.0233<br/>
-0.1326 <= &#969<sub>m</sub>    <= 0.1526<br/>
+0.0217 <= &#969;<sub>b</sub>    <= 0.0233<br/>
+0.1326 <= &#969;<sub>m</sub>    <= 0.1526<br/>
 0.9345 <= n<sub>s</sub>     <= 0.9965<br/>
 0.6251 <= h       <= 0.7211<br/>
 -1.250 <= w<sub>0</sub>     <= -0.750<br/>
@@ -94,7 +94,7 @@ The bash script `example.sh` executes the two scripts described above: first, Eu
    the executable ee.
 
 3. Usage:<br/>
-   ./ee <&#969<sub>b</sub>> <&#969<sub>m</sub>> <n<sub>s</sub>> <h> <w<sub>0</sub>> <&#963;<sub>8</sub>> \<z\>
+   ./ee <&#969;<sub>b</sub>> <&#969;<sub>m</sub>> <n<sub>s</sub>> <h> <w<sub>0</sub>> <&#963;<sub>8</sub>> \<z\>
 
    This will print the resulting boost factor to standard output. To store
    it in a file, just use output redirection, i.e. append " > BoostFile.dat"
