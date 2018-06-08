@@ -115,7 +115,7 @@ When you want to emulate a full non-linear power spectrum, you really not to mak
 Known differences are:
 <ol>
 <li> CAMB and CLASS use om_cdm (the cold dark matter density) instead of om_m (the total matter density). Make sure that the following relation is satisfied: 
-<div align="center">om_b + om_cdm = om_m </div>
+<div align="center">&#969<sub>b</sub> + &#969<sub>cdm</sub> = &#969<sub>m</sub> </div>
 <li>CAMB and CLASS do usually not accept sigma_8 as a parameter for normalization of the power spectrum but rather use A_s. In order to convert these two parameters into each other in the context of using EuclidEmulator, you have to use the same conversion as is used in the EuclidEmulator code. Convert the parameters using the following proportionality:<br/>
-<div align="center"> A_s/(2.215 * 10^(-9)) = (sigma_8/0.8496)^2
+<div align="center"> A_s/(2.215 * 10^(-9)) = (&#963;<sub>8</sub>/0.8496)^2
 <ol/>
