@@ -103,7 +103,7 @@ The bash script `example.sh` executes the two scripts described above: first, Eu
    the executable ee.
 
 3. Usage:<br/>
-   ./ee <&#969;<sub>b</sub>> <&#969;<sub>m</sub>> <n<sub>s</sub>> <h> <w<sub>0</sub>> <&#963;<sub>8</sub>> \<z\>
+   ./ee <&#969;<sub>b</sub>> <&#969;<sub>m</sub>> <n<sub>s</sub>> \<h\> <w<sub>0</sub>> <&#963;<sub>8</sub>> \<z\>
 
    This will print the resulting boost factor to standard output. To store
    it in a file, just use output redirection, i.e. append " > BoostFile.dat"
