@@ -112,8 +112,10 @@ The script `example.sh` includes commands to perform step iv (assuming you have 
 
 When you want to emulate a full non-linear power spectrum, you really not to make sure that you specify the exact same cosmology for EuclidEmulator to produce the boost factor and for the Boltzmann code you use to predict the linear power spectrum. Often, the parametrization of cosmologies used in the Boltzmann solvers is different than the one used by EuclidEmulator. Make sure the different parametrizations define the exact same cosmology!
 
-Known differences are:<br/>
-1. CAMB and CLASS use om_cdm (the cold dark matter density) instead of om_m (the total matter density). Make sure that the following relation is satisfied: 
-<div align="center">om_b + om_cdm = om_m </div>
-2. CAMB and CLASS do usually not accept sigma_8 as a parameter for normalization of the power spectrum but rather use A_s. In order to convert these two parameters into each other in the context of using EuclidEmulator, you have to use the same conversion as is used in the EuclidEmulator code. Convert the parameters using the following proportionality:<br/>
-<div align="center"> A_s / (2.215 * 10^9) = (sigma_8/0.8496)^2 
+Known differences are:
+<ol>
+<li> CAMB and CLASS use om_cdm (the cold dark matter density) instead of om_m (the total matter density). Make sure that the following relation is satisfied: 
+<div align="center">om_b + om_cdm = om_m </div><li/>
+<li>CAMB and CLASS do usually not accept sigma_8 as a parameter for normalization of the power spectrum but rather use A_s. In order to convert these two parameters into each other in the context of using EuclidEmulator, you have to use the same conversion as is used in the EuclidEmulator code. Convert the parameters using the following proportionality:<br/>
+<div align="center"> A_s / (2.215 * 10^9) = (sigma_8/0.8496)^2 <li/>
+<ol/>
