@@ -10,7 +10,7 @@ To compile the code run "make". An executable called "ee" will be created. To ru
 
 ./ee <&#969;<sub>b</sub>> <&#969;<sub>m</sub>> <n<sub>s</sub>> <h> <w<sub>0</sub>> <&#963;<sub>8</sub>> \<z\>
 
-where the seven parameter correspond to the five standard &#923;CDM parameters, the DE equation of state parameter w<sub>0</sub> and redshift z.
+where the seven parameter correspond to the five standard &#923;CDM parameters, the DE equation of state parameter w<sub>0</sub> and redshift z. The first column of the produced output corresponds to the k-mode values at which the boost factor (given in the second column) is measured.
 
 WE URGE EVERYONE TO READ AT LEAST THE SECTION ABOUT PITFALLS (see below).
 
