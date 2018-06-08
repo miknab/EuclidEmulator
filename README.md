@@ -77,9 +77,9 @@ The bash script `example.sh` executes the two scripts described above: first, Eu
 
 ## User guide
 
-===== I M P O R T A N T =====<br/>
+============================== I M P O R T A N T ==============================<br/>
 !!! PLEASE READ THE SECTION ABOUT PITFALLS BELOW IN ORDER TO ENSURE CORRECT RESULTS !!!
-=============================<br/>
+===============================================================================<br/>
 
 1. Prerequisites:<br/>
    * GNU Scientific Library (GSL)
@@ -114,7 +114,6 @@ When you want to emulate a full non-linear power spectrum, you really not to mak
 
 Known differences are:<br/>
 1. CAMB and CLASS use om_cdm (the cold dark matter density) instead of om_m (the total matter density). Make sure that the following relation is satisfied: 
-<div align="center">om_b + om_cdm = om_m </div>
-<br/>
-2. CAMB and CLASS do usually not accept sigma_8 as a parameter for normalization of the power spectrum but rather use A_s. In order to convert these two parameters into each other in the context of using EuclidEmulator, you have to use the same conversion as is used in the EuclidEmulator code. Convert the parameters using the following proportionality:
+<div align="center">om_b + om_cdm = om_m </div><br/>
+2. CAMB and CLASS do usually not accept sigma_8 as a parameter for normalization of the power spectrum but rather use A_s. In order to convert these two parameters into each other in the context of using EuclidEmulator, you have to use the same conversion as is used in the EuclidEmulator code. Convert the parameters using the following proportionality:<br/>
 <div align="center"> A_s / (2.215 * 10^9) = (sigma_8/0.8496)^2 </div>
