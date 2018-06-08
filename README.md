@@ -77,9 +77,9 @@ The bash script `example.sh` executes the two scripts described above: first, Eu
 
 ## User guide
 
-================================== I M P O R T A N T ==================================
+===== I M P O R T A N T =====
 !!! PLEASE READ THE SECTION ABOUT PITFALLS BELOW IN ORDER TO ENSURE CORRECT RESULTS !!!
-=======================================================================================
+=============================
 
 1. Prerequisites:<br/>
    * GNU Scientific Library (GSL)
