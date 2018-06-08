@@ -36,7 +36,7 @@ within the following ranges:
 
 The redshift has to be 0 <= z <= 5.
 
-Input values outside this range will produce an error.
+Input values outside this range will produce an error. Notice that these parameter ranges do *not* define the same parameter space as the one used to construct the emulator (reported in Knabenhans et al. 2018) but a smaller one. The reason for this is that emulation near the boundaries of the construction parameter space might not lead to accurate results.
 
 ## Code structure
 ### Main emulator code
@@ -76,6 +76,11 @@ The python script `GetPnonlin.py` reads in both, the linear power spectrum (prod
 The bash script `example.sh` executes the two scripts described above: first, EuclidEmulator evaluates a boost factor for the Euclid reference cosmology at z=0.5. Second, CLASS is called to produce the corresponding linear power spectrum (together with a non-linear fit according to Takahashi's halo model, cf. Takahashi et al. 2012). Next, `GetPnonlin.py` is executed to combine the results.
 
 ## User guide
+
+================================== I M P O R T A N T ==================================
+!!! PLEASE READ THE SECTION ABOUT PITFALLS BELOW IN ORDER TO ENSURE CORRECT RESULTS !!!
+=======================================================================================
+
 1. Prerequisites:<br/>
    * GNU Scientific Library (GSL)
    * Python2.7 together with numpy, scipy and matplotlib (for post-processing only)
@@ -102,3 +107,14 @@ The bash script `example.sh` executes the two scripts described above: first, Eu
    4. Multiply the boost with the resulting linear power spectrum.
 
 The script `example.sh` includes commands to perform step iv (assuming you have CLASS installed already and your CLASS file explanatory.ini has never been changed). Please change the path to the directory where your CLASS executable is located. Executing `example.sh` will sequentially compute the boost spectrum using EuclidEmulator, compute the corresponding linear power spectrum with CLASS, and finally call `GetPnonlin.py` to compute the non-linear power spectrum.
+
+## Pitfalls
+
+When you want to emulate a full non-linear power spectrum, you really not to make sure that you specify the exact same cosmology for EuclidEmulator to produce the boost factor and for the Boltzmann code you use to predict the linear power spectrum. Often, the parametrization of cosmologies used in the Boltzmann solvers is different than the one used by EuclidEmulator. Make sure the different parametrizations define the exact same cosmology!
+
+Known differences are:<br/>
+1. CAMB and CLASS use om_cdm (the cold dark matter density) instead of om_m (the total matter density). Make sure that the following relation is satisfied: 
+<div align="center">om_b + om_cdm = om_m </div>
+
+2. CAMB and CLASS do usually not accept sigma_8 as a parameter for normalization of the power spectrum but rather use A_s. In order to convert these two parameters into each other in the context of using EuclidEmulator, you have to use the same conversion as is used in the EuclidEmulator code. Convert the parameters using the following proportionality:
+<div align="center"> A_s / (2.215 * 10^9) = (sigma_8/0.8496)^2 </div>
