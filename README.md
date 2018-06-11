@@ -121,7 +121,7 @@ The script `example.sh` includes commands to perform step iv (assuming you have 
 
 ## Pitfalls
 
-When you want to emulate a full non-linear power spectrum, you really not to make sure that you specify the exact same cosmology for EuclidEmulator to produce the boost factor and for the Boltzmann code you use to predict the linear power spectrum. Often, the parametrization of cosmologies used in the Boltzmann solvers is different than the one used by EuclidEmulator. Make sure the different parametrizations define the exact same cosmology!
+When you want to emulate a full non-linear power spectrum, you really have to make sure that you specify the exact same cosmology for EuclidEmulator to produce the boost factor and for the Boltzmann code you use to predict the linear power spectrum. Often, the parametrization of cosmologies used in the Boltzmann solvers is different than the one used by EuclidEmulator. Make sure the different parametrizations define the exact same cosmology!
 
 Known differences are:
 <ol>
