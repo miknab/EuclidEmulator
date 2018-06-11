@@ -5,6 +5,8 @@ Authors:   M. Knabenhans & J. Stadel<br/>
 Date:      May 2018<br/>
 Reference: Knabenhans et al., 2018, arXiv pre-print (submitted)<br/>
 
+If you use EuclidEmulator in any way for a publication, please cite this paper.
+
 ## Quick start
 To compile the code run "make". An executable called "ee" will be created. To run the executable type 
 
