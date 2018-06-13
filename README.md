@@ -7,6 +7,8 @@ Reference: Knabenhans et al., 2018, arXiv pre-print (submitted)<br/>
 
 If you use EuclidEmulator in any way for a publication, please cite this paper.
 
+STAY TUNED: A python wrapper for EuclidEmulator is currently being developped. It will facilitate the use of EuclidEmulator a lot. 
+
 ## Quick start
 To compile the code run "make". An executable called "ee" will be created. To run the executable type 
 
