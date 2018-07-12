@@ -136,6 +136,7 @@ If you want to compute the non-linear power spectrum using a EuclidEmulated-boos
   - To produce the boost factor with EuclidEmulator use &#969<sub>b</sub> and &#969<sub>m</sub> as reported in the data set.</br>
   - To produce the corresponding linear power spectrum use &#969<sub>b</sub> and set the &#969<sub>cdm</sub> parameter equal to &#969<sub>m</sub>-&#969<sub>b</sub>. Doing so you add the neutrino component to the CDM contribution which is the best that can be done with the current version of EuclidEmulator. Stay tuned as version 2 will allow for neutrinos to be taken into accound.
   </br>
+    </br>
 <li>CAMB and CLASS do usually not accept sigma_8 as a parameter for normalization of the power spectrum but rather use A_s. In order to convert these two parameters into each other in the context of using EuclidEmulator, you have to use the same conversion as is used in the EuclidEmulator code. Convert the parameters using the following proportionality:<br/>
 <div align="center"> A<sub>s</sub>/(2.215 * 10^(-9)) = (&#963;<sub>8</sub>/0.8496)^2
 <ol/>
