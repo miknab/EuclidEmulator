@@ -47,9 +47,11 @@ within the following ranges:
 -1.250 <= w<sub>0</sub>     <= -0.750<br/>
 0.7684 <= &#963;<sub>8</sub> <= 0.8614<br/>
 
-The redshift has to be 0 <= z <= 5.
+The redshift has to be 10<sup>15</sup> <= z <= 5.
 
 Input values outside this range will produce an error. Notice that these parameter ranges do *not* define the same parameter space as the one used to construct the emulator (reported in Knabenhans et al. 2018) but a smaller one. The reason for this is that emulation near the boundaries of the construction parameter space might not lead to accurate results.
+
+Notice that also z=0 will lead to an error (but setting z to a very small value like 1e-15 does the job). This will be fixed in the future.
 
 ## Code structure
 ### Main emulator code
@@ -129,6 +131,9 @@ Known differences are:
 <ol>
 <li> CAMB and CLASS use om_cdm (the cold dark matter density &#969;<sub>cdm</sub>) instead of om_m (the total matter density &#969;<sub>m</sub>). Make sure that the following relation is satisfied: 
 <div align="center">&#969<sub>b</sub> + &#969<sub>cdm</sub> = &#969<sub>m</sub> </div>
+If you want to compute the non-linear power spectrum using a EuclidEmulated-boost for a real data set (like e.g. Planck2015), you may find that the reported values doe not obey the above relation. This is most likely due to the fact that there is a small contribution due to neutrinos which is taken into account in that data set but not so in this version of our emulator. Here's what you need to do:
+  <li> To produce the boost factor with EuclidEmulator use &#969<sub>b</sub> and &#969<sub>m</sub> as reported in the data set.
+  <li> To produce the corresponding linear power spectrum use &#969<sub>b</sub> and set the &#969<sub>cdm</sub> parameter equal to &#969<sub>m</sub>-&#969<sub>b</sub>. Doing so you add the neutrino component to the CDM contribution which is the best that can be done with the current version of EuclidEmulator. Stay tuned as version 2 will allow for neutrinos to be taken into accound.
 <li>CAMB and CLASS do usually not accept sigma_8 as a parameter for normalization of the power spectrum but rather use A_s. In order to convert these two parameters into each other in the context of using EuclidEmulator, you have to use the same conversion as is used in the EuclidEmulator code. Convert the parameters using the following proportionality:<br/>
 <div align="center"> A<sub>s</sub>/(2.215 * 10^(-9)) = (&#963;<sub>8</sub>/0.8496)^2
 <ol/>
