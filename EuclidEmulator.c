@@ -5,13 +5,7 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <unistd.h>
-
-#ifdef __APPLE__
-    #include <sys/uio.h>
-#else
-    #include <sys/io.h>
-#endif
-
+#include <sys/io.h>
 #include <sys/mman.h>
 #include <assert.h>
 #include <gsl/gsl_sf_legendre.h>
@@ -27,7 +21,7 @@ int main(int argc,char **argv) {
     const double min[6] = {0.0215,0.1306,0.9283,0.6155,-1.3,0.7591};
     const double max[6] = {0.0235,0.1546,1.0027,0.7307,-0.7,0.8707};
     const double lowerBound[6] = {0.0217,0.1326,0.9345,0.6251,-1.250,0.7684};
-    const double upperBound[6] = {0.0233,0.1526,0.9965,0.7211,-0.750,0.8614}; 
+    const double upperBound[6] = {0.0233,0.1526,0.9965,0.7211,-0.750,0.8614};
     CSM csm;
     double cp[6];
     double *coef[11];
@@ -58,6 +52,7 @@ int main(int argc,char **argv) {
     for (ip=0;ip<6;++ip) {
       sscanf(argv[ip+1],"%lf",&cp[ip]);
       assert(cp[ip] >= lowerBound[ip] && cp[ip] <= upperBound[ip]);
+      fprintf(stderr,"%f\n",cp[ip]);
     }
     sscanf(argv[7],"%lf",&z);
     assert(z<=5.0);
@@ -194,20 +189,42 @@ int main(int argc,char **argv) {
     csm->val.dOmegaRad = omega_rad/(cp[3]*cp[3]);  /* omega_rad (lower case omega) / h^2 */
     csm->val.dOmegaDE = 1.0 - csm->val.dOmega0 - csm->val.dOmegaRad;
 
-    t0 = csmExp2Time(csm,1.0);
-    t200 = csmExp2Time(csm,1.0/201.0); /* time at redshift 200 */
-    dDelta = (t0-t200)/nSteps; /* work out the timestep this cosmology would have */
-    t = csmExp2Time(csm,1.0/(1.0+z)); /* find the desired proper time in this cosmology */
-    dti = (t-t200)/dDelta;  /* find the desired (incl fractional) timestep */
-    iz = (int)floor(dti);
-    x = dti - iz; /* this is the fractional step */
+    fprintf( stderr, "dOmega0: %.8f\n", csm->val.dOmega0);
+    fprintf( stderr, "dOmegaRad: %.8f\n", csm->val.dOmegaRad);
+    fprintf( stderr, "dOmegaDE: %.8f\n", csm->val.dOmegaDE); 
 
-    for (j=0;j<nk;++j) {
-        boost[j] = ((1-x)*mean[iz][j] + x*mean[iz+1][j]);
-    } 
-    for (i=0;i<11;++i) {
-	for (j=0;j<nk;++j) boost[j] += lamb[i]*((1-x)*pca[i + 11*(iz*nk + j)] + x*pca[i + 11*((iz+1)*nk + j)]) ;
-      }
+    /* Notice that the interpolation step is only necessary if z != 0 */
+    if (z==0) {
+        iz = 100;
+        for (j=0;j<nk;++j) {
+            boost[j] = mean[iz][j];
+        }
+
+        for (i=0;i<11;++i) {
+            for (j=0;j<nk;++j) {
+                boost[j] += lamb[i]*(pca[i + 11*(iz*nk + j)]) ;
+            }
+        }
+    }
+    else {
+        t0 = csmExp2Time(csm,1.0);
+        t200 = csmExp2Time(csm,1.0/201.0); /* time at redshift 200 */
+        dDelta = (t0-t200)/nSteps; /* work out the timestep this cosmology would have */
+        t = csmExp2Time(csm,1.0/(1.0+z)); /* find the desired proper time in this cosmology */
+        dti = (t-t200)/dDelta;  /* find the desired (incl fractional) timestep */
+        iz = (int)floor(dti);
+        x = dti - iz; /* this is the fractional step */
+
+        fprintf( stderr, "requested step for z = %f: %f\n", z,dti);
+
+        for (j=0;j<nk;++j) {
+            boost[j] = ((1-x)*mean[iz][j] + x*mean[iz+1][j]);
+        } 
+
+        for (i=0;i<11;++i) {
+	    for (j=0;j<nk;++j) boost[j] += lamb[i]*((1-x)*pca[i + 11*(iz*nk + j)] + x*pca[i + 11*((iz+1)*nk + j)]) ;
+        }
+    }
 
     /* START: Write data to file */
     for (i=0;i<nk;++i) { 
