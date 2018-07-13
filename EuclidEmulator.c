@@ -5,7 +5,13 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <unistd.h>
-#include <sys/io.h>
+
+#ifdef __APPLE__
+    #include <sys/uio.h>
+#else
+    #include <sys/io.h>
+#endif
+
 #include <sys/mman.h>
 #include <assert.h>
 #include <gsl/gsl_sf_legendre.h>
