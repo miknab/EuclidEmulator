@@ -1,1 +1,0 @@
-/usr/bin/cc     CMakeFiles/ee.dir/master.c.o CMakeFiles/ee.dir/EuclidEmulator.c.o CMakeFiles/ee.dir/cosmo.c.o  -o ee -rdynamic /usr/lib64/libgsl.so /usr/lib64/libgslcblas.so 
