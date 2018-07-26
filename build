@@ -1,0 +1,46 @@
+#!/bin/bash
+
+# By executing this script the EuclidEmulator code is built.
+
+# Author: M. Knabenhans
+# Date: July 26, 2018
+
+target=$1
+projectdir=$(pwd)
+
+if  [[ "$target" == "clean" ]]
+then 
+    rm -r bin
+    executable=$projectdir"/ee"
+    pymodule=$projectdir"/e2py/EuclidEmulator_BackEnd.so"
+    pycfiles=$projectdir"/e2py/"*".pyc"
+    pytestfile=$projectdir"/test.py"
+
+    if [ -f $executable ]; then rm $executable; fi
+    if [ -f $pymodule ]; then rm $pymodule; fi
+    if [ -f $pycfiles ]; then rm $pycfiles; fi
+    if [ -f $pytestfile ]; then mv $projectdir"/e2py"; fi
+    exit 0
+fi
+
+mkdir bin
+cd bin
+cmake ..
+
+if [ -z "$target" ]
+then
+    echo -e "Building full project: CLI and python package.\n"
+    make
+    ln -s $projectdir"/bin/src/ee" $projectdir"/ee"
+    ln -s $projectdir"/bin/src/EuclidEmulator_BackEnd.so" $projectdir"/e2py/EuclidEmulator_BackEnd.so"
+
+elif [[ "$target" == "ee" ]]
+then
+    echo -e "Building CLI only\n"
+    make ee
+    ln -s $projectdir"/bin/src/ee" $projectdir"/ee"
+
+else
+    echo -e "$target is not a valid target\n"
+    exit 1
+fi
