@@ -10,16 +10,71 @@ projectdir=$(pwd)
 
 if  [[ "$target" == "clean" ]]
 then 
-    rm -r bin
-    executable=$projectdir"/ee"
-    pymodule=$projectdir"/e2py/EuclidEmulator_BackEnd.so"
-    pycfiles=$projectdir"/e2py/"*".pyc"
-    pytestfile=$projectdir"/test.py"
+    
+    NOTHING_TO_DO=true
 
-    if [ -f $executable ]; then rm $executable; fi
-    if [ -f $pymodule ]; then rm $pymodule; fi
-    if [ -f $pycfiles ]; then rm $pycfiles; fi
-    if [ -f $pytestfile ]; then mv $projectdir"/e2py"; fi
+    executable="$projectdir/ee"
+    datafile="$projectdir/ee.dat"
+    pymodule="$projectdir/e2py/EuclidEmulator_BackEnd.so"
+    pycfiles="$projectdir/e2py/"*".pyc"
+    pytestfile="$projectdir/test.py"
+
+    if [ -d bin ] 
+    then 
+        echo "Directory 'bin' exists"
+        rm -r bin
+        echo -e "\tCleaned!"
+        NOTHING_TO_DO=false
+    fi
+    
+    if [ -L $executable ]
+    then
+        echo "$executable exists"
+        rm $executable
+        echo -e "\tCleaned!"
+        NOTHING_TO_DO=false
+    fi
+
+    if [ -L $datafile ] 
+    then 
+        echo "$datafile' exists"
+        rm $datafile
+        echo -e "\tCleaned!"
+        NOTHING_TO_DO=false
+    fi
+ 
+    if [ -L $pymodule ]
+    then
+        echo "$pymodule exists"
+        rm $pymodule
+        echo -e "\tCleaned!"
+        NOTHING_TO_DO=false
+    fi
+
+    for f in $pycfiles
+    do
+        if [ -e $f ]
+        then
+            echo "$f exists"
+            rm $f
+            echo -e "\tCleaned!"
+            NOTHING_TO_DO=false
+        fi
+    done
+    
+    if [ -e $pytestfile ]
+    then
+        echo "pytestfile exists"
+        mv $pytestfile $projectdir"/e2py/"  
+        echo -e "\tMoved!"
+        NOTHING_TO_DO=false
+    fi
+
+    if $NOTHING_TO_DO
+    then
+        echo -e "There's nothing to clean up!\n"
+    fi
+
     exit 0
 fi
 
@@ -33,12 +88,15 @@ then
     make
     ln -s $projectdir"/bin/src/ee" $projectdir"/ee"
     ln -s $projectdir"/bin/src/EuclidEmulator_BackEnd.so" $projectdir"/e2py/EuclidEmulator_BackEnd.so"
+    mv $projectdir"/e2py/test.py" $projectdir
+    ln -s $projectdir"/e2py/ee.dat" $projectdir"/ee.dat"
 
 elif [[ "$target" == "ee" ]]
 then
     echo -e "Building CLI only\n"
     make ee
     ln -s $projectdir"/bin/src/ee" $projectdir"/ee"
+    ln -s $projectdir"/e2py/ee.dat" $projectdir"/ee.dat"
 
 else
     echo -e "$target is not a valid target\n"
