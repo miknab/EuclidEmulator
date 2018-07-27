@@ -1,5 +1,5 @@
 import e2py
-#import matplotlib.pyplot as plt
+import matplotlib.pyplot as plt
 import numpy as np
 
 csm = {'om_b': 0.0219961,
@@ -19,19 +19,19 @@ Boost = pnl_dict['B']
 
 #np.savetxt("./DataOutput/EmuData.dat", np.c_[kvec, P_nonlin[0], P_lin[0], Boost])
 
-#Fig, axs = plt.subplots(3,1,sharex=True)
+Fig, axs = plt.subplots(3,1,sharex=True)
 
-#ax = axs[0]
-#ax.loglog(kvec,P_lin[0],c="b")
-#ax.set_ylabel(r"$P_{\rm lin}(k)\enspace[({\rm Mpc}/h)^3]$")
-#
-#ax = axs[1]
-#ax.axhline(y=1.0,ls=":",c="k")
-#ax.loglog(kvec,Boost,c="b")
-#ax.set_ylabel(r"$B(k)\enspace[1]$")
+ax = axs[0]
+ax.loglog(kvec,P_lin[0],c="b")
+ax.set_ylabel(r"$P_{\rm lin}(k)\enspace[({\rm Mpc}/h)^3]$")
 
-#ax = axs[2]
-#ax.loglog(kvec,P_nonlin[0],c="b")
-#ax.set_ylabel(r"$P_{\rm nl}(k)\enspace[({\rm Mpc}/h)^3]$")
-#ax.set_xlabel(r"$k\enspace[h/{\rm Mpc}]$")
-#plt.show()
+ax = axs[1]
+ax.axhline(y=1.0,ls=":",c="k")
+ax.loglog(kvec,Boost,c="b")
+ax.set_ylabel(r"$B(k)\enspace[1]$")
+
+ax = axs[2]
+ax.loglog(kvec,P_nonlin[0],c="b")
+ax.set_ylabel(r"$P_{\rm nl}(k)\enspace[({\rm Mpc}/h)^3]$")
+ax.set_xlabel(r"$k\enspace[h/{\rm Mpc}]$")
+plt.show()
