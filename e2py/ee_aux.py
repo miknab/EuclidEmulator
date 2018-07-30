@@ -45,3 +45,19 @@ def stringify_arr(arr):
             separator=',',
         ).strip('[]')
     return np.fromstring(arr_str, sep=','), arr_str
+
+def print_cosmology(emu_pars_dict):
+
+    h = emu_pars_dict['h']
+    omega_m = emu_pars_dict['om_m']
+    omega_rad = 4.183709411969527e-5; # corresponds to 2.755 K Tcmb
+
+    Om_m = omega_m/(h*h)
+    Om_rad = omega_rad/(h*h)
+    Om_DE = 1.0-Om_m-Om_rad
+
+    print "#"
+    print "# Cosmology:"
+    print "# dOmega0: ", Om_m 
+    print "# dOmegaRad: ", Om_rad 
+    print "# dOmegaDE: ", Om_DE
