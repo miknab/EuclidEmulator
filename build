@@ -26,6 +26,14 @@ then
         echo -e "\tCleaned!"
         NOTHING_TO_DO=false
     fi
+
+    if [ -d Testing ]
+    then
+        echo "Directory 'Testing' exists"
+        rm -r Testing
+        echo -e "\tCleaned!"
+        NOTHING_TO_DO=false
+    fi
     
     if [ -L $executable ]
     then
@@ -78,14 +86,50 @@ then
     exit 0
 fi
 
+#gsl_check_install="$(ldconfig -p | grep libgsl.so)"
+#if [ ! -z "$gsl_check_install" ]
+#then
+#    echo -e "GSL installed...\n"
+#    echo $(echo $gsl_check_install | awk -F " => " '{print $1}')
+#
+#else
+#    echo -e "GSL not found. Do you want to install GSL now (root access required)? [yes/no]"
+#    read installnow
+#    
+#    if [[ "$installnow" == "yes" ]]
+#    then
+#       a=1 
+#    else
+#        echo -e "As you wish... you can always come back. Have a good one.\n"
+#        exit 0
+#    fi
+#fi
+
 mkdir bin
 cd bin
 cmake ..
+
+# Check if cmake configuring was successfull
+# abort script execusion if an error ocurred, 
+# otherwise keep on going
+if [ ! $? -eq 0 ]; then
+    cd ..
+    rm -r bin
+    exit 1
+fi
 
 if [ -z "$target" ]
 then
     echo -e "Building full project: CLI and python package.\n"
     make
+
+    # Check if make was successfull
+    # abort script execusion if an error ocurred, 
+    # otherwise keep on going
+    if [ ! $? -eq 0 ]; then
+        exit 1
+    fi
+
     ln -s $projectdir"/bin/src/ee" $projectdir"/ee"
     ln -s $projectdir"/bin/src/EuclidEmulator_BackEnd.so" $projectdir"/e2py/EuclidEmulator_BackEnd.so"
     mv $projectdir"/e2py/test.py" $projectdir
