@@ -100,7 +100,7 @@ def as_to_sigma8(a_s):
     sigma_8 = np.sqrt(0.8496*0.8496*a_s/2.215e-9)
     return sigma_8
 
-def a_to_hubble(emu_par_dicts, a):
+def a_to_hubble(emu_pars_dict, a):
     """
     Signature:   a_to_hubble(emu_pars,dict, a, H0, Om_m, Om_DE, Om_curve, w_0, w_a)
 
@@ -143,9 +143,9 @@ def a_to_hubble(emu_par_dicts, a):
 
     return H
 
-def k_to_l(k, z, emu_pars_dict, prec=12):
+def k_to_l(emu_pars_dict, k, z, prec=12):
     """
-    Signature:   k_to_l(k, z, emu_pars_dict, prec=12)
+    Signature:   k_to_l(emu_pars_dict, k, z, prec=12)
 
     Description: Converts a numpy.array k into a numpy.array l for a given
                  redshift z. Here, k denotes the wave numbers and l the
@@ -153,9 +153,9 @@ def k_to_l(k, z, emu_pars_dict, prec=12):
                  parameter for the romberg integration that has to be computed
                  in the course of the comoving distance calculation.
 
-    Input types: type(k) = numpy.ndarray
+    Input types: type(emu_pars_dict) = dict
+                 type(k) = numpy.ndarray
                  type(z) = float
-                 tpye(emu_pars_dict) = dict
                  type(prec) = int
 
     Ouput type:  numpy.ndarray
@@ -175,3 +175,36 @@ def k_to_l(k, z, emu_pars_dict, prec=12):
                  is working with it.
     """
     return k * bg.dist_comov(emu_pars_dict, 0.0, z, prec)
+
+def l_to_k(emu_pars_dict, l, z, prec=12):
+    """
+    Signature:   l_to_k(emu_pars_dict, l, z, prec=12)
+
+    Description: Converts a numpy.array l into a numpy.array k for a given
+                 redshift z. Here, k denotes the wave numbers and l the
+                 multipole order. The keyword argument "prec" is a precision
+                 parameter for the romberg integration that has to be computed
+                 in the course of the comoving distance calculation.
+
+    Input types: type(emu_pars_dict) = dict
+                 type(l) = numpy.ndarray
+                 type(z) = float
+                 type(prec) = int
+
+    Ouput type:  numpy.ndarray
+
+    REMARK:      The geometry of the Universe is fixed to be flat (i.e.
+                
+                                Omega_curvature = 1 
+
+                 and as a result the comoving angular diameter distance
+                 equals the comoving distance) and the radiation energy
+                 density is set to 
+
+                        Om_rad = 4.183709411969527e-5/(h*h).
+
+                 These values were assumed in the construction process 
+                 of EuclidEmulator and hence must be used whenever one
+                 is working with it.
+    """
+    return l/bg.dist_comov(emu_pars_dict, 0.0, z, prec)
