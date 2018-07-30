@@ -4,6 +4,10 @@
 
 int main(int argc, char* argv[]){
 
+    fprintf(stderr, "# EuclidEmulator Version %d.%d\n",
+            EUCLID_EMULATOR_VERSION_MAJOR,
+            EUCLID_EMULATOR_VERSION_MINOR);
+
     // Check number of input arguments: 8 arguments are expected:
     // 1 executable name + 6 cosmological parameter + 1 redshift value
     assert(argc==8);
@@ -18,6 +22,16 @@ int main(int argc, char* argv[]){
     double z = atof(argv[7]);
 
     double cosmo_params[6] = {omega_b, omega_m, n_s, h, w_0, sigma_8};
+
+    // The radiation density is fixed by the CMB temperature (which is 
+    // fixed as well for our purposes).
+    const double omega_rad = 4.183709411969527e-5; /* corresponds to 2.755 K Tcmb */
+
+
+    fprintf( stderr, "#\n# Cosmology:\n");
+    fprintf( stderr, "#\tdOmega0: %.8f\n", omega_m/(h*h));
+    fprintf( stderr, "#\tdOmegaRad: %.8f\n", omega_rad/(h*h));
+    fprintf( stderr, "#\tdOmegaDE: %.8f\n\n", 1.-omega_m/(h*h)-omega_rad/(h*h));
 
     // Prepare data containers for return values of emulator function
     double* k_values;      // will contain the k modes at which the 
