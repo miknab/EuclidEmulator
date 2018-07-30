@@ -5,7 +5,13 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <unistd.h>
-#include <sys/io.h>
+
+#ifdef __APPLE__
+    #include <sys/uio.h>
+#else
+    #include <sys/io.h>
+#endif
+
 #include <sys/mman.h>
 #include <assert.h>
 #include <gsl/gsl_sf_legendre.h>
@@ -14,7 +20,7 @@
 
 //void EucEmu(double *CosmoParams, double z){
 void EucEmu(double *CosmoParams, double z, double **kVals, int *nkVals, double **Boost, int *nBoost){
-    
+
     const int nSteps = 100;
     const int nk = 1099;
     const int nz = nSteps+1;
@@ -192,11 +198,6 @@ void EucEmu(double *CosmoParams, double z, double **kVals, int *nkVals, double *
     csm->val.dOmegaRad = omega_rad/(CosmoParams[3]*CosmoParams[3]);  /* omega_rad (lower case omega) / h^2 */
     csm->val.dOmegaDE = 1.0 - csm->val.dOmega0 - csm->val.dOmegaRad;
 
-    fprintf( stderr, "\nCosmology:\n");
-    fprintf( stderr, "\tdOmega0: %.8f\n", csm->val.dOmega0);
-    fprintf( stderr, "\tdOmegaRad: %.8f\n", csm->val.dOmegaRad);
-    fprintf( stderr, "\tdOmegaDE: %.8f\n\n", csm->val.dOmegaDE); 
-
     /* Notice that the interpolation step is only necessary if z != 0 */
     if (z==0) {
         iz = 100;
@@ -219,7 +220,7 @@ void EucEmu(double *CosmoParams, double z, double **kVals, int *nkVals, double *
         iz = (int)floor(dti);
         x = dti - iz; /* this is the fractional step */
 
-        fprintf( stderr, "requested step for z = %f: %f\n", z,dti);
+        //fprintf( stderr, "# requested step for z = %f: %f\n", z,dti);
 
         for (j=0;j<nk;++j) {
             lnboost[j] = ((1-x)*mean[iz][j] + x*mean[iz+1][j]);
