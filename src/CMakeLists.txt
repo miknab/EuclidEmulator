@@ -49,8 +49,16 @@ elseif ( GSL_VERSION VERSION_LESS 1.13 )
     message ( SEND_ERROR "${Red}Required minimum version of gsl library is 1.13${ColourReset}") 
 endif()
 
-target_link_libraries( ee GSL::gsl GSL::gslcblas)
-target_link_libraries( EuclidEmulator_BackEnd GSL::gsl GSL::gslcblas)
+#include math library
+find_library(LIBM REQUIRED)
+if ( !LIBM_FOUND )
+    message ( SEND_ERROR "${Red}Math library not installed${ColourReset}" )
+else ()
+    message ( "-- Found libm" )
+endif()
+
+target_link_libraries( ee GSL::gsl GSL::gslcblas m )
+target_link_libraries( EuclidEmulator_BackEnd GSL::gsl GSL::gslcblas m) 
 
 
 
