@@ -174,7 +174,7 @@ def k_to_l(emu_pars_dict, k, z, prec=12):
                  of EuclidEmulator and hence must be used whenever one
                  is working with it.
     """
-    return k * bg.dist_comov(emu_pars_dict, 0.0, z, prec)
+    return k * bg.dist_comov(emu_pars_dict, 1e-13, z, prec)
 
 def l_to_k(emu_pars_dict, l, z, prec=12):
     """
@@ -207,4 +207,4 @@ def l_to_k(emu_pars_dict, l, z, prec=12):
                  of EuclidEmulator and hence must be used whenever one
                  is working with it.
     """
-    return l/bg.dist_comov(emu_pars_dict, 0.0, z, prec)
+    return l/bg.dist_comov(emu_pars_dict, 1e-13, z, prec)
