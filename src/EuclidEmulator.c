@@ -18,7 +18,6 @@
 #include "cosmo.h"
 #include "EuclidEmulator.h"
 
-//void EucEmu(double *CosmoParams, double z){
 void EucEmu(double *CosmoParams, double z, double **kVals, int *nkVals, double **Boost, int *nBoost){
 
     const int nSteps = 100;
