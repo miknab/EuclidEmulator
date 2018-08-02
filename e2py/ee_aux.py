@@ -3,7 +3,7 @@ ee_aux.py
 
 EuclidEmulator submodule for auxiliary functions.
 """
-
+import sys
 import contextlib
 import numpy as np
 
@@ -41,7 +41,7 @@ def stringify_arr(arr):
         arr_str = np.array2string(
             arr,
             max_line_width=np.inf,
-            formatter={'float': lambda f: '{:.16e}'.format(f)},
+            formatter={'float': lambda f: '{:.8e}'.format(f)},
             separator=',',
         ).strip('[]')
     return np.fromstring(arr_str, sep=','), arr_str
