@@ -17,23 +17,26 @@ from scipy.integrate import romb
 from scipy.interpolate import CubicSpline
 from classy import Class
 
-def get_boost(emu_pars_dict, z):
+def get_boost(emu_pars_dict, redshifts):
     """
-    Signature:   get_boost(emu_pars_dict, z)
+    Signature:   get_boost(emu_pars_dict, redshifts)
 
     Description: Computes the non-linear boost factor for a cosmology
                  defined in EmuParsArr (a numpy array containing the
-                 values for the 6 LCDM parameters) at a specified
-                 redshift z.
+                 values for the 6 LCDM parameters) at specified
+                 redshift stored in a list or numpy.array.
 
     Input types: python dictionary (with the six cosmological parameters)
-                 float
+                 list or numpy.array
 
     Output type: python dictionary
 
     Related:     get_plin, get_pnonlin
     """
-    assert z <= 5.0, "EuclidEmulator allows only redshifts z <= 5.0.\n"
+    redshifts = np.asarray(redshifts)
+    
+    for z in redshifts:
+        assert z <= 5.0, "EuclidEmulator allows only redshifts z <= 5.0.\n"
 
     if not isinstance(emu_pars_dict, (dict,)):
         print("The cosmological parameters must be passed as a python \
@@ -45,13 +48,27 @@ def get_boost(emu_pars_dict, z):
                                          emu_pars_dict['n_s'],
                                          emu_pars_dict['h'],
                                          emu_pars_dict['w_0'],
-                                         emu_pars_dict['sigma_8']]), z)
+                                         emu_pars_dict['sigma_8']]),
+                               redshifts)
+    
+    kvals = boost_data.k
+    k_shape = kvals.shape
 
-    return {'k': boost_data.k, 'B': boost_data.boost}
+    nk = len(kvals)
+    nz = len(redshifts)
 
-def get_pnonlin(emu_pars_dict, z):
+    if nz>1:
+        bvals = {}
+        for i in range(nz):
+            bvals['z'+str(i)]=boost_data.boost[i*nk:(i+1)*nk].reshape(k_shape) 
+    else:
+        bvals = boost_data.boost.reshape(k_shape)
+
+    return {'k': kvals, 'B': bvals}
+
+def get_pnonlin(emu_pars_dict, redshifts):
     """
-    Signature:   get_pnonlin(emu_pars_dict, z)
+    Signature:   get_pnonlin(emu_pars_dict, redshifts)
 
     Description: Computes the linear power spectrum and the non-linear boost
                  separately for a given redshift z and cosmology defined by
@@ -60,30 +77,34 @@ def get_pnonlin(emu_pars_dict, z):
                  the non-linear DM-only power spectrum.
 
     Input types: python dictionary (with the six cosmological parameters)
-                 float
+                 iterable (list, numpy array)
 
     Output type: python dictionary
 
     Related:     get_plin, get_boost
     """
+    redshifts = np.asarray(redshifts)
 
-    assert z <= 5.0, "EuclidEmulator allows only redshifts z <= 5.0.\n"
-
-    boost_dict = get_boost(emu_pars_dict, z)
+    for z in redshifts:
+        assert z <= 5.0, "EuclidEmulator allows only redshifts z <= 5.0.\n"
+ 
+    boost_dict = get_boost(emu_pars_dict, redshifts)
 
     kvec = boost_dict['k']
+    shape = kvec.shape
+
     Bk = boost_dict['B']
 
-    plin = get_plin(emu_pars_dict, kvec, z)
+    plin = get_plin(emu_pars_dict, kvec, redshifts)
 
-    pnonlin = plin*Bk
+    if len(redshifts)==1:
+        pnonlin = plin*Bk
 
-    # finally, make all the resulting vectors have the same shape
-    shape = kvec.shape
-    pnonlin = pnonlin.reshape(shape)
-    plin = plin.reshape(shape)
-    Bk = Bk.reshape(shape)
-
+    else:
+        pnonlin = {}
+        for i,z in enumerate(redshifts):
+            pnonlin['z'+str(i)] = plin['z'+str(i)]*Bk['z'+str(i)]
+    
     return {'k': kvec, 'P_nonlin': pnonlin, 'P_lin': plin, 'B': Bk}
 
 def get_plin(emu_pars_dict, k_arr, z_arr):
@@ -98,7 +119,8 @@ def get_plin(emu_pars_dict, k_arr, z_arr):
                  numpy.ndarray (containing the k modes)
                  numpy.ndarray (containing the redshift values)
 
-    Output type: numpy.ndarray (containing the linear power spectrum values)
+    Output type: if len(z_arr)==1, then numpy.ndarray (containing the linear power spectrum values)
+                 if len(z_arr)>1, then dict with indices 'z0', 'z1', 'z2' etc.
 
     Related:     get_pnonlin, get_boost
     """
@@ -134,12 +156,18 @@ def get_plin(emu_pars_dict, k_arr, z_arr):
     # Convert k units: h/Mpc
     h = classy_pars['h']
     k_classy_arr = h*k_arr
-    # Get power spectrum at tabulated z and k in units of Mpc^3
-    linpower = np.array([[cosmo.pk(k, z) for k in k_classy_arr] for z in z_arr])
 
-    # Convert P(k) units: Mpc^3 --> Mpc^3/h^3
-    #return linpower*h*h*h
-    return linpower*(h*h*h)
+    # Get shape of k vector
+    k_shape = k_classy_arr.shape
+
+    # Get power spectrum at tabulated z and k in units of Mpc^3 
+    if len(z_arr)==1:
+        z = z_arr
+        linpower = np.array([cosmo.pk(k, z)*h*h*h for k in k_classy_arr]).reshape(k_shape)
+    else:
+        linpower = {'z'+str(i): np.array([cosmo.pk(k, z)*h*h*h for k in k_classy_arr]).reshape(k_shape) for i,z in enumerate(z_arr)}
+
+    return linpower
 
 def get_pconv(emu_pars_dict, sourcedist, prec=12):
     """

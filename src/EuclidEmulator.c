@@ -18,7 +18,7 @@
 #include "cosmo.h"
 #include "EuclidEmulator.h"
 
-void EucEmu(double *CosmoParams, double z, double **kVals, int *nkVals, double **Boost, int *nBoost){
+void EucEmu(double *CosmoParams, double *Redshifts, int len_z, double **kVals, int *nkVals, double **Boost, int *nBoost){
 
     const int nSteps = 100;
     const int nk = 1099;
@@ -45,9 +45,9 @@ void EucEmu(double *CosmoParams, double z, double **kVals, int *nkVals, double *
     off_t size;
     struct stat s;
     int fd = open("ee.dat", O_RDONLY);
-    int i,di,ip,iz,ic,j,l,lmax;
-    double x,prod,t0,t200,dDelta,t,dti;
-  
+    int zcounter,i,di,ip,iz,ic,j,l,lmax;
+    double z,x,prod,t0,t200,dDelta,t,dti;
+
     assert(fd > 0); 
     /* Get the size of the file. */
     //printf("Get file size...\n");
@@ -185,8 +185,8 @@ void EucEmu(double *CosmoParams, double z, double **kVals, int *nkVals, double *
     ** depending on the desired API.
     */
 
-    lnboost = malloc(nk*sizeof(double));
-    boost = malloc(nk*sizeof(double));
+    lnboost = malloc(len_z*nk*sizeof(double));
+    boost = malloc(len_z*nk*sizeof(double));
 
     csmInitialize(&csm);
     csm->val.bComove = 1;
@@ -197,48 +197,57 @@ void EucEmu(double *CosmoParams, double z, double **kVals, int *nkVals, double *
     csm->val.dOmegaRad = omega_rad/(CosmoParams[3]*CosmoParams[3]);  /* omega_rad (lower case omega) / h^2 */
     csm->val.dOmegaDE = 1.0 - csm->val.dOmega0 - csm->val.dOmegaRad;
 
-    /* Notice that the interpolation step is only necessary if z != 0 */
-    if (z==0) {
-        iz = 100;
-        for (j=0;j<nk;++j) {
-            lnboost[j] = mean[iz][j];
-        }
-
-        for (i=0;i<11;++i) {
+    for(zcounter=0; zcounter<len_z; ++zcounter){
+   
+        z=Redshifts[zcounter];
+  
+        /* Notice that the interpolation step is only necessary if z != 0 */
+        if (z==0) {
+            iz = 100;
             for (j=0;j<nk;++j) {
-                lnboost[j] += lamb[i]*(pca[i + 11*(iz*nk + j)]) ;
+                lnboost[zcounter*nk+j] = mean[iz][j];
+            }
+
+            for (i=0;i<11;++i) {
+                for (j=0;j<nk;++j) {
+                    lnboost[zcounter*nk+j] += lamb[i]*(pca[i + 11*(iz*nk + j)]) ;
+                }
             }
         }
-    }
-    else {
-        t0 = csmExp2Time(csm,1.0);
-        t200 = csmExp2Time(csm,1.0/201.0); /* time at redshift 200 */
-        dDelta = (t0-t200)/nSteps; /* work out the timestep this cosmology would have */
-        t = csmExp2Time(csm,1.0/(1.0+z)); /* find the desired proper time in this cosmology */
-        dti = (t-t200)/dDelta;  /* find the desired (incl fractional) timestep */
-        iz = (int)floor(dti);
-        x = dti - iz; /* this is the fractional step */
+        else {
+            t0 = csmExp2Time(csm,1.0);
+            t200 = csmExp2Time(csm,1.0/201.0); /* time at redshift 200 */
+            dDelta = (t0-t200)/nSteps; /* work out the timestep this cosmology would have */
+            t = csmExp2Time(csm,1.0/(1.0+z)); /* find the desired proper time in this cosmology */
+            dti = (t-t200)/dDelta;  /* find the desired (incl fractional) timestep */
+            iz = (int)floor(dti);
+            x = dti - iz; /* this is the fractional step */
 
-        //fprintf( stderr, "# requested step for z = %f: %f\n", z,dti);
+            //fprintf( stderr, "# requested step for z = %f: %f\n", z,dti);
 
-        for (j=0;j<nk;++j) {
-            lnboost[j] = ((1-x)*mean[iz][j] + x*mean[iz+1][j]);
+            for (j=0;j<nk;++j) {
+                lnboost[zcounter*nk+j] = ((1-x)*mean[iz][j] + x*mean[iz+1][j]);
+            }
+
+            for (i=0;i<11;++i) {
+                for (j=0;j<nk;++j) {
+                    lnboost[zcounter*nk+j] += lamb[i]*((1-x)*pca[i + 11*(iz*nk + j)] + x*pca[i + 11*((iz+1)*nk + j)]); 
+                }
+            }
         }
-
-        for (i=0;i<11;++i) {
-            for (j=0;j<nk;++j) lnboost[j] += lamb[i]*((1-x)*pca[i + 11*(iz*nk + j)] + x*pca[i + 11*((iz+1)*nk + j)]) ;
-        }
-    }
-
-    for (j=0;j<nk;++j) {
+        fprintf(stderr, "# Computed %d of %d boost factors.\n", zcounter+1, len_z);
+    } 
+       
+   for (j=0;j<len_z*nk;++j) {
         boost[j] = exp(lnboost[j]);
+        //fprintf(stderr, "boost[%d] = %f\n", j, boost[j]);
     }
- 
+      
+    *kVals = kvec;
+    *Boost = boost;
     *nkVals = nk;
     *nBoost = nk;
-    *kVals = kvec;
-    *Boost = boost;    
-
+    
     int retval;
     retval = munmap (retFid.handle, retFid.size);
     assert(retval == 0);

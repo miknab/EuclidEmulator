@@ -1,7 +1,7 @@
 import cython
 cimport cython
 from libc.stdlib cimport free
-
+import sys
 import numpy as np
 
 #defining NPY_NO_DEPRECATED_API NPY_1_7_API_VERSION
@@ -39,7 +39,7 @@ cdef extern from "../include/EuclidEmulator.h":
     struct FID:
         double *handle
         int size
-    FID EucEmu(double *CosmoParams, double z, double **kVals, int *nkVals, double **Boost, int *nBoost)
+    FID EucEmu(double *CosmoParams, double *Redshifts, int len_z, double **kVals, int *nkVals, double **Boost, int *nBoost)
 
 # Simple class storing the data passed back from the
 # wrapped C function. It also takes care of freeing the data.
@@ -82,9 +82,11 @@ cdef class Py_EE_class:
 
 # Function with both C and Python capablities,
 # wrapping the C function.
-def emu_boost(cosmo_par_array,redshift):
+def emu_boost(cosmo_par_array,redshift_array):
     # Cast input variables to Cython types
-    cdef double z = float(redshift)
+    cdef double[::1] redshifts = np.asarray(redshift_array, dtype=C2np['double']) 
+    cdef int nz = len(redshifts)
+    
     cdef double[::1] cosmo_params = np.asarray(cosmo_par_array, dtype=C2np['double'])
  
     # Define output data containers for C-function
@@ -101,8 +103,7 @@ def emu_boost(cosmo_par_array,redshift):
     kVals = &hmm_ptr
 
     # Call the C function
-    #fid = EucEmu(&CosmoParams[0],z,kVals, &nkVals, Boost, &nBoost) 
-    EucEmu(&cosmo_params[0],z,kVals, &nkVals, Boost, &nBoost)
+    EucEmu(&cosmo_params[0],&redshifts[0],nz,kVals, &nkVals, Boost, &nBoost)
 
     # Wrap the data in a simple class. We have to pass the data
     # as Cython memoryviews, as structs (and pointers) are too
@@ -110,6 +111,6 @@ def emu_boost(cosmo_par_array,redshift):
 
     cdef double[::1] mv_k, mv_b, mv_f
     mv_k = <double[:nkVals]>(kVals[0])
-    mv_b = <double[:nBoost]>(Boost[0]) 
-
+    mv_b = <double[:nz*nBoost]>(Boost[0]) 
+    
     return Py_EE_class(mv_k, mv_b)
