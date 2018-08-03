@@ -18,6 +18,7 @@ then
     pymodule="$projectdir/e2py/EuclidEmulator_BackEnd.so"
     pycfiles="$projectdir/e2py/"*".pyc"
     pytestfile="$projectdir/test.py"
+    headerfile="$projectdir/include/EuclidEmulator.h"
 
     if [ -d bin ] 
     then 
@@ -70,6 +71,17 @@ then
         fi
     done
     
+    for f in $headerfile
+    do
+        if [ -e $f ]
+        then
+            echo "$f exists"
+            rm $f
+            echo -e "\tCleaned!"
+            NOTHING_TO_DO=false
+        fi
+    done
+
     if [ -e $pytestfile ]
     then
         echo "pytestfile exists"
