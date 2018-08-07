@@ -83,16 +83,17 @@ def get_pnonlin(emu_pars_dict, redshifts):
 
     Related:     get_plin, get_boost
     """
-    redshifts = np.asarray(redshifts)
-
+    if isinstance(redshifts,(int,float)):
+        redshifts = np.asarray([redshifts])
+    else:
+        redshifts = np.asarray(redshifts)   
+ 
     for z in redshifts:
         assert z <= 5.0, "EuclidEmulator allows only redshifts z <= 5.0.\n"
  
     boost_dict = get_boost(emu_pars_dict, redshifts)
 
     kvec = boost_dict['k']
-    shape = kvec.shape
-
     Bk = boost_dict['B']
 
     plin = get_plin(emu_pars_dict, kvec, redshifts)
@@ -169,9 +170,12 @@ def get_plin(emu_pars_dict, k_arr, z_arr):
 
     return linpower
 
-def get_pconv(emu_pars_dict, sourcedist, prec=12):
+def sgaldist(alpha=2.0, beta=1.5, z_mean=0.9):
+    return lens.GalaxyRedshiftDist(alpha, beta, z_mean)(z_mean)
+
+def get_pconv(emu_pars_dict, sourcedist_func, prec=7):
     """
-    Signature:   get_pconv(emu_pars_dict, sourcedist, prec=12)
+    Signature:   get_pconv(emu_pars_dict, sourcedist_func, prec=12)
         
     Description: Converts a matter power spectrum into a convergence power 
                  spectrum via the Limber equation (conversion is based on
@@ -186,15 +190,23 @@ def get_pconv(emu_pars_dict, sourcedist, prec=12):
                  comoving distances ("chi") together with the number counts of 
                  source galaxies at these distances or redshifts, respectively.
                  
+                 The precision parameter prec is an integer which defines at
+                 how many redshifts the matter power spectrum is emulated for 
+                 integration in the Limber equation. The relation between the 
+                 number of redshifts nz and the parameter prec is given by 
+                 
+                                         nz = 2^prec + 1
+                 
                  REMARK: The 'chi' vector in the sourcedist dictionary should 
                  span the range from 0 to chi(z=5).
 
     Input type:  emu_pars_dict - dictionary
-                 sourcedist - np.ndarray
-        
-    Ouput type:  dictionary of the form {'l': ..., 'Pconv': ...}
+                 sourcedist - function object
+                 prec - int
+                 
+    Ouput type:  dictionary of the form {'l': ..., 'Cl': ...}
     """
-    c = 1 # speed of light
+    c = bg.SPEED_OF_LIGHT_IN_KILOMETERS_PER_SECOND # speed of light
     c_inv = 1./c
     h = emu_pars_dict['h']
     H0 = 100*h
@@ -203,26 +215,34 @@ def get_pconv(emu_pars_dict, sourcedist, prec=12):
     nz = int(2**prec + 1)
     nl = int(1e4)
     
-    z_vec = np.linspace(0.0, 5.0, nz)
+    z_vec = np.logspace(np.log10(5e-2), np.log10(4.999999), nz)
     a_inv_vec = 1.+z_vec
-    chi_lim = bg.dist_comov(emu_pars_dict, 0.0, 5.0)
+    chi_lim = bg.dist_comov(emu_pars_dict, 1e-12, 5.0) # in Mpc/h
     chi_vec = []
     pnonlin_array = []
     
-    l_vec = np.linspace(1,1e3, nl)
-    
-    for z in z_vec:
-        chi_vec.append(bg.dist_comov(emu_pars_dict, 0.0, z))
-        P = get_pnonlin(emu_pars_dict, z) # call EuclidEmulator
-        
-        print len(P['k']), len(P['P_nonlin'])
-        
-        f = CubicSpline(np.log10(P['k']), np.log10(P['P_nonlin']))
-        k = cc.l_to_k(emu_pars_dict, l_vec, z)
-        pnonlin_array.append(10** f(np.log10(k)))
-    
-    chi_vec = np.asarray(chi_vec)
-    pnonlin_array = np.asarray(pnonlin_array)
+    l_vec = np.linspace(1e1,1e4, nl)
+
+    P = get_pnonlin(emu_pars_dict, z_vec) # call EuclidEmulator
+    chi_vec = bg.dist_comov(emu_pars_dict, np.zeros_like(z_vec), z_vec)
+
+    for i,z in enumerate(z_vec):
+        f = CubicSpline(np.log10(P['k']), np.log10(P['P_nonlin']['z'+str(i)]))
+        k = cc.l_to_k(emu_pars_dict, l_vec, z) # needs to be called inside loop
+                                               # because different z-values
+                                               # lead to different results
+
+        # evaluate the interpolating function of Pnl for all k in the range
+        # allowed by EuclidEmulator (this range is given by P['k'])
+        pmatternl = [10.0**f(np.log10(kk)) for kk in k if (kk >= P['k'].min() and kk <= P['k'].max())]
+        # for k values below the lower bound or above the upper bound of 
+        # this k range, set the contributions to 0.0
+        p_toosmall = [0.0 for kk in k if kk < P['k'].min()]
+        p_toobig = [0.0 for kk in k if kk > P['k'].max()]
+
+        pnonlin_array.append(np.array(p_toosmall + pmatternl + p_toobig))
+
+    pnonlin_array = np.asarray(pnonlin_array).transpose()
         
     prefac = 2.25*Om_m*Om_m * H0 * H0 * H0 * H0 * c_inv * c_inv * c_inv * c_inv
     
@@ -232,14 +252,17 @@ def get_pconv(emu_pars_dict, sourcedist, prec=12):
     assert all([len(chi_vec) == len(pnonlin_array[i]) 
                 for i in range(len(pnonlin_array))])
     
-    q_vec = lens.lens_efficiency(sourcedist, chi_vec, chi_lim)
+    source_dict = {'chi': chi_vec, 'n': sourcedist_func(z_vec)}
+    
+    q_vec = lens.lens_efficiency(source_dict, chi_vec, chi_lim)
  
-    integrand = q_vec * q_vec * a_inv_vec * a_inv_vec * pnonlin_array
+    integrand = np.array([q_vec * q_vec * a_inv_vec * a_inv_vec * 
+                          pnonlin_array[i] for i in range(nl)])
 
     assert(integrand.shape == pnonlin_array.shape)
     
     # perform integral and return
     Pconv = {'l': l_vec, 
-             'Pconv': prefac*romb(integrand, chi_vec[1]-chi_vec[0])}
+             'Cl': prefac*romb(integrand, chi_vec[1]-chi_vec[0])}
     
     return Pconv
