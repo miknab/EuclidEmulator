@@ -13,6 +13,7 @@ REMARK:      The geometry of the Universe is fixed to be flat (i.e.
 
 import numpy as np
 import ee_background as bg
+import decimal as dec
 
 def z_to_a(z):
     """
@@ -119,9 +120,11 @@ def a_to_hubble(emu_pars_dict, a):
                  EuclidEmulator and hence must be used whenever one is
                  working with it.
     """
+    a_inv = 1.0/a
+    
     h = emu_pars_dict['h']
     Om_m = emu_pars_dict['om_m']/(h*h)
-    H0 = 100.0 * h
+    H0 = 100.0 * h # * (km/s)/Mpc
     w_0 = emu_pars_dict['w_0']
 
     # We explicitly set the radiation energy density. By hardcoding this
@@ -131,17 +134,22 @@ def a_to_hubble(emu_pars_dict, a):
     # density as in CLASS (cf. CLASS code, input.c file, lines 643 & 714)
     Om_rad = 4.183709411969527e-5/(h*h)
 
-    # We infer Om_DE assuming flat geometry (Om_curve = 1.0). By hardcoding this
+    # We infer Om_DE assuming flat geometry (Om_curve = 0.0). By hardcoding this
     # we make sure that the user cannot choose Om_curve values inconsistent with 
     # that used in the construction process of EuclidEmulator.
-    Om_curve = 1.0
-    Om_DE = Om_curve-Om_m-Om_rad
+    Om_curve = 0.0
+    Om_DE = 1.0-Om_curve-Om_m-Om_rad
+    
+    assert (Om_curve == 0.0 and Om_m + Om_rad + Om_DE + Om_curve == 1.0)
 
-    exp_darkenergy = 1.0-3.0*w_0
+    curvature = Om_curve * a_inv * a_inv
+    matter = Om_m * a_inv * a_inv * a_inv
+    radiation = Om_rad * a_inv * a_inv * a_inv * a_inv
+    darkenergy = Om_DE * a_inv**(3.0+3.0*w_0)
 
-    H = H0 * np.sqrt(Om_m*a + Om_curve*a*a + Om_DE*a**exp_darkenergy)
+    H = H0 * np.sqrt(curvature + matter + radiation + darkenergy)
 
-    return H
+    return H # in the standard units of (km/s)/Mpc
 
 def k_to_l(emu_pars_dict, k, z, prec=12):
     """
