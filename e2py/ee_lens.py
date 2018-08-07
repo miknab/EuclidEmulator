@@ -15,8 +15,9 @@ import numpy as np
 from scipy.integrate import romb
 from scipy.interpolate import CubicSpline
 import ee_cosmoconv as cc
+import ee_aux as aux
 
-def lens_efficiency(sourcedist, dcomov, dcomov_lim):
+def lens_efficiency(sourcedist, dcomov, dcomov_lim, prec=12):
     """
     Signature:    lens_efficiency(sourcedist, dcomov, dcomov_lim)
     
@@ -41,7 +42,7 @@ def lens_efficiency(sourcedist, dcomov, dcomov_lim):
     if isinstance(dcomov, np.ndarray):
 
         for d in dcomov:
-            chi = np.linspace(d, dcomov_lim, 1000)
+            chi = np.linspace(d, dcomov_lim, 2**prec+1)
             n = 10**nfunc(np.log10(chi))
             integrand = n * (1-d/chi)
             result.append(romb(integrand, chi[1]-chi[0]))
@@ -49,7 +50,7 @@ def lens_efficiency(sourcedist, dcomov, dcomov_lim):
         return np.asarray(result)
     
     elif isinstance(dcomov, float) or isinstance(dcomov,int):
-        chi = np.linspace(dcomov, dcomov_lim, 1000)
+        chi = np.linspace(dcomov, dcomov_lim, 2**prec+1)
         n = 10**nfunc(np.log10(chi))
         integrand = n * (1-dcomov/chi)
         
@@ -58,4 +59,27 @@ def lens_efficiency(sourcedist, dcomov, dcomov_lim):
     else:
         raise(TypeError, "The second argument 'dcomov' must be either a float,\
                           an integer or a np.ndarray.\n")
-        
+
+class GalaxyRedshiftDist(object):
+    # Author: Rongchuan Zhao
+    def __init__(self, alpha = 2.0, beta = 1.5, z_mean = 0.9):
+        self._alpha = alpha
+        self._beta = beta
+        self._z_mean = z_mean
+
+    def __call__(self, z_mean):
+        return GalaxyRedshiftDist(z_mean = z_mean,
+                                  alpha = self._alpha, beta = self._beta
+                                 ).gala_probdist_func
+
+    def _z_0(self):
+        return self._z_mean/1.412
+
+    @aux.normalize()
+    def _gala_probdist(self, z):
+        z_0 = self._z_0()
+        return (z / z_0)**self._alpha*np.exp(-(z/z_0)**self._beta)
+
+    @property
+    def gala_probdist_func(self):
+        return aux.Function(self._gala_probdist) 
