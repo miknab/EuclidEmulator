@@ -35,7 +35,16 @@ then
         echo -e "\tCleaned!"
         NOTHING_TO_DO=false
     fi
-    
+   
+    if [ -d ClassPatch ]
+    then
+        echo "Directory 'ClassPatch' exists"
+        rm -r ClassPatch
+        echo -e "\tCleaned!"
+        NOTHING_TO_DO=false
+    fi
+
+ 
     if [ -L $executable ]
     then
         echo "$executable exists"
@@ -119,7 +128,7 @@ fi
 
 mkdir bin
 cd bin
-cmake ..
+cmake .. -DUSEPATCH:BOOL=TRUE
 
 # Check if cmake configuring was successfull
 # abort script execusion if an error ocurred, 
