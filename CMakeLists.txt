@@ -1,6 +1,16 @@
 cmake_minimum_required (VERSION 2.8.5)
 project ( EUCLID_EMULATOR )
 
+# Set message colors
+if (NOT WIN32)
+    string( ASCII 27 Esc )
+    set ( ColourReset "${Esc}[m" )
+    set ( Red "${Esc}[31m" )
+    set ( Green "${Esc}[32m" )
+endif()
+####
+
+
 # The version number
 set ( EUCLID_EMULATOR_VERSION_MAJOR 1 )
 set ( EUCLID_EMULATOR_VERSION_MINOR 1 )
@@ -40,15 +50,28 @@ enable_testing ()
 add_test ( NAME eeRuns COMMAND ee 0.02222 0.1426 0.96 0.67 -1.0 0.83 0.5 WORKING_DIRECTORY ${TOP_PROJECT_DIRECTORY} )
 
 # add the compilation of the class patch as an external project
-include( ExternalProject )
+set ( USEPATCH TRUE CACHE BOOL "Compile and use the patched version of classy (called ''classee'')" )
 
-ExternalProject_Add(project_eeClassPatch
-    URL https://github.com/miknab/ClassPatch/archive/master.zip
-    PREFIX ${ CMAKE_CURRENT_BINARY_DIR }/eeClassPatch
-    CONFIGURE_COMMAND ""
-    BUILD_COMMAND make
-    INSTALL_COMMAND make
-)
+if( ${USEPATCH} )
+    message ( "Building patched class as external project" )
+    
+    file( MAKE_DIRECTORY ClassPatch )
 
-ExternalProject_Get_Property(project_eeClassPatch install_dir)
-add_library ( eeClassPatch project_eeClassPatch )
+    include( ExternalProject )
+
+    ExternalProject_Add(project_eeClassPatch
+        URL https://github.com/miknab/ClassPatch/archive/master.tar.gz
+        SOURCE_DIR ${CMAKE_CURRENT_LIST_DIR}/ClassPatch
+        DOWNLOAD_DIR ${CMAKE_CURRENT_LIST_DIR}/ClassPatch
+        BUILD_IN_SOURCE 1
+        CONFIGURE_COMMAND ""
+        BUILD_COMMAND make
+        INSTALL_COMMAND make
+    )
+
+    ExternalProject_Get_Property(project_eeClassPatch install_dir)
+
+    add_library ( eeClassPatch MODULE IMPORTED )
+else()
+    message ( WARNING "${Red}You will be using EuclidEmulator with a non-patched version of class/classy. This might lead to unexpected or even wrong results. Do this at your own risk! We encourage you to use the patched version. We do not take any responsibility for anything that could go wrong because of using EuclidEmulator with the original classy version.${ColourReset}" )
+endif()
