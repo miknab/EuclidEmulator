@@ -267,10 +267,15 @@ def get_pconv(emu_pars_dict, sourcedist_func, prec=7):
 
         pnonlin_array.append(np.array(p_toosmall + pmatternl + p_toobig))
 
+    # get the non-linear matter power spectrum in units of [(Mpc/h)^3]
     pnonlin_array = np.asarray(pnonlin_array).transpose()
         
+    # compute prefactor of limber equation integral --> in units of [Mpc^4]
     prefac = 2.25*Om_m*Om_m * H0 * H0 * H0 * H0 * c_inv * c_inv * c_inv * c_inv
     
+    # convert prefactor units to [(Mpc/h)^4]
+    prefac = prefac * h * h * h * h
+
     # compose the integrand
     assert (len(z_vec) == len(chi_vec))
     assert (len(chi_vec) == len(a_inv_vec))
@@ -286,7 +291,8 @@ def get_pconv(emu_pars_dict, sourcedist_func, prec=7):
 
     assert(integrand.shape == pnonlin_array.shape)
     
-    # perform integral and return
+    # perform integral (bear in mind that only the product of the 
+    # integral and the prefac is truely dimensionless) and return
     Pconv = {'l': l_vec, 
              'Cl': prefac*romb(integrand, chi_vec[1]-chi_vec[0])}
     
