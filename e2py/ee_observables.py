@@ -95,7 +95,7 @@ def get_pnonlin(emu_pars_dict, redshifts):
 
     Related:     get_plin, get_boost
     """
-    if (classee not in sys.modules) and (classy not in sys.modules):
+    if Class.__module__ not in sys.modules:
         print("You have not imported neither classee nor classy. Emulating full power spectrum is hence not possible.")
         return None
 
@@ -141,7 +141,7 @@ def get_plin(emu_pars_dict, k_arr, z_arr):
 
     Related:     get_pnonlin, get_boost
     """
-    if (classee not in sys.modules) and (classy not in sys.modules):
+    if Class.__module__ not in sys.modules:
         print("You have not imported neither classee nor classy. Computing linear power spectrum is hence not possible.")
         return None
 
@@ -226,7 +226,7 @@ def get_pconv(emu_pars_dict, sourcedist_func, prec=7):
                  
     Ouput type:  dictionary of the form {'l': ..., 'Cl': ...}
     """
-    if (classee not in sys.modules) and (classy not in sys.modules):
+    if Class.__module__ not in sys.modules:
         print("You have not imported neither classee nor classy. Emulating convergence power spectrum is hence not possible.")
         return None
 
