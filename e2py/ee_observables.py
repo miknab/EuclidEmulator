@@ -246,7 +246,7 @@ def get_pconv(emu_pars_dict, sourcedist_func, prec=7):
     chi_vec = []
     pnonlin_array = []
     
-    l_vec = np.linspace(1e1,1e4, nl)
+    l_vec = np.linspace(1e1,2e3, nl)
 
     P = get_pnonlin(emu_pars_dict, z_vec) # call EuclidEmulator
     chi_vec = bg.dist_comov(emu_pars_dict, np.zeros_like(z_vec), z_vec)
