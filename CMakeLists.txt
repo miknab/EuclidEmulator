@@ -61,4 +61,3 @@ if( ${USEPATCH} )
 else()
     message ( WARNING "${Red}You will be using EuclidEmulator with a non-patched version of class/classy. This might lead to unexpected or even wrong results. Do this at your own risk! We encourage you to use the patched version. We do not take any responsibility for anything that could go wrong because of using EuclidEmulator with the original classy version.${ColourReset}" )
 endif()
->>>>>>> AddClassPatch
