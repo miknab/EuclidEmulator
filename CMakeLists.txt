@@ -7,14 +7,6 @@ set ( EUCLID_EMULATOR_VERSION_MINOR 1 )
 
 set ( TOP_PROJECT_DIR ${CMAKE_CURRENT_LIST_DIR} )
 
-# does this system provide the gsl_sf_legendre_Pl_array function of the GSL library?
-#include( CheckFunctionExists )
-#check_function_exists ( gsl_sf_legendre_Pl_array HAVE_GSL_LEGENDRE )
-
-#if ( !HAVE_GSL_LEGENDRE )
-#    message ( SEND_ERROR "${HAVE_GSL_LEGENDRE} The required function gsl_sf_legendre_Pl_array was not found" )
-#endif()
-
 # Configure the header file to pass CMake setting to source code
 configure_file ( "${CMAKE_CURRENT_LIST_DIR}/include/EuclidEmulator.h.in"
                  "${CMAKE_CURRENT_LIST_DIR}/include/EuclidEmulator.h"
@@ -32,9 +24,3 @@ include( UseCython )
 
 # Procedd the CMakeLists.txt in the 'src' and 'bin' directory
 add_subdirectory( src )
-
-# enable testing
-enable_testing ()
-
-# does the ee executable run
-add_test ( NAME eeRuns COMMAND ee 0.02222 0.1426 0.96 0.67 -1.0 0.83 0.5 WORKING_DIRECTORY ${TOP_PROJECT_DIRECTORY} )
