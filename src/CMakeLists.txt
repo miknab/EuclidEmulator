@@ -2,12 +2,12 @@ set( CYTHON_SOURCE_FILE EuclidEmulator_BackEnd.pyx )
 set( C_SOURCE_FILES EuclidEmulator.c cosmo.c )
 
 # Set message colors
-if (NOT WIN32)
-    string( ASCII 27 Esc )
-    set ( ColourReset "${Esc}[m" )
-    set ( Red "${Esc}[31m" )
-    set ( Green "${Esc}[32m" )
-endif()
+#if (NOT WIN32)
+#    string( ASCII 27 Esc )
+#    set ( ColourReset "${Esc}[m" )
+#    set ( Red "${Esc}[31m" )
+#    set ( Green "${Esc}[32m" )
+#endif()
 ####
 
 execute_process ( COMMAND bash -c "python -c 'import sys; print(sys.version)'"
