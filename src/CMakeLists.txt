@@ -2,12 +2,12 @@ set( CYTHON_SOURCE_FILE EuclidEmulator_BackEnd.pyx )
 set( C_SOURCE_FILES EuclidEmulator.c cosmo.c )
 
 # Set message colors
-if (NOT WIN32)
-    string( ASCII 27 Esc )
-    set ( ColourReset "${Esc}[m" )
-    set ( Red "${Esc}[31m" )
-    set ( Green "${Esc}[32m" )
-endif()
+#if (NOT WIN32)
+#    string( ASCII 27 Esc )
+#    set ( ColourReset "${Esc}[m" )
+#    set ( Red "${Esc}[31m" )
+#    set ( Green "${Esc}[32m" )
+#endif()
 ####
 
 execute_process ( COMMAND bash -c "python -c 'import sys; print(sys.version)'"
@@ -50,20 +50,15 @@ elseif ( GSL_VERSION VERSION_LESS 1.13 )
 endif()
 
 #include math library
-#find_library(LIBM REQUIRED)
-#if ( !LIBM_FOUND )
-#    message ( SEND_ERROR "${Red}Math library not installed${ColourReset}" )
-#else ()
-#    message ( "-- Found libm" )
-#endif()
+find_library(LIBM REQUIRED)
+if ( !LIBM_FOUND )
+    message ( SEND_ERROR "${Red}Math library not installed${ColourReset}" )
+else ()
+    message ( "-- Found libm" )
+endif()
 
-target_link_libraries( ee GSL::gsl GSL::gslcblas )
-target_link_libraries( EuclidEmulator_BackEnd GSL::gsl GSL::gslcblas) 
-
-
-
-
-
+target_link_libraries( ee GSL::gsl GSL::gslcblas m)
+target_link_libraries( EuclidEmulator_BackEnd GSL::gsl GSL::gslcblas m) 
 
 
 

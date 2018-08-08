@@ -15,7 +15,19 @@ import ee_cosmoconv as cc
 
 from scipy.integrate import romb
 from scipy.interpolate import CubicSpline
-from classy import Class
+
+try:
+    from classee import Class
+except ImportError:
+    try:
+        from classy import Class
+    except ImportError:
+        print("Classy could not be found in your system. Here are some suggestions:\n")
+        print("\t -Download the patched version of Class and its wrapper classee (see https://github.com/miknab/ClassPatch)")
+        print("\t -If you know that Class is installed on your system and yet classy could not be installed, try re-compiling Class with just ''make'' instead of ''make class''")
+        print("\t -If both of the two previous options are not applicable to your situation, please download and build the original class code (see class-code.net)")
+        print("")
+        print("NOTICE: Even without classy you can still use EuclidEmulator to emulate boost factors. You won't be able to compute full power spectra, though.")
 
 def get_boost(emu_pars_dict, redshifts):
     """
@@ -83,6 +95,10 @@ def get_pnonlin(emu_pars_dict, redshifts):
 
     Related:     get_plin, get_boost
     """
+    if Class.__module__ not in sys.modules:
+        print("You have not imported neither classee nor classy. Emulating full power spectrum is hence not possible.")
+        return None
+
     if isinstance(redshifts,(int,float)):
         redshifts = np.asarray([redshifts])
     else:
@@ -125,6 +141,10 @@ def get_plin(emu_pars_dict, k_arr, z_arr):
 
     Related:     get_pnonlin, get_boost
     """
+    if Class.__module__ not in sys.modules:
+        print("You have not imported neither classee nor classy. Computing linear power spectrum is hence not possible.")
+        return None
+
     # Convert single redshift input argument to array
     if isinstance(z_arr, (float, int)):
         z_arr = np.array([z_arr])
@@ -206,6 +226,11 @@ def get_pconv(emu_pars_dict, sourcedist_func, prec=7):
                  
     Ouput type:  dictionary of the form {'l': ..., 'Cl': ...}
     """
+    if Class.__module__ not in sys.modules:
+        print("You have not imported neither classee nor classy. Emulating convergence power spectrum is hence not possible.")
+        return None
+
+
     c = bg.SPEED_OF_LIGHT_IN_KILOMETERS_PER_SECOND # speed of light
     c_inv = 1./c
     h = emu_pars_dict['h']
