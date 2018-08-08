@@ -39,6 +39,9 @@ enable_testing ()
 # does the ee executable run
 add_test ( NAME eeRuns COMMAND ee 0.02222 0.1426 0.96 0.67 -1.0 0.83 0.5 WORKING_DIRECTORY ${TOP_PROJECT_DIRECTORY} )
 
+# add the compilation of the class patch as an external project
+include( ExternalProject )
+
 ExternalProject_Add(project_eeClassPatch
     URL https://github.com/miknab/ClassPatch/archive/master.zip
     PREFIX ${ CMAKE_CURRENT_BINARY_DIR }/eeClassPatch
