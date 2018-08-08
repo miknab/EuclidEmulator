@@ -1,0 +1,169 @@
+#!/bin/bash
+
+# By executing this script the EuclidEmulator code is built.
+
+# Author: M. Knabenhans
+# Date: July 26, 2018
+
+target=$1
+projectdir=$(pwd)
+
+if  [[ "$target" == "clean" ]]
+then 
+    
+    NOTHING_TO_DO=true
+
+    executable="$projectdir/ee"
+    datafile="$projectdir/ee.dat"
+    pymodule="$projectdir/e2py/EuclidEmulator_BackEnd.so"
+    pycfiles="$projectdir/e2py/"*".pyc"
+    pytestfile="$projectdir/test.py"
+    headerfile="$projectdir/include/EuclidEmulator.h"
+
+    if [ -d bin ] 
+    then 
+        echo "Directory 'bin' exists"
+        rm -r bin
+        echo -e "\tCleaned!"
+        NOTHING_TO_DO=false
+    fi
+
+    if [ -d Testing ]
+    then
+        echo "Directory 'Testing' exists"
+        rm -r Testing
+        echo -e "\tCleaned!"
+        NOTHING_TO_DO=false
+    fi
+   
+    if [ -d ClassPatch ]
+    then
+        echo "Directory 'ClassPatch' exists"
+        rm -r ClassPatch
+        echo -e "\tCleaned!"
+        NOTHING_TO_DO=false
+    fi
+
+ 
+    if [ -L $executable ]
+    then
+        echo "$executable exists"
+        rm $executable
+        echo -e "\tCleaned!"
+        NOTHING_TO_DO=false
+    fi
+
+    if [ -L $datafile ] 
+    then 
+        echo "$datafile' exists"
+        rm $datafile
+        echo -e "\tCleaned!"
+        NOTHING_TO_DO=false
+    fi
+ 
+    if [ -L $pymodule ]
+    then
+        echo "$pymodule exists"
+        rm $pymodule
+        echo -e "\tCleaned!"
+        NOTHING_TO_DO=false
+    fi
+
+    for f in $pycfiles
+    do
+        if [ -e $f ]
+        then
+            echo "$f exists"
+            rm $f
+            echo -e "\tCleaned!"
+            NOTHING_TO_DO=false
+        fi
+    done
+    
+    for f in $headerfile
+    do
+        if [ -e $f ]
+        then
+            echo "$f exists"
+            rm $f
+            echo -e "\tCleaned!"
+            NOTHING_TO_DO=false
+        fi
+    done
+
+    if [ -e $pytestfile ]
+    then
+        echo "pytestfile exists"
+        mv $pytestfile $projectdir"/e2py/"  
+        echo -e "\tMoved!"
+        NOTHING_TO_DO=false
+    fi
+
+    if $NOTHING_TO_DO
+    then
+        echo -e "There's nothing to clean up!\n"
+    fi
+
+    exit 0
+fi
+
+#gsl_check_install="$(ldconfig -p | grep libgsl.so)"
+#if [ ! -z "$gsl_check_install" ]
+#then
+#    echo -e "GSL installed...\n"
+#    echo $(echo $gsl_check_install | awk -F " => " '{print $1}')
+#
+#else
+#    echo -e "GSL not found. Do you want to install GSL now (root access required)? [yes/no]"
+#    read installnow
+#    
+#    if [[ "$installnow" == "yes" ]]
+#    then
+#       a=1 
+#    else
+#        echo -e "As you wish... you can always come back. Have a good one.\n"
+#        exit 0
+#    fi
+#fi
+
+mkdir bin
+cd bin
+cmake .. -DUSEPATCH:BOOL=TRUE
+
+# Check if cmake configuring was successfull
+# abort script execusion if an error ocurred, 
+# otherwise keep on going
+if [ ! $? -eq 0 ]; then
+    cd ..
+    rm -r bin
+    exit 1
+fi
+
+if [ -z "$target" ]
+then
+    echo -e "Building full project: CLI and python package.\n"
+    make
+
+    # Check if make was successfull
+    # abort script execusion if an error ocurred, 
+    # otherwise keep on going
+    if [ ! $? -eq 0 ]; then
+        exit 1
+    fi
+
+    ln -s $projectdir"/bin/src/ee" $projectdir"/ee"
+    ln -s $projectdir"/bin/src/EuclidEmulator_BackEnd.so" $projectdir"/e2py/EuclidEmulator_BackEnd.so"
+    mv $projectdir"/e2py/test.py" $projectdir
+    ln -s $projectdir"/e2py/ee.dat" $projectdir"/ee.dat"
+
+elif [[ "$target" == "ee" ]]
+then
+    echo -e "Building CLI only\n"
+    make ee
+    ln -s $projectdir"/bin/src/ee" $projectdir"/ee"
+    ln -s $projectdir"/e2py/ee.dat" $projectdir"/ee.dat"
+
+else
+    echo -e "$target is not a valid target\n"
+    exit 1
+fi
