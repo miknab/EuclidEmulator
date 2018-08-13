@@ -193,107 +193,108 @@ def get_plin(emu_pars_dict, k_arr, z_arr):
 def sgaldist(alpha=2.0, beta=1.5, z_mean=0.9):
     return lens.GalaxyRedshiftDist(alpha, beta, z_mean)(z_mean)
 
-def get_pconv(emu_pars_dict, sourcedist_func, prec=7):
-    """
-    Signature:   get_pconv(emu_pars_dict, sourcedist_func, prec=12)
+if False:
+    def get_pconv(emu_pars_dict, sourcedist_func, prec=7):
+        """
+        Signature:   get_pconv(emu_pars_dict, sourcedist_func, prec=12)
+            
+        Description: Converts a matter power spectrum into a convergence power 
+                     spectrum via the Limber equation (conversion is based on
+                     equation (29) of the review article by Martin Kilbinger 
+                     "Cosmology with cosmic shear observations: a review", July 21,
+                     2015,arXiv:1411.0115v2). REMARK: The g in that equation is a
+                     typo and should be q which is defined in equation (24). 
+                     
+                     The input variable emu_pars_dict is a dictionary containing
+                     the cosmological parameters and sourcedist is a dictionary of
+                     the format {'chi': ..., 'n': ...} containing the a vector of 
+                     comoving distances ("chi") together with the number counts of 
+                     source galaxies at these distances or redshifts, respectively.
+                     
+                     The precision parameter prec is an integer which defines at
+                     how many redshifts the matter power spectrum is emulated for 
+                     integration in the Limber equation. The relation between the 
+                     number of redshifts nz and the parameter prec is given by 
+                     
+                                             nz = 2^prec + 1
+                     
+                     REMARK: The 'chi' vector in the sourcedist dictionary should 
+                     span the range from 0 to chi(z=5).
+
+        Input type:  emu_pars_dict - dictionary
+                     sourcedist - function object
+                     prec - int
+                     
+        Ouput type:  dictionary of the form {'l': ..., 'Cl': ...}
+        """
+        if Class.__module__ not in sys.modules:
+            print("You have not imported neither classee nor classy. Emulating convergence power spectrum is hence not possible.")
+            return None
+
+
+        c = bg.SPEED_OF_LIGHT_IN_KILOMETERS_PER_SECOND # speed of light
+        c_inv = 1./c
+        h = emu_pars_dict['h']
+        H0 = 100*h
+        Om_m = emu_pars_dict['om_m']/(h*h)
         
-    Description: Converts a matter power spectrum into a convergence power 
-                 spectrum via the Limber equation (conversion is based on
-                 equation (29) of the review article by Martin Kilbinger 
-                 "Cosmology with cosmic shear observations: a review", July 21,
-                 2015,arXiv:1411.0115v2). REMARK: The g in that equation is a
-                 typo and should be q which is defined in equation (24). 
-                 
-                 The input variable emu_pars_dict is a dictionary containing
-                 the cosmological parameters and sourcedist is a dictionary of
-                 the format {'chi': ..., 'n': ...} containing the a vector of 
-                 comoving distances ("chi") together with the number counts of 
-                 source galaxies at these distances or redshifts, respectively.
-                 
-                 The precision parameter prec is an integer which defines at
-                 how many redshifts the matter power spectrum is emulated for 
-                 integration in the Limber equation. The relation between the 
-                 number of redshifts nz and the parameter prec is given by 
-                 
-                                         nz = 2^prec + 1
-                 
-                 REMARK: The 'chi' vector in the sourcedist dictionary should 
-                 span the range from 0 to chi(z=5).
-
-    Input type:  emu_pars_dict - dictionary
-                 sourcedist - function object
-                 prec - int
-                 
-    Ouput type:  dictionary of the form {'l': ..., 'Cl': ...}
-    """
-    if Class.__module__ not in sys.modules:
-        print("You have not imported neither classee nor classy. Emulating convergence power spectrum is hence not possible.")
-        return None
-
-
-    c = bg.SPEED_OF_LIGHT_IN_KILOMETERS_PER_SECOND # speed of light
-    c_inv = 1./c
-    h = emu_pars_dict['h']
-    H0 = 100*h
-    Om_m = emu_pars_dict['om_m']/(h*h)
-    
-    nz = int(2**prec + 1)
-    nl = int(1e4)
-    
-    z_vec = np.logspace(np.log10(5e-2), np.log10(4.999999), nz)
-    a_inv_vec = 1.+z_vec
-    chi_lim = bg.dist_comov(emu_pars_dict, 1e-12, 5.0) # in Mpc/h
-    chi_vec = []
-    pnonlin_array = []
-    
-    l_vec = np.linspace(1e1,2e3, nl)
-
-    P = get_pnonlin(emu_pars_dict, z_vec) # call EuclidEmulator
-    chi_vec = bg.dist_comov(emu_pars_dict, np.zeros_like(z_vec), z_vec)
-
-    for i,z in enumerate(z_vec):
-        f = CubicSpline(np.log10(P['k']), np.log10(P['P_nonlin']['z'+str(i)]))
-        k = cc.l_to_k(emu_pars_dict, l_vec, z) # needs to be called inside loop
-                                               # because different z-values
-                                               # lead to different results
-
-        # evaluate the interpolating function of Pnl for all k in the range
-        # allowed by EuclidEmulator (this range is given by P['k'])
-        pmatternl = [10.0**f(np.log10(kk)) for kk in k if (kk >= P['k'].min() and kk <= P['k'].max())]
-        # for k values below the lower bound or above the upper bound of 
-        # this k range, set the contributions to 0.0
-        p_toosmall = [0.0 for kk in k if kk < P['k'].min()]
-        p_toobig = [0.0 for kk in k if kk > P['k'].max()]
-
-        pnonlin_array.append(np.array(p_toosmall + pmatternl + p_toobig))
-
-    # get the non-linear matter power spectrum in units of [(Mpc/h)^3]
-    pnonlin_array = np.asarray(pnonlin_array).transpose()
+        nz = int(2**prec + 1)
+        nl = int(1e4)
         
-    # compute prefactor of limber equation integral --> in units of [Mpc^4]
-    prefac = 2.25*Om_m*Om_m * H0 * H0 * H0 * H0 * c_inv * c_inv * c_inv * c_inv
-    
-    # convert prefactor units to [(Mpc/h)^4]
-    prefac = prefac * h * h * h * h
+        z_vec = np.logspace(np.log10(5e-2), np.log10(4.999999), nz)
+        a_inv_vec = 1.+z_vec
+        chi_lim = bg.dist_comov(emu_pars_dict, 1e-12, 5.0) # in Mpc/h
+        chi_vec = []
+        pnonlin_array = []
+        
+        l_vec = np.linspace(1e1,2e3, nl)
 
-    # compose the integrand
-    assert (len(z_vec) == len(chi_vec))
-    assert (len(chi_vec) == len(a_inv_vec))
-    assert all([len(chi_vec) == len(pnonlin_array[i]) 
-                for i in range(len(pnonlin_array))])
-    
-    source_dict = {'chi': chi_vec, 'n': sourcedist_func(z_vec)}
-    
-    q_vec = lens.lens_efficiency(source_dict, chi_vec, chi_lim)
- 
-    integrand = np.array([q_vec * q_vec * a_inv_vec * a_inv_vec * 
-                          pnonlin_array[i] for i in range(nl)])
+        P = get_pnonlin(emu_pars_dict, z_vec) # call EuclidEmulator
+        chi_vec = bg.dist_comov(emu_pars_dict, np.zeros_like(z_vec), z_vec)
 
-    assert(integrand.shape == pnonlin_array.shape)
-    
-    # perform integral (bear in mind that only the product of the 
-    # integral and the prefac is truely dimensionless) and return
-    Pconv = {'l': l_vec, 
-             'Cl': prefac*romb(integrand, chi_vec[1]-chi_vec[0])}
-    
-    return Pconv
+        for i,z in enumerate(z_vec):
+            f = CubicSpline(np.log10(P['k']), np.log10(P['P_nonlin']['z'+str(i)]))
+            k = cc.l_to_k(emu_pars_dict, l_vec, z) # needs to be called inside loop
+                                                   # because different z-values
+                                                   # lead to different results
+
+            # evaluate the interpolating function of Pnl for all k in the range
+            # allowed by EuclidEmulator (this range is given by P['k'])
+            pmatternl = [10.0**f(np.log10(kk)) for kk in k if (kk >= P['k'].min() and kk <= P['k'].max())]
+            # for k values below the lower bound or above the upper bound of 
+            # this k range, set the contributions to 0.0
+            p_toosmall = [0.0 for kk in k if kk < P['k'].min()]
+            p_toobig = [0.0 for kk in k if kk > P['k'].max()]
+
+            pnonlin_array.append(np.array(p_toosmall + pmatternl + p_toobig))
+
+        # get the non-linear matter power spectrum in units of [(Mpc/h)^3]
+        pnonlin_array = np.asarray(pnonlin_array).transpose()
+            
+        # compute prefactor of limber equation integral --> in units of [Mpc^4]
+        prefac = 2.25*Om_m*Om_m * H0 * H0 * H0 * H0 * c_inv * c_inv * c_inv * c_inv
+        
+        # convert prefactor units to [(Mpc/h)^4]
+        prefac = prefac * h * h * h * h
+
+        # compose the integrand
+        assert (len(z_vec) == len(chi_vec))
+        assert (len(chi_vec) == len(a_inv_vec))
+        assert all([len(chi_vec) == len(pnonlin_array[i]) 
+                    for i in range(len(pnonlin_array))])
+        
+        source_dict = {'chi': chi_vec, 'n': sourcedist_func(z_vec)}
+        
+        q_vec = lens.lens_efficiency(source_dict, chi_vec, chi_lim)
+     
+        integrand = np.array([q_vec * q_vec * a_inv_vec * a_inv_vec * 
+                              pnonlin_array[i] for i in range(nl)])
+
+        assert(integrand.shape == pnonlin_array.shape)
+        
+        # perform integral (bear in mind that only the product of the 
+        # integral and the prefac is truely dimensionless) and return
+        Pconv = {'l': l_vec, 
+                 'Cl': prefac*romb(integrand, chi_vec[1]-chi_vec[0])}
+        
+        return Pconv
