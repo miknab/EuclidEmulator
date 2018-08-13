@@ -1,2 +1,0 @@
-/usr/bin/ar qc libeucemu.a  CMakeFiles/eucemu.dir/EuclidEmulator.o CMakeFiles/eucemu.dir/cosmo.o
-/usr/bin/ranlib libeucemu.a
