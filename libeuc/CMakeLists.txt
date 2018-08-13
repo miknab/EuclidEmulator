@@ -6,7 +6,6 @@ project ( eucemu )
 set ( EUCLID_EMULATOR_VERSION_MAJOR 1 )
 set ( EUCLID_EMULATOR_VERSION_MINOR 1 )
 
-
 # Set the path to where the EuclidEmulator data file ee.dat should be installed
 set ( PATH_TO_EUCLIDEMULATOR_DATA_FILE "${CMAKE_INSTALL_PREFIX}/share" )
 
@@ -32,5 +31,3 @@ target_include_directories( ${PROJECT_NAME} PUBLIC ${GSL_INCLUDE_DIRS} )
 install( TARGETS ${PROJECT_NAME} DESTINATION "lib" )
 install( FILES ${CMAKE_CURRENT_BINARY_DIR}/EuclidEmulator.h DESTINATION "include" )
 install( FILES ee.dat DESTINATION ${PATH_TO_EUCLIDEMULATOR_DATA_FILE} )
-
-
