@@ -46,9 +46,8 @@ void EucEmu(double *CosmoParams, double *Redshifts, int len_z, double **kVals, i
     off_t size;
     struct stat s;
 
-    printf("data file path = %s\n", PATH_TO_EUCLIDEMULATOR_DATA_FILE);
-
     int fd = open(PATH_TO_EUCLIDEMULATOR_DATA_FILE"/ee.dat", O_RDONLY);
+
     int zcounter,i,di,ip,iz,ic,j,l,lmax;
     double z,x,prod,t0,t200,dDelta,t,dti;
 
