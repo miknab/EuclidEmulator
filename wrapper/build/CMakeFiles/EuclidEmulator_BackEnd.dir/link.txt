@@ -1,1 +1,0 @@
-/usr/bin/cc  -fPIC   -shared  -o EuclidEmulator_BackEnd.so CMakeFiles/EuclidEmulator_BackEnd.dir/EuclidEmulator_BackEnd.c.o /home/ics/mischak/anaconda2/lib/libpython2.7.so /home/ics/mischak/code/EuclidEmulator/EmulatorCode/EucEmu_V1.1.1.clean/NewStructure/libeuc/build/libeucemu.a -lgsl -lgslcblas -Wl,-rpath,/home/ics/mischak/anaconda2/lib: 
