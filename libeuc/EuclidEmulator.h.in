@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include <math.h>
 #include <fcntl.h>
 #include <sys/types.h>
@@ -20,6 +21,8 @@
 #define EUCLID_EMULATOR_VERSION_MAJOR @EUCLID_EMULATOR_VERSION_MAJOR@
 #define EUCLID_EMULATOR_VERSION_MINOR @EUCLID_EMULATOR_VERSION_MINOR@
 
+#define PATH_TO_EUCLIDEMULATOR_DATA_FILE "@PATH_TO_EUCLIDEMULATOR_DATA_FILE@"
+
 // Struct for return type of EucEmu()
 struct FID{
     double *handle;
@@ -27,6 +30,4 @@ struct FID{
 };
 
 // Actual emulator function
-//void EucEmu(double *CosmoParams, double z);
-//void EucEmu(double *CosmoParams, double z, double **kVals, int *nkVals, double **Boost, int *nBoost);
 void EucEmu(double *CosmoParams, double *Redshifts, int len_z, double **kVals, int *nkVals, double **Boost, int *nBoost);

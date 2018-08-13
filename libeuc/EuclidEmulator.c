@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include <math.h>
 #include <fcntl.h>
 #include <sys/types.h>
@@ -44,7 +45,10 @@ void EucEmu(double *CosmoParams, double *Redshifts, int len_z, double **kVals, i
     double *f;
     off_t size;
     struct stat s;
-    int fd = open("ee.dat", O_RDONLY);
+
+    printf("data file path = %s\n", PATH_TO_EUCLIDEMULATOR_DATA_FILE);
+
+    int fd = open(PATH_TO_EUCLIDEMULATOR_DATA_FILE"/ee.dat", O_RDONLY);
     int zcounter,i,di,ip,iz,ic,j,l,lmax;
     double z,x,prod,t0,t200,dDelta,t,dti;
 
