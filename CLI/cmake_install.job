@@ -1,0 +1,3 @@
+cmake -DCMAKE_INSTALL_PREFIX=/home/ics/mischak/code/e2CLI
+make
+make install
