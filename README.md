@@ -12,7 +12,11 @@ STAY TUNED:
 2) We plan a fully revised version of the emulator that includes neutrino physics.
 
 ## Quick start
-Depending on whether you want to build the command line interface (CLI) only or the python wrapper, enter one or the other directory (called `CLI` or `wrapper`). Create a new build directory (in bash e.g. via `mkdir build`), enter this newly created directory and type `cmake ..` (if you have root access) or `cmake -DCMAKE_INSTALL_PREFIX=path/to/installation/directory ..` (without root access). Then type `make` in order to build the code and `make install` to install it.
+Depending on whether you want to build the command line interface (CLI) only or the python wrapper, enter one or the other directory (called `CLI` or `wrapper`). Create a new build directory (in bash e.g. via `mkdir build`), enter this newly created directory and type <\br>
+`cmake ..`  <\br>
+(if you have root access) or <\br>
+`cmake -DCMAKE_INSTALL_PREFIX=path/to/installation/directory ..`  <\br>
+(without root access). Then type `make` in order to build the code and `make install` to install it.
 
 If you don't have root acces on the machine you want to build this software on, we recommend to install this software inside a virtual environment (see documentation/wiki for more info).
 
