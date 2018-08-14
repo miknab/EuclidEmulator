@@ -85,9 +85,9 @@ There will be e.g. the field `result[B][z1]` corresponding to the boost factor a
 ## Credits
 Credits for this project go to:<br/>
 <br/>
-__Doug Potter__ (https://bitbucket.org/dpotter/) for constantly advising me in this project <br/>
-__Jeppe Mosgaard Dakin__ (https://github.com/jmd-dk) for significant contributions to the cython code <br/>
-__Rongchuan Zhao__ (https://astro.uni-bonn.de/m/rzhao) for contributions in the lensing module ee_lens.py and some functions in ee_aux.py.
+__Doug Potter__, University of Zurich, Switzerland (https://bitbucket.org/dpotter/) for constantly advising me in this project <br/><br/>
+__Jeppe Mosgaard Dakin__, Aarhus University, Denmark (https://github.com/jmd-dk) for significant contributions to the cython code <br/><br/>
+__Rongchuan Zhao__, University of Bonn, Germany (https://astro.uni-bonn.de/m/rzhao) for contributions in the lensing module ee_lens.py and some functions in ee_aux.py.
 
 ## License
 To be added
