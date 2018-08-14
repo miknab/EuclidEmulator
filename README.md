@@ -8,7 +8,7 @@ Reference: Knabenhans et al., 2018, arXiv pre-print (submitted)<br/>
 If you use EuclidEmulator in any way (for a publication or otherwise), please cite this paper.
 
 STAY TUNED:
-1) We are working on a new feature for the python wrapper allowing to easily an quickly calculate convergence power spectra.
+1) We are working on a new feature for the python wrapper allowing to easily and quickly calculate convergence power spectra.
 2) We plan a fully revised version of the emulator that includes neutrino physics.
 
 ## Quick start
