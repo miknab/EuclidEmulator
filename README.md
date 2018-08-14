@@ -28,15 +28,19 @@ If you have not done so already, either download this repository or clone it to 
 ### Building and installation
 EuclidEmulator comes with a command line interface (CLI) and a full-fledged python2.7 package. You can choose whether you want to install only one of these tools or both. We recommend to install the python package as it's usage is less error-prone than that of the CLI and it offers much more utilities. In the following we will restrict our description on the python package (if you are interested in the CLI, please consult the wiki).
 Now `cd`into `wrapper` inside the `EuclidEmulator` directory. Create a new build folder, enter it  and type <br/><br/>
-`cmake ..`  <br/><br/>
+```bash
+   cmake ..
+```
 (if you have root access) or <br/><br/>
-`cmake -DCMAKE_INSTALL_PREFIX=path/to/installation/directory ..`  <br/><br/>
+```bash
+   cmake -DCMAKE_INSTALL_PREFIX=path/to/installation/directory ..
+```
 (without root access), where `path/to/installation/directory` denotes the absolute path to directory for which you have write access. Then type `make` in order to build the code and `make install` to install it.
 
 If you don't have root acces on the machine you want to build this software on, we recommend to install this software inside a virtual environment (see documentation/wiki for more info).
 
 ### Usage
-Now you are ready to use the software. In a python2.7 script or in a jupyter notebook you can import the package via <br/>
+Now you are ready to use the software. In a python2.7 script or in a jupyter notebook (with a python2 kernel) you can import the package via <br/>
 ```python
    import e2py
 ```
