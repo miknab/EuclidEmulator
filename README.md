@@ -1,7 +1,7 @@
 # EuclidEmulator (version 1.1)
 This repository contains the main source code of the EuclidEmulator, a fast and accurate tool to estimate the non-linear correction to the matter power spectrum.
 
-Authors:   M. Knabenhans & J. Stadel<br/>
+Authors:   M. Knabenhans, J. Stadel<br/>
 Date:      May 2018<br/>
 Reference: Knabenhans et al., 2018, arXiv pre-print (submitted)<br/>
 
@@ -9,26 +9,35 @@ If you use EuclidEmulator in any way (for a publication or otherwise), please ci
 
 STAY TUNED:
 1) We are working on a new feature for the python wrapper allowing to easily and quickly calculate convergence power spectra.
-2) We plan a fully revised version of the emulator that includes neutrino physics.
+2) We plan to write a python3 version of the wrapper.
+3) We plan a fully revised version of the emulator that includes neutrino physics.
 
 ## Quick start
-If you have not done so already, either download this repository or clone it to your local host (under Linux you can get a gzipped tar-ball via `wget https://github.com/miknab/EuclidEmulator/archive/master.tar.gz`). In case you have to do so, extract the archive and enter it.
+### Prerequisites
+In any case you need:
+ * GNU Scientific Library (GSL; see https://www.gnu.org/software/gsl/)
+ * CMake (see https://cmake.org)
 
-Depending on whether you want to build the python wrapper (recommended) or the command line interface (CLI) only, enter one or the other directory (called `wrapper` or `CLI`). Create a new build directory (in bash e.g. via `mkdir build`), enter this newly created directory and type <br/><br/>
+In order to use the python wrapper, you need in addition:
+ * Python2.7 together with cython, numpy, scipy and pandas (only for python wrapper)
+ * Our own patch of the CLASS code (see https://github.com/miknab/ClassPatch) (only for python wrapper)
+ 
+### Get the code
+If you have not done so already, either download this repository or clone it to your local host (under Linux you can get a gzipped tar-ball via `wget https://github.com/miknab/EuclidEmulator/archive/master.tar.gz`). 
+
+### Building and installation
+EuclidEmulator comes with a command line interface (CLI) and a full-fledged python2.7 package. You can choose whether you want to install only one of these tools or both. We recommend to install the python package as it's usage is less error-prone than that of the CLI and it offers much more utilities. In the following we will restrict our description on the python package (if you are interested in the CLI, please consult the wiki).
+Now `cd`into `wrapper` inside the `EuclidEmulator` directory. Create a new build folder, enter it  and type <br/><br/>
 `cmake ..`  <br/><br/>
 (if you have root access) or <br/><br/>
 `cmake -DCMAKE_INSTALL_PREFIX=path/to/installation/directory ..`  <br/><br/>
-(without root access). Then type `make` in order to build the code and `make install` to install it.
+(without root access), where `path/to/installation/directory` denotes the absolute path to directory for which you have write access. Then type `make` in order to build the code and `make install` to install it.
 
 If you don't have root acces on the machine you want to build this software on, we recommend to install this software inside a virtual environment (see documentation/wiki for more info).
 
-An executable called "ee" will be created. To run the executable type 
+### Usage
+Now you are ready to use the software. Use 
 
-./ee <&#969;<sub>b</sub>> <&#969;<sub>m</sub>> <n<sub>s</sub>> \<h\> <w<sub>0</sub>> <&#963;<sub>8</sub>> \<z\>
-
-where the seven parameter correspond to the five standard &#923;CDM parameters, the DE equation of state parameter w<sub>0</sub> and redshift z. The first column of the produced output corresponds to the k-mode values at which the boost factor (given in the second column) is measured.
-
-WE URGE EVERYONE TO READ AT LEAST THE SECTION ABOUT PITFALLS (see below).
 
 ## Description
 EuclidEmulator is a tool for rapid and accurate estimation of the
