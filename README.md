@@ -45,13 +45,13 @@ Next, define a cosmology as a python dictionary with the keys om_b, om_m, n_s, h
    MyCosmo = {'om_b': 0.0219961, 'om_m': 0.1431991, 'n_s': 0.96, 'h': 0.67, 'w_0': -1.0, 'sigma_8': 0.83}
 ```
 <br/>
-You can now compute a non-linear power spectrum at redshift `z=0.0` by executing:
-<br/>
+You can now compute a non-linear power spectrum at redshift z=0.0 by executing:<br/>
+
 ```python
    z = 0.0
    result = e2py.get_pnonlin(MyCosmo, z)
 ```
-<br/>
+
 The `result` is also a python dictionary with the keys `B` (the boost factor), `P_lin` (the linear power spectrum as computed by class), `P_nonlin` (the non-linear power spectrum being the product of `P_lin` and `B`) and `k` (the vector of k-values given in _h_/Mpc). 
 
 
