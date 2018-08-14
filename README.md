@@ -5,7 +5,7 @@ Authors:   M. Knabenhans & J. Stadel<br/>
 Date:      May 2018<br/>
 Reference: Knabenhans et al., 2018, arXiv pre-print (submitted)<br/>
 
-If you use EuclidEmulator in any way for a publication, please cite this paper.
+If you use EuclidEmulator in any way (for a publication or otherwise), please cite this paper.
 
 STAY TUNED:
 1) We are working on a new feature for the python wrapper allowing to easily an quickly calculate convergence power spectra.
