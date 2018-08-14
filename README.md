@@ -12,6 +12,8 @@ STAY TUNED:
 2) We plan a fully revised version of the emulator that includes neutrino physics.
 
 ## Quick start
+If you have not done so already, either download this repository or clone it to your local host (under Linux you can get a gzipped tar-ball via `wget https://github.com/miknab/EuclidEmulator/archive/master.tar.gz`). In case you have to do so, extract the archive and enter it.
+
 Depending on whether you want to build the python wrapper (recommended) or the command line interface (CLI) only, enter one or the other directory (called `wrapper` or `CLI`). Create a new build directory (in bash e.g. via `mkdir build`), enter this newly created directory and type <br/><br/>
 `cmake ..`  <br/><br/>
 (if you have root access) or <br/><br/>
