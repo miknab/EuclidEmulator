@@ -83,10 +83,10 @@ Notice that you can as well pass a list or numpy.ndarray for `z` in which case `
 There will be e.g. the field `result[B][z1]` corresponding to the boost factor at redshift `z=0.0` or the field `result[P_nonlin][z9]` corresponding to the non-linear matter power spectrum evaluated at redshift `z=0.8`. 
 
 ## Credits
-Credits for this project go to:
-
-Doug Potter (https://bitbucket.org/dpotter/)
-Jeppe Mosgaard Dakin (https://github.com/jmd-dk)
+Credits for this project go to:<br/>
+<br/>
+Doug Potter (https://bitbucket.org/dpotter/)<br/>
+Jeppe Mosgaard Dakin (https://github.com/jmd-dk)<br/>
 Rongchuan Zhao (https://astro.uni-bonn.de/m/rzhao)
 
 ## License
