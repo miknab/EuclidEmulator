@@ -40,10 +40,6 @@ all scales.
 
 For more details we refer to publication and the documentation/wiki.
 
-## Changes with respect to version 1.0
-1. Python wrapper with many useful functions (reducing the risk of falling into a pitfall)
-2. Usage of CMake for the building
-
 ## User guide
 
 =============================== I M P O R T A N T ===============================<br/>
@@ -98,3 +94,7 @@ Known differences are:
     order to convert these two parameters into each other in the context of using EuclidEmulator, you have to use the same
     conversion as is used in the EuclidEmulator code. Convert the parameters using the following proportionality:<br/>
     <div align="center"> A<sub>s</sub>/(2.215 * 10^(-9)) = (&#963;<sub>8</sub>/0.8496)^2
+
+## Changes with respect to version 1.0
+1. Python wrapper with many useful functions (reducing the risk of falling into a pitfall)
+2. Usage of CMake for the building
