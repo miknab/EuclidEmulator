@@ -44,9 +44,14 @@ Create a new build folder, enter it and run CMake, i.e.:
 ```bash
    cmake -DCMAKE_INSTALL_PREFIX=path/to/installation/directory ..
 ```
-(without root access), where `path/to/installation/directory` denotes the absolute path to directory for which you have write access. Then type `make` in order to build the code and `make install` to install it.
+(without root access), where `path/to/installation/directory` denotes the absolute path to directory for which you have write access. Then type 
+```bash
+   make
+   make install
+``` 
+in order to compile and install the code.
 
-If you don't have root acces on the machine you want to build this software on, we recommend to install this software inside a virtual environment (see documentation/wiki for more info).
+REMARK: If you don't have root acces on the machine you want to build this software on, we recommend to install this software inside a virtual environment (see documentation/wiki for more info).
 
 ### Usage
 Now you are ready to use the software. In a python2.7 script or in a jupyter notebook (with a python2 kernel) you can import the package via <br/>
