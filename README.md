@@ -2,7 +2,7 @@
 This repository contains the main source code of the EuclidEmulator, a fast and accurate tool to estimate the non-linear correction to the matter power spectrum. EuclidEmulator is roughly seven orders of magnitude faster than an N-body simulation that yields results at the same level of accuracy.
 
 Authors:   M. Knabenhans, J. Stadel<br/>
-Date:      May 2018<br/>
+Date:      August 2018<br/>
 Reference: Knabenhans et al., 2018, arXiv pre-print (submitted)<br/>
 
 If you use EuclidEmulator in any way (for a publication or otherwise), please cite this paper.
@@ -72,7 +72,15 @@ You can now compute a non-linear power spectrum at redshift z=0.0 by executing:<
 
 The `result` is also a python dictionary with the keys `B` (the boost factor), `P_lin` (the linear power spectrum as computed by class), `P_nonlin` (the non-linear power spectrum being the product of `P_lin` and `B`) and `k` (the vector of k-values given in _h_/Mpc). 
 
-
+Notice that you can as well pass a list or numpy.ndarray for `z` in which case `result` will contain a nested dictionary: The fields `B`, `P_lin` and `P_nonlin` are now dictionaries themselves with fields `z1`, `z2`, `z3`, etc., corresponding to the boost factor, linear and non-linear power spectrum, respectively, evaluated at the individual redshifts listed in the `z` variable. Here is a short example:
+```python
+   import e2py
+   import numpy as np
+   MyCosmo = {'om_b': 0.0219961, 'om_m': 0.1431991, 'n_s': 0.96, 'h': 0.67, 'w_0': -1.0, 'sigma_8': 0.83}
+   z = np.linspace(0.0,1.0,11) # z = [0.0, 0.1, 0.2, ..., 0.9, 1.0]
+   result = e2py.get_pnonlin(MyCosmo, z)
+```
+There will be e.g. the field `result[B][z1]` corresponding to the boost factor at redshift `z=0.0` or the field `result[P_nonlin][z9]` corresponding to the non-linear matter power spectrum evaluated at redshift `z=0.8`. 
 
 ## Description
 EuclidEmulator is a tool for rapid and accurate estimation of the
