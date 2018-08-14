@@ -58,7 +58,7 @@ Now you are ready to use the software. In a python2.7 script or in a jupyter not
 ```python
    import e2py
 ```
-Next, define a cosmology as a python dictionary with the keys om_b, om_m, n_s, h, w_0 and sigma_8:<br/>
+Next, define a cosmology as a python dictionary with the keys `om_b`, `om_m`, `n_s`, `h`, `w_0` and `sigma_8:<br/>
 ```python
    MyCosmo = {'om_b': 0.0219961, 'om_m': 0.1431991, 'n_s': 0.96, 'h': 0.67, 'w_0': -1.0, 'sigma_8': 0.83}
 ```
@@ -85,9 +85,9 @@ There will be e.g. the field `result[B][z1]` corresponding to the boost factor a
 ## Credits
 Credits for this project go to:<br/>
 <br/>
-__Doug Potter__, University of Zurich, Switzerland (https://bitbucket.org/dpotter/) for constantly advising me in this project <br/><br/>
-__Jeppe Mosgaard Dakin__, Aarhus University, Denmark (https://github.com/jmd-dk) for significant contributions to the cython code <br/><br/>
-__Rongchuan Zhao__, University of Bonn, Germany (https://astro.uni-bonn.de/m/rzhao) for contributions in the lensing module ee_lens.py and some functions in ee_aux.py.
+__Doug Potter__, University of Zurich, Switzerland for constantly advising me in this project; https://bitbucket.org/dpotter/ <br/><br/>
+__Jeppe Mosgaard Dakin__, Aarhus University, Denmark for significant contributions to the cython code; https://github.com/jmd-dk <br/><br/>
+__Rongchuan Zhao__, University of Bonn, Germany for contributions in the lensing module ee_lens.py and some functions in ee_aux.py; https://astro.uni-bonn.de/m/rzhao.
 
 ## License
 To be added
