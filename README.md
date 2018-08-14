@@ -23,15 +23,22 @@ In order to use the python wrapper, you need in addition:
  * Our own patch of the CLASS code (see https://github.com/miknab/ClassPatch) (only for python wrapper)
  
 ### Get the code
-If you have not done so already, either download this repository or clone it to your local host (under Linux you can get a gzipped tar-ball via `wget https://github.com/miknab/EuclidEmulator/archive/master.tar.gz`). 
+If you have not done so already, either download this repository or clone it to your local host (under Linux you can get a gzipped tar-ball via
+```
+   wget https://github.com/miknab/EuclidEmulator/archive/master.tar.gz`)
+```
 
 ### Building and installation
 EuclidEmulator comes with a command line interface (CLI) and a full-fledged python2.7 package. You can choose whether you want to install only one of these tools or both. We recommend to install the python package as it's usage is less error-prone than that of the CLI and it offers much more utilities. In the following we will restrict our description on the python package (if you are interested in the CLI, please consult the wiki).
-Now `cd`into `wrapper` inside the `EuclidEmulator` directory. Create a new build folder, enter it  and type <br/><br/>
+Now, inside the `EuclidEmulator` directory type
+```bash
+   cd wrapper
+```
+Create a new build folder, enter it and type 
 ```bash
    cmake ..
 ```
-(if you have root access) or <br/><br/>
+(if you have root access) or
 ```bash
    cmake -DCMAKE_INSTALL_PREFIX=path/to/installation/directory ..
 ```
