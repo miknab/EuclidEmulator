@@ -85,13 +85,13 @@ There will be e.g. the field `result[B][z1]` corresponding to the boost factor a
 ## Credits
 Credits for this project go to:<br/>
 <br/>
-Doug Potter (https://bitbucket.org/dpotter/)<br/>
-Jeppe Mosgaard Dakin (https://github.com/jmd-dk)<br/>
-Rongchuan Zhao (https://astro.uni-bonn.de/m/rzhao)
+__Doug Potter__ (https://bitbucket.org/dpotter/) for constantly advising me in this project <br/>
+__Jeppe Mosgaard Dakin__ (https://github.com/jmd-dk) for significant contributions to the cython code <br/>
+__Rongchuan Zhao__ (https://astro.uni-bonn.de/m/rzhao) for contributions in the lensing module ee_lens.py and some functions in ee_aux.py.
 
 ## License
 To be added
 
 ## Changes with respect to version 1.0
-1. Python wrapper with many useful functions (reducing the risk of falling into a pitfall)
+1. Python wrapper with many useful functions (reducing the risk of falling into a pitfalls)
 2. Usage of CMake for the building
