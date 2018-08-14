@@ -58,7 +58,7 @@ Now you are ready to use the software. In a python2.7 script or in a jupyter not
 ```python
    import e2py
 ```
-Next, define a cosmology as a python dictionary with the keys `om_b`, `om_m`, `n_s`, `h`, `w_0` and `sigma_8:<br/>
+Next, define a cosmology as a python dictionary with the keys `om_b`, `om_m`, `n_s`, `h`, `w_0` and `sigma_8`:<br/>
 ```python
    MyCosmo = {'om_b': 0.0219961, 'om_m': 0.1431991, 'n_s': 0.96, 'h': 0.67, 'w_0': -1.0, 'sigma_8': 0.83}
 ```
