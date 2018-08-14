@@ -22,6 +22,14 @@ Depending on whether you want to build the python wrapper (recommended) or the c
 
 If you don't have root acces on the machine you want to build this software on, we recommend to install this software inside a virtual environment (see documentation/wiki for more info).
 
+An executable called "ee" will be created. To run the executable type 
+
+./ee <&#969;<sub>b</sub>> <&#969;<sub>m</sub>> <n<sub>s</sub>> \<h\> <w<sub>0</sub>> <&#963;<sub>8</sub>> \<z\>
+
+where the seven parameter correspond to the five standard &#923;CDM parameters, the DE equation of state parameter w<sub>0</sub> and redshift z. The first column of the produced output corresponds to the k-mode values at which the boost factor (given in the second column) is measured.
+
+WE URGE EVERYONE TO READ AT LEAST THE SECTION ABOUT PITFALLS (see below).
+
 ## Description
 EuclidEmulator is a tool for rapid and accurate estimation of the
 non-linear correction ("boost") to the dark matter power spectrum.
