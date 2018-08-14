@@ -43,3 +43,58 @@ For more details we refer to publication and the documentation/wiki.
 ## Changes with respect to version 1.0
 1. Python wrapper with many useful functions (reducing the risk of falling into a pitfall)
 2. Usage of CMake for the building
+
+## User guide
+
+=============================== I M P O R T A N T ===============================<br/>
+!!! PLEASE READ THE SECTION ABOUT PITFALLS BELOW IN ORDER TO ENSURE CORRECT RESULTS !!!
+============================================================================<br/>
+
+1. Prerequisites:<br/>
+   * GNU Scientific Library (GSL)
+   * Python2.7 together with numpy, scipy and matplotlib (for post-processing only)
+   * CLASS (for post-processing only)
+   
+2. Building the code:<br/>
+   Type "make". An executable called "ee" will be created.
+
+   Make sure not to move the files cosmo.c, cosmo.h and ee.dat.
+   They have to be in the same directory as EuclidEmulator.c and
+   the executable ee.
+
+3. Usage:<br/>
+   ./ee <&#969;<sub>b</sub>> <&#969;<sub>m</sub>> <n<sub>s</sub>> \<h\> <w<sub>0</sub>> <&#963;<sub>8</sub>> \<z\>
+
+   This will print the resulting boost factor to standard output. To store
+   it in a file, just use output redirection, i.e. append " > BoostFile.dat"
+   to the command above.
+
+4. Computation of the full non-linear power spectrum:<br/>
+   1. Produce a linear power spectrum with a Boltzmann code.
+   2. Interpolate the linear power spectrum (we suggest a cubic spline interpolation in log space.
+   3. Evaluate the interpolated liner power spectrum at the k modes of the emulated boost.
+   4. Multiply the boost with the resulting linear power spectrum.
+
+The script `example.sh` includes commands to perform step iv (assuming you have CLASS installed already and your CLASS file explanatory.ini has never been changed). Please change the path to the directory where your CLASS executable is located. Executing `example.sh` will sequentially compute the boost spectrum using EuclidEmulator, compute the corresponding linear power spectrum with CLASS, and finally call `GetPnonlin.py` to compute the non-linear power spectrum.
+
+## Pitfalls
+
+When you want to emulate a full non-linear power spectrum, you really have to make sure that you specify the exact same cosmology for EuclidEmulator to produce the boost factor and for the Boltzmann code you use to predict the linear power spectrum. Often, the parametrization of cosmologies used in the Boltzmann solvers is different than the one used by EuclidEmulator. Make sure the different parametrizations define the exact same cosmology!
+
+Known differences are:
+
+1.  CAMB and CLASS use om_cdm (the cold dark matter density &#969;<sub>cdm</sub>) instead of om_m (the total matter density
+    &#969;<sub>m</sub>). Make sure that the following relation is satisfied: 
+    <div align="center">&#969<sub>b</sub> + &#969<sub>cdm</sub> = &#969<sub>m</sub> </div>
+    If you want to compute the non-linear power spectrum using a EuclidEmulated-boost for a real data set (like e.g. 
+    Planck2015), you may find that the reported values doe not obey the above relation. This is most likely due to the fact
+    that there is a small contribution due to neutrinos which is taken into account in that data set but not so in this 
+    version of our emulator. Here's what you need to do:</br>
+
+    1. To produce the boost factor with EuclidEmulator use &#969;<sub>b</sub> and &#969;<sub>m</sub> as reported in the data set.
+    2. To produce the corresponding linear power spectrum use &#969;<sub>b</sub> and set the &#969;<sub>cdm</sub> parameter equal to &#969;<sub>m</sub>-&#969;<sub>b</sub>. Doing so you add the neutrino component to the CDM contribution which is the best that can be done with the current version of EuclidEmulator. Stay tuned as version 2 will allow for neutrinos to be taken into accound.
+ 
+2.  CAMB and CLASS do usually not accept sigma_8 as a parameter for normalization of the power spectrum but rather use A_s. In
+    order to convert these two parameters into each other in the context of using EuclidEmulator, you have to use the same
+    conversion as is used in the EuclidEmulator code. Convert the parameters using the following proportionality:<br/>
+    <div align="center"> A<sub>s</sub>/(2.215 * 10^(-9)) = (&#963;<sub>8</sub>/0.8496)^2
