@@ -37,3 +37,7 @@ damping or baryonic clustering) are accounted for to first order on
 all scales.
 
 For more details we refer to publication and the documentation/wiki.
+
+## Changes with respect to version 1.0
+1. Python wrapper with many useful functions (reducing the risk of falling into a pitfall)
+2. Usage of CMake for the building
