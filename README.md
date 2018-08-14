@@ -1,5 +1,5 @@
 # EuclidEmulator (version 1.1)
-This repository contains the main source code of the EuclidEmulator, a fast and accurate tool to estimate the non-linear correction to the matter power spectrum.
+This repository contains the main source code of the EuclidEmulator, a fast and accurate tool to estimate the non-linear correction to the matter power spectrum. EuclidEmulator is roughly seven orders of magnitude faster than an N-body simulation that yields results at the same level of accuracy.
 
 Authors:   M. Knabenhans, J. Stadel<br/>
 Date:      May 2018<br/>
@@ -36,7 +36,26 @@ Now `cd`into `wrapper` inside the `EuclidEmulator` directory. Create a new build
 If you don't have root acces on the machine you want to build this software on, we recommend to install this software inside a virtual environment (see documentation/wiki for more info).
 
 ### Usage
-Now you are ready to use the software. Use 
+Now you are ready to use the software. In a python2.7 script or in a jupyter notebook you can import the package via <br/>
+<br/>
+```python
+   import e2py
+```
+<br/>
+Next, define a cosmology as a python dictionary with the keys om_b, om_m, n_s, h, w_0 and sigma_8:<br/>
+```python
+   MyCosmo = {'om_b': 0.0219961, 'om_m': 0.1431991, 'n_s': 0.96, 'h': 0.67, 'w_0': -1.0, 'sigma_8': 0.83}
+```
+<br/>
+You can now compute a non-linear power spectrum at redshift `z=0.0` by executing:
+<br/>
+```python
+   z = 0.0
+   result = e2py.get_pnonlin(MyCosmo, z)
+```
+<br/>
+The `result` is also a python dictionary with the keys `B` (the boost factor), `P_lin` (the linear power spectrum as computed by class), `P_nonlin` (the non-linear power spectrum being the product of `P_lin` and `B`) and `k` (the vector of k-values given in _h_/Mpc). 
+
 
 
 ## Description
