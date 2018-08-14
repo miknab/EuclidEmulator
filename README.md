@@ -34,8 +34,10 @@ Now, inside the `EuclidEmulator` directory type
 ```bash
    cd wrapper
 ```
-Create a new build folder, enter it and type 
+Create a new build folder, enter it and run CMake, i.e.: 
 ```bash
+   mkdir build
+   cd build
    cmake ..
 ```
 (if you have root access) or
