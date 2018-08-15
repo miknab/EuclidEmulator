@@ -21,9 +21,12 @@
 
 int main(int argc, char* argv[]){
 
-    fprintf(stderr, "# EuclidEmulator Version %d.%d\n",
+    fprintf(stderr, "# EuclidEmulator Version %d.%d Copyright (C) 2018 Mischa Knabenhans & Joachim Stadel\n",
             EUCLID_EMULATOR_VERSION_MAJOR,
             EUCLID_EMULATOR_VERSION_MINOR);
+    fprintf(stderr, "# This program comes with ABSOLUTELY NO WARRANTY; for details type `show w'.\n");
+    fprintf(stderr, "# This is free software, and you are welcome to redistribute it\n");
+    fprintf(stderr, "# under certain conditions; type `show c' for details.\n");
 
     // Check number of input arguments: 8 arguments are expected:
     // 1 executable name + 6 cosmological parameter + 1 redshift value
