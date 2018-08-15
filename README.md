@@ -25,7 +25,7 @@ In order to use the python wrapper, you need in addition:
 ### Get the code
 If you have not done so already, either download this repository or clone it to your local host (under Linux you can get a gzipped tar-ball via
 ```
-   wget https://github.com/miknab/EuclidEmulator/archive/master.tar.gz`)
+   wget https://github.com/miknab/EuclidEmulator/archive/master.tar.gz
 ```
 
 ### Building and installation
