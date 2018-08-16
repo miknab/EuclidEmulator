@@ -19,5 +19,6 @@ print('This program comes with ABSOLUTELY NO WARRANTY; for details type "show w"
 print('This is free software, and you are welcome to redistribute it')
 print('under certain conditions; type "show c" for details.')
 
+from ee_input import *
 from ee_observables import *
 
