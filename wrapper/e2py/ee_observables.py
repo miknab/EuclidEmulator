@@ -26,7 +26,7 @@ import EuclidEmulator_BackEnd as _eeb
 import _internal._ee_aux as _aux
 import _internal._ee_background as _bg
 import _internal._ee_cosmoconv as _cc
-import ee_input as inp
+import ee_input as _inp
 import _ee_lens as _lens
 
 from scipy.integrate import romb as _romb
@@ -173,7 +173,7 @@ def get_plin(emu_pars_dict, k_arr, z_arr):
     k_arr, k_str = _aux.stringify_arr(k_arr)
 
     # Convert the input dictionary into a Class-compatible dictionary
-    class_pars_dict = inp.emu_to_class(emu_pars_dict)
+    class_pars_dict = _inp.emu_to_class(emu_pars_dict)
 
     # Extend the input Class-compatible dictionary by the additional
     # information requested by classy.
