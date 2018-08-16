@@ -23,11 +23,11 @@ EuclidEmulator submodule for actual emulation of cosmological observables.
 import sys
 import numpy as np
 import EuclidEmulator_BackEnd as eeb
-import ee_aux as aux
+import _internal._ee_aux as aux
+import _internal._ee_background as bg
+import _internal._ee_cosmoconv as cc
 import ee_input as inp
-import ee_background as bg
 import ee_lens as lens
-import ee_cosmoconv as cc
 
 from scipy.integrate import romb
 from scipy.interpolate import CubicSpline

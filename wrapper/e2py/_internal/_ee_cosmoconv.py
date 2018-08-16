@@ -12,8 +12,7 @@ REMARK:      The geometry of the Universe is fixed to be flat (i.e.
 """
 
 import numpy as np
-import ee_background as bg
-import decimal as dec
+import _ee_background as bg
 
 def z_to_a(z):
     """

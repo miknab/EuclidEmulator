@@ -22,7 +22,7 @@ EuclidEmulator submodule containing functions related to argument parsing.
 
 import sys
 import pandas as pd
-import ee_cosmoconv as cc
+import _internal._ee_cosmoconv as cc
 ######################################################
 #################### Check input #####################
 ######################################################
