@@ -27,9 +27,9 @@ REMARK:      The geometry of the Universe is fixed to be flat (i.e.
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-import numpy as np
-from scipy.integrate import romb
-import _ee_cosmoconv as cc
+import numpy as _np
+from scipy.integrate import romb as _romb
+import _ee_cosmoconv as _cc
 
 # UNIVERSAL CONSTANTS (Source: PDG booklet 2018)
 SPEED_OF_LIGHT_IN_KILOMETERS_PER_SECOND = 299792.458
@@ -71,24 +71,24 @@ def dist_comov(emu_pars_dict, z1, z2, prec=12):
     """
        
     if isinstance(z1,(float,int)) and isinstance(z2,(float,int)):
-        z1 = np.array([z1])
+        z1 = _np.array([z1])
         z2 = np.array([z2])
 
-    a1_vec = cc.z_to_a(z1)
-    a2_vec = cc.z_to_a(z2)
+    a1_vec = _cc.z_to_a(z1)
+    a2_vec = _cc.z_to_a(z2)
 
     d_comov = []
     for a1,a2 in zip(a1_vec,a2_vec):
         if a1 > a2:
             a1, a2 = a2, a1 # swap values
-        avec = np.linspace(a1, a2, 2**prec+1)
+        avec = _np.linspace(a1, a2, 2**prec+1)
         delta_a = avec[1]-avec[0]
 
-        H = cc.a_to_hubble(emu_pars_dict,avec)
+        H = _cc.a_to_hubble(emu_pars_dict,avec)
 
-        d_comov.append(romb(1./(avec*avec*H), dx=delta_a))
+        d_comov.append(_romb(1./(avec*avec*H), dx=delta_a))
 
-    chi = np.array(d_comov) # here the comoving distances have units of Mpc/(km/s)
+    chi = _np.array(d_comov) # here the comoving distances have units of Mpc/(km/s)
     
     # return result in units of Mpc/h
     return SPEED_OF_LIGHT_IN_KILOMETERS_PER_SECOND * chi * emu_pars_dict['h']

@@ -1,5 +1,5 @@
 """
-ee_aux.py
+_ee_aux.py
 
 EuclidEmulator submodule for auxiliary functions.
 """
@@ -20,15 +20,16 @@ EuclidEmulator submodule for auxiliary functions.
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-import sys
-import contextlib
-import numpy as np
+import sys as _sys
+import contextlib as _ctlib
+import numpy as _np
 
-from functools import wraps, partial
-from scipy.integrate import quad
+from functools import wraps as _wraps
+from functools import partial as _partial
+from scipy.integrate import quad as _quad
 
 # Auxiliary functions for formatting input such that CLASS understands
-@contextlib.contextmanager
+@_ctlib.contextmanager
 def disable_numpy_summarization():
     # Author: Jeppe Mosgaard Dakin
     """
@@ -41,12 +42,12 @@ def disable_numpy_summarization():
 
     Output type: None
     """
-    threshold = np.get_printoptions()['threshold']
-    np.set_printoptions(threshold=np.inf)
+    threshold = _np.get_printoptions()['threshold']
+    _np.set_printoptions(threshold=_np.inf)
     try:
         yield
     finally:
-        np.set_printoptions(threshold=threshold)
+        _np.set_printoptions(threshold=threshold)
 
 def stringify_arr(arr):
     # Author: Jeppe Mosgaard Dakin
@@ -60,13 +61,13 @@ def stringify_arr(arr):
     Output type: tuple (array, string)
     """
     with disable_numpy_summarization():
-        arr_str = np.array2string(
+        arr_str = _np.array2string(
             arr,
-            max_line_width=np.inf,
+            max_line_width=_np.inf,
             formatter={'float': lambda f: '{:.8e}'.format(f)},
             separator=',',
         ).strip('[]')
-    return np.fromstring(arr_str, sep=','), arr_str
+    return _np.fromstring(arr_str, sep=','), arr_str
 
 def print_cosmology(emu_pars_dict):
     # Author: Mischa Knabenhans
@@ -92,18 +93,18 @@ def progress(count, total, status=''):
     percents = round(100.0 * count / float(total), 1)
     bar = '=' * filled_len + '-' * (bar_len - filled_len)
 
-    sys.stdout.write('[%s] %s%s ...%s\r' % (bar, percents, '%', status))
-    sys.stdout.flush()
+    _sys.stdout.write('[%s] %s%s ...%s\r' % (bar, percents, '%', status))
+    _sys.stdout.flush()
 
-def normalize(ave_range=[0, np.inf]):
+def normalize(ave_range=[0, _np.inf]):
     # Author: Rongchuan Zhao 
     def decorate(func):
-        @wraps(func)
+        @_wraps(func)
         def norm_func(self, *args):
             # reads in some function and returns its 
             # area-normalized version (as a function object)
-            inst_func = partial(func, self)
-            ToT = quad(inst_func, ave_range[0], ave_range[1], args=args[1:] )[0]
+            inst_func = _partial(func, self)
+            ToT = _quad(inst_func, ave_range[0], ave_range[1], args=args[1:] )[0]
             return func(self, *args)/ToT
         return norm_func
     return decorate

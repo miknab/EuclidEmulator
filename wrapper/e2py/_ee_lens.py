@@ -27,11 +27,10 @@ REMARK:      The geometry of the Universe is fixed to be flat (i.e.
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-import numpy as np
-from scipy.integrate import romb
-from scipy.interpolate import CubicSpline
-import _internal._ee_cosmoconv as cc
-import _internal._ee_aux as aux
+import numpy as _np
+from scipy.integrate import romb as _romb
+from scipy.interpolate import CubicSpline as _CubicSpline
+import _internal._ee_aux as _aux
 
 def lens_efficiency(sourcedist, dcomov, dcomov_lim, prec=12):
     """
@@ -51,26 +50,26 @@ def lens_efficiency(sourcedist, dcomov, dcomov_lim, prec=12):
     """    
     
     # interpolate the source distribution function
-    nfunc = CubicSpline(np.log10(sourcedist['chi']), np.log10(sourcedist['n']))
+    nfunc = _CubicSpline(_np.log10(sourcedist['chi']), _np.log10(sourcedist['n']))
     
     result = []
     
-    if isinstance(dcomov, np.ndarray):
+    if isinstance(dcomov, _np.ndarray):
 
         for d in dcomov:
-            chi = np.linspace(d, dcomov_lim, 2**prec+1)
-            n = 10**nfunc(np.log10(chi))
+            chi = _np.linspace(d, dcomov_lim, 2**prec+1)
+            n = 10**nfunc(_np.log10(chi))
             integrand = n * (1-d/chi)
-            result.append(romb(integrand, chi[1]-chi[0]))
+            result.append(_romb(integrand, chi[1]-chi[0]))
         
-        return np.asarray(result)
+        return _np.asarray(result)
     
     elif isinstance(dcomov, float) or isinstance(dcomov,int):
-        chi = np.linspace(dcomov, dcomov_lim, 2**prec+1)
-        n = 10**nfunc(np.log10(chi))
+        chi = _np.linspace(dcomov, dcomov_lim, 2**prec+1)
+        n = 10**nfunc(_np.log10(chi))
         integrand = n * (1-dcomov/chi)
         
-        return romb(integrand, chi[1]-chi[0])
+        return _romb(integrand, chi[1]-chi[0])
     
     else:
         raise(TypeError, "The second argument 'dcomov' must be either a float,\
@@ -91,11 +90,11 @@ class GalaxyRedshiftDist(object):
     def _z_0(self):
         return self._z_mean/1.412
 
-    @aux.normalize()
+    @_aux.normalize()
     def _gala_probdist(self, z):
         z_0 = self._z_0()
-        return (z / z_0)**self._alpha*np.exp(-(z/z_0)**self._beta)
+        return (z / z_0)**self._alpha*_np.exp(-(z/z_0)**self._beta)
 
     @property
     def gala_probdist_func(self):
-        return aux.Function(self._gala_probdist) 
+        return _aux.Function(self._gala_probdist) 

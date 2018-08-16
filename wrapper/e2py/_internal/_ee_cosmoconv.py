@@ -11,8 +11,8 @@ REMARK:      The geometry of the Universe is fixed to be flat (i.e.
              working with it.
 """
 
-import numpy as np
-import _ee_background as bg
+import numpy as _np
+import _ee_background as _bg
 
 def z_to_a(z):
     """
@@ -67,11 +67,11 @@ def sigma8_to_as(sigma8):
 
     # Check if input is a real number
     sigma8_is_complex = isinstance(sigma8, complex)
-    sigma8_is_array = isinstance(sigma8, np.ndarray)
+    sigma8_is_array = isinstance(sigma8, _np.ndarray)
     complex_entry = False
 
     if sigma8_is_array:
-        complex_entry = any([isinstance(val, np.complex128) for val in sigma8])
+        complex_entry = any([isinstance(val, _np.complex128) for val in sigma8])
 
     if sigma8_is_complex or complex_entry:
         raise TypeError("sigma8 must be a real number.")
@@ -97,7 +97,7 @@ def as_to_sigma8(a_s):
 
     Related:      sigma8_to_as
     """
-    sigma_8 = np.sqrt(0.8496*0.8496*a_s/2.215e-9)
+    sigma_8 = _np.sqrt(0.8496*0.8496*a_s/2.215e-9)
     return sigma_8
 
 def a_to_hubble(emu_pars_dict, a):
@@ -146,7 +146,7 @@ def a_to_hubble(emu_pars_dict, a):
     radiation = Om_rad * a_inv * a_inv * a_inv * a_inv
     darkenergy = Om_DE * a_inv**(3.0+3.0*w_0)
 
-    H = H0 * np.sqrt(curvature + matter + radiation + darkenergy)
+    H = H0 * _np.sqrt(curvature + matter + radiation + darkenergy)
 
     return H # in the standard units of (km/s)/Mpc
 
@@ -181,7 +181,7 @@ def k_to_l(emu_pars_dict, k, z, prec=12):
                  of EuclidEmulator and hence must be used whenever one
                  is working with it.
     """
-    return k * bg.dist_comov(emu_pars_dict, 1e-13, z, prec)
+    return k * _bg.dist_comov(emu_pars_dict, 1e-13, z, prec)
 
 def l_to_k(emu_pars_dict, l, z, prec=12):
     """
@@ -214,4 +214,4 @@ def l_to_k(emu_pars_dict, l, z, prec=12):
                  of EuclidEmulator and hence must be used whenever one
                  is working with it.
     """
-    return l/bg.dist_comov(emu_pars_dict, 1e-13, z, prec)
+    return l/_bg.dist_comov(emu_pars_dict, 1e-13, z, prec)

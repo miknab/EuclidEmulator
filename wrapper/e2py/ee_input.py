@@ -20,9 +20,9 @@ EuclidEmulator submodule containing functions related to argument parsing.
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-import sys
-import pandas as pd
-import _internal._ee_cosmoconv as cc
+import sys as _sys
+import pandas as _pd
+import _internal._ee_cosmoconv as _cc
 ######################################################
 #################### Check input #####################
 ######################################################
@@ -111,7 +111,7 @@ def read_parfile(filename, sep=","):
     Output type: list of python dictionaries
     """
     list_of_cosmologies = []
-    parameters = pd.read_csv(filename,
+    parameters = _pd.read_csv(filename,
                              delimiter='\s*'+sep+'\s*',
                              engine='python')
 
@@ -154,7 +154,7 @@ def emu_to_class(emu_pars_dict):
     if not isinstance(emu_pars_dict, (dict,)):
         print("The cosmological parameters must be passed as a \
                python dictionary.\n")
-        sys.exit()
+        _sys.exit()
 
     om_b = emu_pars_dict['om_b']
     om_m = emu_pars_dict['om_m']
@@ -164,7 +164,7 @@ def emu_to_class(emu_pars_dict):
     sigma_8 = emu_pars_dict['sigma_8']
 
     om_cdm = om_m - om_b
-    a_s = cc.sigma8_to_as(sigma_8)
+    a_s = _cc.sigma8_to_as(sigma_8)
 
     class_pars_dict = {'omega_b': om_b,
                        'omega_cdm': om_cdm,
@@ -201,7 +201,7 @@ def class_to_emu(class_pars_dict):
     if isinstance(class_pars_dict, (dict,)):
         print("The cosmological parameters must be passed as a \
                python dictionary.\n")
-        sys.exit()
+        _sys.exit()
 
     om_b = class_pars_dict['omega_b']
     om_cdm = class_pars_dict['omega_cdm']
@@ -211,7 +211,7 @@ def class_to_emu(class_pars_dict):
     a_s = class_pars_dict['A_s']
 
     om_m = om_b + om_cdm
-    sigma_8 = cc.as_to_sigma8(a_s)
+    sigma_8 = _cc.as_to_sigma8(a_s)
 
     emu_pars_dict = {'om_b': om_b,
                      'om_m': om_m,

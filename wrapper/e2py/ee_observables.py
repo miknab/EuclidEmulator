@@ -20,23 +20,23 @@ EuclidEmulator submodule for actual emulation of cosmological observables.
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-import sys
-import numpy as np
-import EuclidEmulator_BackEnd as eeb
-import _internal._ee_aux as aux
-import _internal._ee_background as bg
-import _internal._ee_cosmoconv as cc
+import sys as _sys
+import numpy as _np
+import EuclidEmulator_BackEnd as _eeb
+import _internal._ee_aux as _aux
+import _internal._ee_background as _bg
+import _internal._ee_cosmoconv as _cc
 import ee_input as inp
-import ee_lens as lens
+import _ee_lens as _lens
 
-from scipy.integrate import romb
-from scipy.interpolate import CubicSpline
+from scipy.integrate import romb as _romb
+from scipy.interpolate import CubicSpline as _CubicSpline
 
 try:
-    from classee import Class
+    from classee import Class as _Class
 except ImportError:
     try:
-        from classy import Class
+        from classy import Class as _Class
     except ImportError:
         print("Classy could not be found in your system. Here are some suggestions:\n")
         print("\t -Download the patched version of Class and its wrapper classee (see https://github.com/miknab/ClassPatch)")
@@ -61,7 +61,7 @@ def get_boost(emu_pars_dict, redshifts):
 
     Related:     get_plin, get_pnonlin
     """
-    redshifts = np.asarray(redshifts)
+    redshifts = _np.asarray(redshifts)
     
     for z in redshifts:
         assert z <= 5.0, "EuclidEmulator allows only redshifts z <= 5.0.\n"
@@ -69,9 +69,9 @@ def get_boost(emu_pars_dict, redshifts):
     if not isinstance(emu_pars_dict, (dict,)):
         print("The cosmological parameters must be passed as a python \
                dictionary.\n")
-        sys.exit()
+        _sys.exit()
 
-    boost_data = eeb.emu_boost(np.array([emu_pars_dict['om_b'],
+    boost_data = _eeb.emu_boost(_np.array([emu_pars_dict['om_b'],
                                          emu_pars_dict['om_m'],
                                          emu_pars_dict['n_s'],
                                          emu_pars_dict['h'],
@@ -111,14 +111,14 @@ def get_pnonlin(emu_pars_dict, redshifts):
 
     Related:     get_plin, get_boost
     """
-    if Class.__module__ not in sys.modules:
+    if _Class.__module__ not in _sys.modules:
         print("You have not imported neither classee nor classy. Emulating full power spectrum is hence not possible.")
         return None
 
     if isinstance(redshifts,(int,float)):
-        redshifts = np.asarray([redshifts])
+        redshifts = _np.asarray([redshifts])
     else:
-        redshifts = np.asarray(redshifts)   
+        redshifts = _np.asarray(redshifts)   
  
     for z in redshifts:
         assert z <= 5.0, "EuclidEmulator allows only redshifts z <= 5.0.\n"
@@ -157,20 +157,20 @@ def get_plin(emu_pars_dict, k_arr, z_arr):
 
     Related:     get_pnonlin, get_boost
     """
-    if Class.__module__ not in sys.modules:
+    if _Class.__module__ not in _sys.modules:
         print("You have not imported neither classee nor classy. Computing linear power spectrum is hence not possible.")
         return None
 
     # Convert single redshift input argument to array
     if isinstance(z_arr, (float, int)):
-        z_arr = np.array([z_arr])
+        z_arr = _np.array([z_arr])
 
     for z in z_arr:
         assert z <= 5.0, "EuclidEmulator allows only redshifts z <= 5.0.\n"
 
     # "Stringify" the input arrays to be understandable for classy.
-    z_arr, z_str = aux.stringify_arr(z_arr)
-    k_arr, k_str = aux.stringify_arr(k_arr)
+    z_arr, z_str = _aux.stringify_arr(z_arr)
+    k_arr, k_str = _aux.stringify_arr(k_arr)
 
     # Convert the input dictionary into a Class-compatible dictionary
     class_pars_dict = inp.emu_to_class(emu_pars_dict)
@@ -186,7 +186,7 @@ def get_plin(emu_pars_dict, k_arr, z_arr):
 
     # Create a "Class" instance called "cosmo" and run classy to compute
     # the cosmological quantities.
-    cosmo = Class()
+    cosmo = _Class()
     cosmo.set(classy_pars)
     cosmo.compute()
 
@@ -200,14 +200,14 @@ def get_plin(emu_pars_dict, k_arr, z_arr):
     # Get power spectrum at tabulated z and k in units of Mpc^3 
     if len(z_arr)==1:
         z = z_arr
-        linpower = np.array([cosmo.pk(k, z)*h*h*h for k in k_classy_arr]).reshape(k_shape)
+        linpower = _np.array([cosmo.pk(k, z)*h*h*h for k in k_classy_arr]).reshape(k_shape)
     else:
-        linpower = {'z'+str(i): np.array([cosmo.pk(k, z)*h*h*h for k in k_classy_arr]).reshape(k_shape) for i,z in enumerate(z_arr)}
+        linpower = {'z'+str(i): _np.array([cosmo.pk(k, z)*h*h*h for k in k_classy_arr]).reshape(k_shape) for i,z in enumerate(z_arr)}
 
     return linpower
 
 def sgaldist(alpha=2.0, beta=1.5, z_mean=0.9):
-    return lens.GalaxyRedshiftDist(alpha, beta, z_mean)(z_mean)
+    return _lens.GalaxyRedshiftDist(alpha, beta, z_mean)(z_mean)
 
 if False:
     def get_pconv(emu_pars_dict, sourcedist_func, prec=7):
@@ -243,12 +243,12 @@ if False:
                      
         Ouput type:  dictionary of the form {'l': ..., 'Cl': ...}
         """
-        if Class.__module__ not in sys.modules:
+        if _Class.__module__ not in _sys.modules:
             print("You have not imported neither classee nor classy. Emulating convergence power spectrum is hence not possible.")
             return None
 
 
-        c = bg.SPEED_OF_LIGHT_IN_KILOMETERS_PER_SECOND # speed of light
+        c = _bg.SPEED_OF_LIGHT_IN_KILOMETERS_PER_SECOND # speed of light
         c_inv = 1./c
         h = emu_pars_dict['h']
         H0 = 100*h
@@ -257,35 +257,35 @@ if False:
         nz = int(2**prec + 1)
         nl = int(1e4)
         
-        z_vec = np.logspace(np.log10(5e-2), np.log10(4.999999), nz)
+        z_vec = _np.logspace(_np.log10(5e-2), _np.log10(4.999999), nz)
         a_inv_vec = 1.+z_vec
-        chi_lim = bg.dist_comov(emu_pars_dict, 1e-12, 5.0) # in Mpc/h
+        chi_lim = _bg.dist_comov(emu_pars_dict, 1e-12, 5.0) # in Mpc/h
         chi_vec = []
         pnonlin_array = []
         
-        l_vec = np.linspace(1e1,2e3, nl)
+        l_vec = _np.linspace(1e1,2e3, nl)
 
         P = get_pnonlin(emu_pars_dict, z_vec) # call EuclidEmulator
-        chi_vec = bg.dist_comov(emu_pars_dict, np.zeros_like(z_vec), z_vec)
+        chi_vec = _bg.dist_comov(emu_pars_dict, _np.zeros_like(z_vec), z_vec)
 
         for i,z in enumerate(z_vec):
-            f = CubicSpline(np.log10(P['k']), np.log10(P['P_nonlin']['z'+str(i)]))
-            k = cc.l_to_k(emu_pars_dict, l_vec, z) # needs to be called inside loop
+            f = _CubicSpline(_np.log10(P['k']), _np.log10(P['P_nonlin']['z'+str(i)]))
+            k = _cc.l_to_k(emu_pars_dict, l_vec, z) # needs to be called inside loop
                                                    # because different z-values
                                                    # lead to different results
 
             # evaluate the interpolating function of Pnl for all k in the range
             # allowed by EuclidEmulator (this range is given by P['k'])
-            pmatternl = [10.0**f(np.log10(kk)) for kk in k if (kk >= P['k'].min() and kk <= P['k'].max())]
+            pmatternl = [10.0**f(_np.log10(kk)) for kk in k if (kk >= P['k'].min() and kk <= P['k'].max())]
             # for k values below the lower bound or above the upper bound of 
             # this k range, set the contributions to 0.0
             p_toosmall = [0.0 for kk in k if kk < P['k'].min()]
             p_toobig = [0.0 for kk in k if kk > P['k'].max()]
 
-            pnonlin_array.append(np.array(p_toosmall + pmatternl + p_toobig))
+            pnonlin_array.append(_np.array(p_toosmall + pmatternl + p_toobig))
 
         # get the non-linear matter power spectrum in units of [(Mpc/h)^3]
-        pnonlin_array = np.asarray(pnonlin_array).transpose()
+        pnonlin_array = _np.asarray(pnonlin_array).transpose()
             
         # compute prefactor of limber equation integral --> in units of [Mpc^4]
         prefac = 2.25*Om_m*Om_m * H0 * H0 * H0 * H0 * c_inv * c_inv * c_inv * c_inv
@@ -301,9 +301,9 @@ if False:
         
         source_dict = {'chi': chi_vec, 'n': sourcedist_func(z_vec)}
         
-        q_vec = lens.lens_efficiency(source_dict, chi_vec, chi_lim)
+        q_vec = _lens.lens_efficiency(source_dict, chi_vec, chi_lim)
      
-        integrand = np.array([q_vec * q_vec * a_inv_vec * a_inv_vec * 
+        integrand = _np.array([q_vec * q_vec * a_inv_vec * a_inv_vec * 
                               pnonlin_array[i] for i in range(nl)])
 
         assert(integrand.shape == pnonlin_array.shape)
@@ -311,6 +311,6 @@ if False:
         # perform integral (bear in mind that only the product of the 
         # integral and the prefac is truely dimensionless) and return
         Pconv = {'l': l_vec, 
-                 'Cl': prefac*romb(integrand, chi_vec[1]-chi_vec[0])}
+                 'Cl': prefac*_romb(integrand, chi_vec[1]-chi_vec[0])}
         
         return Pconv
