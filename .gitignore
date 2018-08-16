@@ -2,3 +2,4 @@ DataOutput
 OLD
 */*.pyc
 */.nfs*
+*/build
