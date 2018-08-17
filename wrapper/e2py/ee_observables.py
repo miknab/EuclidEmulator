@@ -38,20 +38,20 @@ except ImportError:
     try:
         from classy import Class as _Class
     except ImportError:
-        print("\nClassy could not be found in your system.\n
-               Here are some suggestions:\n")
-        print("\t -Download the patched version of Class and its\n
-               \t  wrapper classee (see https://github.com/miknab/ClassPatch)")
-        print("\t -If you know that Class is installed on your system\n
-               \t  and yet classy could not be installed, try re-compiling\n
-               \t  Class with just ''make'' instead of ''make class''")
-        print("\t -If both of the two previous options are not applicable\n
-               \t  to your situation, please download and build the original\n
-               \t  class code (see class-code.net)")
+        print("\nClassy could not be found in your system.")
+        print("Here are some suggestions:\n")
+        print("\t -Download the patched version of Class and its")
+        print("\t  wrapper classee (see https://github.com/miknab/ClassPatch)")
+        print("\t -If you know that Class is installed on your system")
+        print("\t  and yet classy could not be installed, try re-compiling")
+        print("\t  Class with just ''make'' instead of ''make class''")
+        print("\t -If both of the two previous options are not applicable")
+        print("\t  to your situation, please download and build the original")
+        print("\t  class code (see class-code.net)")
         print("")
-        print("NOTICE: Even without classy you can still use EuclidEmulator\n
-                       to emulate boost factors. You won't be able to compute\n
-                       full power spectra, though.")
+        print("NOTICE: Even without classy you can still use EuclidEmulator")
+        print("        to emulate boost factors. You won't be able to compute")
+        print("        full power spectra, though.")
 
 def get_boost(emu_pars_dict, redshifts):
     """
@@ -120,7 +120,7 @@ def get_pnonlin(emu_pars_dict, redshifts):
     Related:     get_plin, get_boost
     """
     if _Class.__module__ not in _sys.modules:
-        print("You have not imported neither classee nor classy.\n
+        print("You have not imported neither classee nor classy.\n \
                Emulating full power spectrum is hence not possible.")
         return None
 
@@ -167,7 +167,7 @@ def get_plin(emu_pars_dict, k_arr, z_arr):
     Related:     get_pnonlin, get_boost
     """
     if _Class.__module__ not in _sys.modules:
-        print("You have not imported neither classee nor classy.\n
+        print("You have not imported neither classee nor classy.\n \
                Computing linear power spectrum is hence not possible.")
         return None
 
@@ -254,8 +254,8 @@ if False:
         Ouput type:  dictionary of the form {'l': ..., 'Cl': ...}
         """
         if _Class.__module__ not in _sys.modules:
-            print("You have not imported neither classee nor classy.\n
-                   Emulating convergence power spectrum is hence not\n
+            print("You have not imported neither classee nor classy.\n \
+                   Emulating convergence power spectrum is hence not\n \
                    possible.")
             return None
 
