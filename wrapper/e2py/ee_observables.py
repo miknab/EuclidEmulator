@@ -69,8 +69,11 @@ def get_boost(emu_pars_dict, redshifts):
 
     Related:     get_plin, get_pnonlin
     """
-    redshifts = _np.asarray(redshifts)
-    
+    if isinstance(redshifts,(int,float)):
+        redshifts = _np.asarray([redshifts])
+    else:
+        redshifts = _np.asarray(redshifts)
+
     for z in redshifts:
         assert z <= 5.0, "EuclidEmulator allows only redshifts z <= 5.0.\n"
 
