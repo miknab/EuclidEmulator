@@ -90,7 +90,7 @@ __Jeppe Mosgaard Dakin__, Aarhus University, Denmark for significant contributio
 __Rongchuan Zhao__, University of Bonn, Germany for contributions in the lensing module ee_lens.py and some functions in ee_aux.py; https://astro.uni-bonn.de/m/rzhao.
 
 ## License
-To be added
+EuclidEmulator is free software, distributed under the GNU General Public License. This implies that you may freely distribute and copy the software. You may also modify it as you wish, and distribute these modified versions. You must always indicate prominently any changes you made in the original code and leave the copyright notices, and the no-warranty notice intact. Please read the General Public License for more details. 
 
 ## Changes with respect to version 1.0
 1. Python wrapper with many useful functions (reducing the risk of falling into a pitfalls)
