@@ -28,6 +28,12 @@ int main(int argc, char* argv[]){
     fprintf(stderr, "# This is free software, and you are welcome to redistribute it\n");
     fprintf(stderr, "# under certain conditions; type `show c' for details.\n");
 
+    fprintf(stderr,"#\n");
+    fprintf(stderr,"# Units:\n");
+    fprintf(stderr,"# \t k has units h/Mpc\n");
+    fprintf(stderr,"# \t B is dimensionless\n");
+    fprintf(stderr,"#\n");
+
     // Check number of input arguments: 8 arguments are expected:
     // 1 executable name + 6 cosmological parameter + 1 redshift value
     assert(argc>=8);
@@ -59,7 +65,7 @@ int main(int argc, char* argv[]){
     fprintf( stderr, "#\n# Cosmology:\n");
     fprintf( stderr, "#\tdOmega0: %.8f\n", omega_m/(h*h));
     fprintf( stderr, "#\tdOmegaRad: %.8f\n", omega_rad/(h*h));
-    fprintf( stderr, "#\tdOmegaDE: %.8f\n\n", 1.-omega_m/(h*h)-omega_rad/(h*h));
+    fprintf( stderr, "#\tdOmegaDE: %.8f\n#\n", 1.-omega_m/(h*h)-omega_rad/(h*h));
 
     // Prepare data containers for return values of emulator function
     double* k_values;      // will contain the k modes at which the 
@@ -96,11 +102,12 @@ int main(int argc, char* argv[]){
     assert(length_k_values == length_boost);
 
     // Print results to stdout
+    fprintf(stderr,"#\n");
     fprintf(stderr,"# ===============================\n");
-    printf("#k\t");
+    printf("# k\t");
     int zcounter;
     for (zcounter=0;zcounter<nz;zcounter++){
-	printf("\tz=%.4f", zvec[zcounter]);
+	printf("\tB(z=%.3f)", zvec[zcounter]);
     }
     printf("\n#\n");
     int j;
