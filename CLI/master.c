@@ -94,11 +94,22 @@ int main(int argc, char* argv[]){
     EucEmu(&cosmo_params[0], &zvec[0], nz, &k_values, &length_k_values, &boost, &length_boost);
 
     assert(length_k_values == length_boost);
-    
+
+    // Print results to stdout
+    fprintf(stderr,"# ===============================\n");
+    printf("#k\t");
+    int zcounter;
+    for (zcounter=0;zcounter<nz;zcounter++){
+	printf("\tz=%.4f", zvec[zcounter]);
+    }
+    printf("\n#\n");
     int j;
-    for(j=0; j<nz*length_k_values; j++){
-        if(j%length_k_values==0) printf("Next redshift\n");
-        printf("%f\t%f\n", k_values[j%length_k_values], boost[j]);        
+    for(j=0; j<length_k_values; j++){
+	printf("%f", k_values[j]);
+        for(zcounter=0;zcounter<nz;zcounter++){
+	    printf("\t%f", boost[zcounter*length_k_values+j]);
+    	}
+	printf("\n");
     }
 
     fprintf(stderr, "Done!\n");
