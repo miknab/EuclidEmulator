@@ -71,7 +71,7 @@ You can now compute a non-linear power spectrum at redshift z=0.0 by executing:<
 ```
 
 The `result` is also a python dictionary with the keys `B` (the boost factor, units: dimensionless), `P_lin` (the linear power spectrum as computed by class, units: (Mpc/_h_)<sup<3</sup>), `P_nonlin` (the non-linear power spectrum being the product of `P_lin` and `B`Mpc/_h_)<sup<3</sup>) and `k` (the vector of k-values given in _h_/Mpc). 
-The `result` is also a python dictionary with the keys `B` (the boost factor, units: dimensionless), `P_lin` (the linear power spectrum as computed by class, units: (Mpc/_h_)<sup<3</sup>), `P_nonlin` (the non-linear power spectrum, also in units of (Mpc/_h_)<sup<3</sup>, being the product of `P_lin` and `B`) and `k` (the vector of k-values given in _h_/Mpc). 
+The `result` is also a python dictionary with the keys `B` (the boost factor, units: dimensionless), `P_lin` (the linear power spectrum as computed by class, units: (Mpc/_h_)<sup>3</sup>), `P_nonlin` (the non-linear power spectrum, also in units of (Mpc/_h_)<sup>3</sup>, being the product of `P_lin` and `B`) and `k` (the vector of k-values given in _h_/Mpc). 
 
 Notice that you can as well pass a list or numpy.ndarray for `z` in which case `result` will contain a nested dictionary: The fields `B`, `P_lin` and `P_nonlin` are now dictionaries themselves with fields `z1`, `z2`, `z3`, etc., corresponding to the boost factor, linear and non-linear power spectrum, respectively, evaluated at the individual redshifts listed in the `z` variable. Here is a short example:
 ```python
