@@ -32,7 +32,6 @@ int main(int argc, char* argv[]){
     fprintf(stderr,"# Units:\n");
     fprintf(stderr,"# \t k has units h/Mpc\n");
     fprintf(stderr,"# \t B is dimensionless\n");
-    fprintf(stderr,"#\n");
 
     // Check number of input arguments: 8 arguments are expected:
     // 1 executable name + 6 cosmological parameter + 1 redshift value
