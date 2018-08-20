@@ -194,7 +194,7 @@ def get_plin(emu_pars_dict, k_arr, z_arr):
     classy_pars['Omega_Lambda'] = 0.0
     classy_pars['output'] = 'mPk'
     classy_pars['P_k_max_1/Mpc'] = 10.0
-#    classy_pars['k_output_values'] = k_str
+    classy_pars['k_output_values'] = k_str
     classy_pars['z_pk'] = z_str
 
     # Create a "Class" instance called "cosmo" and run classy to compute
