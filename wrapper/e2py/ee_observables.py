@@ -141,6 +141,7 @@ def get_pnonlin(emu_pars_dict, redshifts):
     Bk = boost_dict['B']
 
     plin = get_plin(emu_pars_dict, kvec, redshifts)
+    plin = plin['P_lin']
 
     if len(redshifts)==1:
         pnonlin = plin*Bk
@@ -225,7 +226,7 @@ def get_plin(emu_pars_dict, kvec, redshifts):
     else:
         linpower = {'z'+str(i): _np.array([cosmo.pk(k, z)*h*h*h for k in k_classy_arr]).reshape(k_shape) for i,z in enumerate(z_arr)}
 
-    return linpower
+    return {'k': kvec, 'P_lin': linpower }
 
 def sgaldist(alpha=2.0, beta=1.5, z_mean=0.9):
     return _lens.GalaxyRedshiftDist(alpha, beta, z_mean)(z_mean)
