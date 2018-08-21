@@ -198,7 +198,7 @@ def class_to_emu(class_pars_dict):
 
     Related:      class_to_emu
     """
-    if isinstance(class_pars_dict, (dict,)):
+    if not isinstance(class_pars_dict, (dict,)):
         print("The cosmological parameters must be passed as a \
                python dictionary.\n")
         _sys.exit()
