@@ -3,6 +3,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pylab as plb
 from scipy.interpolate import CubicSpline
+import os
 
 # Specify cosmology and redshifts at which the non-linear
 # power spectrum shall be emulated
@@ -26,6 +27,9 @@ P_lin = pnl_dict['P_lin']
 Boost = pnl_dict['B']
 
 # Save the data
+if not(os.path.isdir("DataOutput")):
+    os.makedirs("DataOutput")
+
 for idx in P_nonlin.keys():
     np.savetxt("./DataOutput/EmuData."+idx+".dat", np.c_[kvec, P_nonlin[idx], P_lin[idx], Boost[idx]])
 
