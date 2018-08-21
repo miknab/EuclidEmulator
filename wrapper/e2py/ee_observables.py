@@ -152,9 +152,9 @@ def get_pnonlin(emu_pars_dict, redshifts):
     
     return {'k': kvec, 'P_nonlin': pnonlin, 'P_lin': plin, 'B': Bk}
 
-def get_plin(emu_pars_dict, k_arr, z_arr):
+def get_plin(emu_pars_dict, kvec, redshifts):
     """
-    Signature:   get_plin(emu_pars_dict, k_arr, z_arr)
+    Signature:   get_plin(emu_pars_dict, kvec, redshifts)
 
     Description: Computes the linear power spectrum at redshift z for a
                  cosmology defined in EmuParsArr (a numpy array containing
@@ -164,8 +164,8 @@ def get_plin(emu_pars_dict, k_arr, z_arr):
                  numpy.ndarray (containing the k modes)
                  numpy.ndarray (containing the redshift values)
 
-    Output type: if len(z_arr)==1, then numpy.ndarray (containing the linear power spectrum values)
-                 if len(z_arr)>1, then dict with indices 'z0', 'z1', 'z2' etc.
+    Output type: if len(redshifts)==1, then numpy.ndarray (containing the linear power spectrum values)
+                 if len(redshifts)>1, then dict with indices 'z0', 'z1', 'z2' etc.
 
     Related:     get_pnonlin, get_boost
     """
@@ -175,15 +175,23 @@ def get_plin(emu_pars_dict, k_arr, z_arr):
         return None
 
     # Convert single redshift input argument to array
-    if isinstance(z_arr, (float, int)):
-        z_arr = _np.array([z_arr])
+    if isinstance(redshifts,(int,float)):
+        redshifts = _np.asarray([redshifts])
+    else:
+        redshifts = _np.asarray(redshifts)
 
-    for z in z_arr:
+    for z in redshifts:
         assert z <= 5.0, "EuclidEmulator allows only redshifts z <= 5.0.\n"
 
+    # Convert single redshift input argument to array
+    if isinstance(kvec,(int,float)):
+        kvec = _np.asarray([kvec])
+    else:
+        kvec = _np.asarray(kvec)
+
     # "Stringify" the input arrays to be understandable for classy.
-    z_arr, z_str = _aux.stringify_arr(z_arr)
-    k_arr, k_str = _aux.stringify_arr(k_arr)
+    z_arr, z_str = _aux.stringify_arr(redshifts)
+    k_arr, k_str = _aux.stringify_arr(kvec)
 
     # Convert the input dictionary into a Class-compatible dictionary
     class_pars_dict = _inp.emu_to_class(emu_pars_dict)
