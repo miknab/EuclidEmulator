@@ -33,25 +33,19 @@ from scipy.integrate import romb as _romb
 from scipy.interpolate import CubicSpline as _CubicSpline
 
 try:
-    from classee import Class as _Class
+    from classy import Class as _Class
 except ImportError:
-    try:
-        from classy import Class as _Class
-    except ImportError:
-        print("\nClassy could not be found in your system.")
-        print("Here are some suggestions:\n")
-        print("\t -Download the patched version of Class and its")
-        print("\t  wrapper classee (see https://github.com/miknab/ClassPatch)")
-        print("\t -If you know that Class is installed on your system")
-        print("\t  and yet classy could not be installed, try re-compiling")
-        print("\t  Class with just ''make'' instead of ''make class''")
-        print("\t -If both of the two previous options are not applicable")
-        print("\t  to your situation, please download and build the original")
-        print("\t  class code (see class-code.net)")
-        print("")
-        print("NOTICE: Even without classy you can still use EuclidEmulator")
-        print("        to emulate boost factors. You won't be able to compute")
-        print("        full power spectra, though.")
+    print("\nClassy could not be found in your system.")
+    print("Here are some suggestions:\n")
+    print("\t -Download the Class from class-code.net and install it")
+    print("\t  together with its wrapper classy (type 'make' instead of")
+    print("\t  'make class'") 
+    print("\t -If you know that Class is installed on your system")
+    print("\t  and yet classy could not be installed, try re-compiling")
+    print("\t  Class with just ''make'' instead of ''make class''")
+    print("NOTICE: Even without classy you can still use EuclidEmulator")
+    print("        to emulate boost factors. You won't be able to compute")
+    print("        full power spectra, though.")
 
 def get_boost(emu_pars_dict, redshifts):
     """
@@ -203,7 +197,7 @@ def get_plin(emu_pars_dict, kvec, redshifts):
     classy_pars['Omega_Lambda'] = 0.0
     classy_pars['output'] = 'mPk'
     classy_pars['P_k_max_1/Mpc'] = 10.0
-    classy_pars['k_output_values'] = k_str
+#    classy_pars['k_output_values'] = k_str
     classy_pars['z_pk'] = z_str
 
     # Create a "Class" instance called "cosmo" and run classy to compute
