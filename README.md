@@ -83,6 +83,8 @@ Notice that you can as well pass a list or numpy.ndarray for `z` in which case `
 ```
 There will be e.g. the field `result[B][z1]` corresponding to the boost factor at redshift `z=0.0` or the field `result[P_nonlin][z9]` corresponding to the non-linear matter power spectrum evaluated at redshift `z=0.8`. 
 
+*NOTICE:* The number of redshifts at which you ask EuclidEmulator to produce non-linear power spectra is limited. Usually this upper limit is 100 (sometimes already a bit less). This is a problem of CLASS (there is no such limit for boost factors whose computation does not rely on CLASS).
+
 ## Credits
 Credits for this project go to:<br/>
 <br/>
