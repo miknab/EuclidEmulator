@@ -30,7 +30,7 @@ REMARK:      The geometry of the Universe is fixed to be flat (i.e.
 import numpy as _np
 from scipy.integrate import romb as _romb
 from scipy.interpolate import CubicSpline as _CubicSpline
-from e2py._internal import _ee_aux as _aux
+from e2py3._internal import _ee_aux as _aux
 
 def lens_efficiency(sourcedist, dcomov, dcomov_lim, prec=12):
     """
