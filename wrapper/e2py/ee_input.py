@@ -4,7 +4,7 @@ ee_input.py
 EuclidEmulator submodule containing functions related to argument parsing.
 """
 
-# This file is part of EuclidEmulator 
+# This file is part of EuclidEmulator
 # Copyright (c) 2018 Mischa Knabenhans
 #
 # EuclidEmulator is free software: you can redistribute it and/or modify
@@ -22,7 +22,7 @@ EuclidEmulator submodule containing functions related to argument parsing.
 
 import sys as _sys
 import pandas as _pd
-import _internal._ee_cosmoconv as _cc
+from e2py._internal import _ee_cosmoconv as _cc
 ######################################################
 #################### Check input #####################
 ######################################################
@@ -112,8 +112,8 @@ def read_parfile(filename, sep=","):
     """
     list_of_cosmologies = []
     parameters = _pd.read_csv(filename,
-                             delimiter='\s*'+sep+'\s*',
-                             engine='python')
+                              delimiter='\s*'+sep+'\s*',
+                              engine='python')
 
     for indx, row in parameters.iterrows():
         # Convert pandas.Series to dictionary (= required output type)
@@ -152,8 +152,8 @@ def emu_to_class(emu_pars_dict):
     Related:      class_to_emu
     """
     if not isinstance(emu_pars_dict, (dict,)):
-        print("The cosmological parameters must be passed as a \
-               python dictionary.\n")
+        print "The cosmological parameters must be passed as a \
+               python dictionary.\n"
         _sys.exit()
 
     om_b = emu_pars_dict['om_b']
@@ -199,8 +199,8 @@ def class_to_emu(class_pars_dict):
     Related:      class_to_emu
     """
     if not isinstance(class_pars_dict, (dict,)):
-        print("The cosmological parameters must be passed as a \
-               python dictionary.\n")
+        print "The cosmological parameters must be passed as a \
+               python dictionary.\n"
         _sys.exit()
 
     om_b = class_pars_dict['omega_b']
