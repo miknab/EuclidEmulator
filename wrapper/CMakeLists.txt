@@ -32,7 +32,8 @@ include( UseCython )
 #    installed with Homebrew. Going the detour ensures that the found interpreter
 #    and libraries belong to the same python installation
 
-# 2) There is a function "" in CMake 3.12 (most recent version of CMake in Aug 2018). 
+# 2) There is a function "FindPython" in CMake 3.12 (most recent version of CMake in Aug 2018).
+#    that has a return value "Python_SITELIB" which is basically just what we need.
 #    But we decided not to rely on it as because it is so recent.
  
 get_filename_component( PYEXPATH ${PYTHON_EXECUTABLE} DIRECTORY )
