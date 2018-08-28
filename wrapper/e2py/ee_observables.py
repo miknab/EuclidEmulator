@@ -4,7 +4,7 @@ ee_observables.py
 EuclidEmulator submodule for actual emulation of cosmological observables.
 """
 
-# This file is part of EuclidEmulator 
+# This file is part of EuclidEmulator
 # Copyright (c) 2018 Mischa Knabenhans
 #
 # EuclidEmulator is free software: you can redistribute it and/or modify
@@ -23,11 +23,11 @@ EuclidEmulator submodule for actual emulation of cosmological observables.
 import sys as _sys
 import numpy as _np
 import EuclidEmulator_BackEnd as _eeb
-import _internal._ee_aux as _aux
-import _internal._ee_background as _bg
-import _internal._ee_cosmoconv as _cc
-import ee_input as _inp
-import _ee_lens as _lens
+from e2py._internal import _ee_aux as _aux
+from e2py._internal import _ee_background as _bg
+from e2py._internal import _ee_cosmoconv as _cc
+import e2py.ee_input as _inp
+import e2py._ee_lens as _lens
 
 from scipy.integrate import romb as _romb
 from scipy.interpolate import CubicSpline as _CubicSpline
@@ -35,17 +35,17 @@ from scipy.interpolate import CubicSpline as _CubicSpline
 try:
     from classy import Class as _Class
 except ImportError:
-    print("\nClassy could not be found in your system.")
-    print("Here are some suggestions:\n")
-    print("\t -Download the Class from class-code.net and install it")
-    print("\t  together with its wrapper classy (type 'make' instead of")
-    print("\t  'make class'") 
-    print("\t -If you know that Class is installed on your system")
-    print("\t  and yet classy could not be installed, try re-compiling")
-    print("\t  Class with just ''make'' instead of ''make class''")
-    print("NOTICE: Even without classy you can still use EuclidEmulator")
-    print("        to emulate boost factors. You won't be able to compute")
-    print("        full power spectra, though.")
+    print "\nClassy could not be found in your system."
+    print "Here are some suggestions:\n"
+    print "\t -Download the Class from class-code.net and install it"
+    print "\t  together with its wrapper classy (type 'make' instead of"
+    print "\t  'make class'"
+    print "\t -If you know that Class is installed on your system"
+    print "\t  and yet classy could not be installed, try re-compiling"
+    print "\t  Class with just ''make'' instead of ''make class''"
+    print "NOTICE: Even without classy you can still use EuclidEmulator"
+    print "        to emulate boost factors. You won't be able to compute"
+    print "        full power spectra, though."
 
 def get_boost(emu_pars_dict, redshifts):
     """
@@ -63,7 +63,7 @@ def get_boost(emu_pars_dict, redshifts):
 
     Related:     get_plin, get_pnonlin
     """
-    if isinstance(redshifts,(int,float)):
+    if isinstance(redshifts, (int, float)):
         redshifts = _np.asarray([redshifts])
     else:
         redshifts = _np.asarray(redshifts)
@@ -72,28 +72,29 @@ def get_boost(emu_pars_dict, redshifts):
         assert z <= 5.0, "EuclidEmulator allows only redshifts z <= 5.0.\n"
 
     if not isinstance(emu_pars_dict, (dict,)):
-        print("The cosmological parameters must be passed as a python \
-               dictionary.\n")
+        print "The cosmological parameters must be passed as a python \
+               dictionary.\n"
         _sys.exit()
 
     boost_data = _eeb.emu_boost(_np.array([emu_pars_dict['om_b'],
-                                         emu_pars_dict['om_m'],
-                                         emu_pars_dict['n_s'],
-                                         emu_pars_dict['h'],
-                                         emu_pars_dict['w_0'],
-                                         emu_pars_dict['sigma_8']]),
-                               redshifts)
-    
+                                           emu_pars_dict['om_m'],
+                                           emu_pars_dict['n_s'],
+                                           emu_pars_dict['h'],
+                                           emu_pars_dict['w_0'],
+                                           emu_pars_dict['sigma_8']]),
+                                redshifts)
+
     kvals = boost_data.k
     k_shape = kvals.shape
 
-    nk = len(kvals)
-    nz = len(redshifts)
+    len_kvec = len(kvals)
+    len_redshifts = len(redshifts)
 
-    if nz>1:
+    if len_redshifts > 1:
         bvals = {}
-        for i in range(nz):
-            bvals['z'+str(i)]=boost_data.boost[i*nk:(i+1)*nk].reshape(k_shape) 
+        for i in range(len_redshifts):
+            tmp = boost_data.boost[i*len_kvec:(i+1)*len_kvec]
+            bvals['z'+str(i)] = tmp.reshape(k_shape)
     else:
         bvals = boost_data.boost.reshape(k_shape)
 
@@ -117,18 +118,18 @@ def get_pnonlin(emu_pars_dict, redshifts):
     Related:     get_plin, get_boost
     """
     if _Class.__module__ not in _sys.modules:
-        print("You have not imported neither classee nor classy.\n \
-               Emulating full power spectrum is hence not possible.")
+        print "You have not imported neither classee nor classy.\n \
+               Emulating full power spectrum is hence not possible."
         return None
 
-    if isinstance(redshifts,(int,float)):
+    if isinstance(redshifts, (int, float)):
         redshifts = _np.asarray([redshifts])
     else:
-        redshifts = _np.asarray(redshifts)   
- 
+        redshifts = _np.asarray(redshifts)
+
     for z in redshifts:
         assert z <= 5.0, "EuclidEmulator allows only redshifts z <= 5.0.\n"
- 
+
     boost_dict = get_boost(emu_pars_dict, redshifts)
 
     kvec = boost_dict['k']
@@ -137,14 +138,14 @@ def get_pnonlin(emu_pars_dict, redshifts):
     plin = get_plin(emu_pars_dict, kvec, redshifts)
     plin = plin['P_lin']
 
-    if len(redshifts)==1:
+    if len(redshifts) == 1:
         pnonlin = plin*Bk
 
     else:
         pnonlin = {}
-        for i,z in enumerate(redshifts):
+        for i, z in enumerate(redshifts):
             pnonlin['z'+str(i)] = plin['z'+str(i)]*Bk['z'+str(i)]
-    
+
     return {'k': kvec, 'P_nonlin': pnonlin, 'P_lin': plin, 'B': Bk}
 
 def get_plin(emu_pars_dict, kvec, redshifts):
@@ -159,18 +160,20 @@ def get_plin(emu_pars_dict, kvec, redshifts):
                  numpy.ndarray (containing the k modes)
                  numpy.ndarray (containing the redshift values)
 
-    Output type: if len(redshifts)==1, then numpy.ndarray (containing the linear power spectrum values)
-                 if len(redshifts)>1, then dict with indices 'z0', 'z1', 'z2' etc.
+    Output type: if len(redshifts)==1, then numpy.ndarray (containing the
+                 linear power spectrum values)
+                 if len(redshifts)>1, then dict with indices 'z0', 'z1',
+                 'z2' etc.
 
     Related:     get_pnonlin, get_boost
     """
     if _Class.__module__ not in _sys.modules:
-        print("You have not imported neither classee nor classy.\n \
-               Computing linear power spectrum is hence not possible.")
+        print "You have not imported neither classee nor classy.\n \
+               Computing linear power spectrum is hence not possible."
         return None
 
     # Convert single redshift input argument to array
-    if isinstance(redshifts,(int,float)):
+    if isinstance(redshifts, (int, float)):
         redshifts = _np.asarray([redshifts])
     else:
         redshifts = _np.asarray(redshifts)
@@ -179,14 +182,13 @@ def get_plin(emu_pars_dict, kvec, redshifts):
         assert z <= 5.0, "EuclidEmulator allows only redshifts z <= 5.0.\n"
 
     # Convert single redshift input argument to array
-    if isinstance(kvec,(int,float)):
+    if isinstance(kvec, (int, float)):
         kvec = _np.asarray([kvec])
     else:
         kvec = _np.asarray(kvec)
 
     # "Stringify" the input arrays to be understandable for classy.
     z_arr, z_str = _aux.stringify_arr(redshifts)
-    k_arr, k_str = _aux.stringify_arr(kvec)
 
     # Convert the input dictionary into a Class-compatible dictionary
     class_pars_dict = _inp.emu_to_class(emu_pars_dict)
@@ -197,7 +199,6 @@ def get_plin(emu_pars_dict, kvec, redshifts):
     classy_pars['Omega_Lambda'] = 0.0
     classy_pars['output'] = 'mPk'
     classy_pars['P_k_max_1/Mpc'] = 10.0
-#    classy_pars['k_output_values'] = k_str
     classy_pars['z_pk'] = z_str
 
     # Create a "Class" instance called "cosmo" and run classy to compute
@@ -208,129 +209,233 @@ def get_plin(emu_pars_dict, kvec, redshifts):
 
     # Convert k units: h/Mpc
     h = classy_pars['h']
-    k_classy_arr = h*k_arr
+    k_classy_arr = h*kvec
 
     # Get shape of k vector
     k_shape = k_classy_arr.shape
 
-    # Get power spectrum at tabulated z and k in units of Mpc^3 
-    if len(z_arr)==1:
+    # Get power spectrum at tabulated z and k in units of Mpc^3
+    if len(z_arr) == 1:
         z = z_arr
-        linpower = _np.array([cosmo.pk(k, z)*h*h*h for k in k_classy_arr]).reshape(k_shape)
+        linpower = _np.array([cosmo.pk(k, z)*h*h*h
+                              for k in k_classy_arr]).reshape(k_shape)
     else:
-        linpower = {'z'+str(i): _np.array([cosmo.pk(k, z)*h*h*h for k in k_classy_arr]).reshape(k_shape) for i,z in enumerate(z_arr)}
+        linpower = {'z'+str(i):
+                    _np.array([cosmo.pk(k, z)*h*h*h
+                               for k in k_classy_arr]).reshape(k_shape)
+                    for i, z in enumerate(z_arr)}
 
-    return {'k': kvec, 'P_lin': linpower }
+    return {'k': kvec, 'P_lin': linpower}
 
 def sgaldist(alpha=2.0, beta=1.5, z_mean=0.9):
+    """
+    Signature:      sgaldist(alpha=2.0, beta=1.5, z_mean=0.9)
+
+    Description:    This function takes three (optional) keyword arguments
+                    (or any subset thereof) and returns a source galaxy
+                    distribution according to the standard distribution function
+                    given by
+
+                       n(z;alpha,beta,z_mean) = (z/z_0)^alpha exp[-(z/z_0)^beta]
+
+                    where z_0 = z_mean/1.412. Notice that the default values of
+                    alpha, beta and z_mean are as listed in 'Signature'.
+
+    Input:          the input parameters are the parameters of the distribution
+                    function n(z) mentioned above.
+
+    Input types:    type(alpha)=float,
+                    type(beta)=float,
+                    type(z_mean)=float
+
+    Output:         This function returns an object that is similar to a
+                    function object in the sense that it takes arguments.
+                    To be precise, the returned object takes a numpy.ndarray of
+                    redshifts as arguments and computes the correspondingsource
+                    galaxy distribution in redshift based on the passed
+                    parameters.
+
+    Output types:   type(output)=e2py._internal._ee_aux.Function
+                    (EuclidEmulator internal type)
+
+    """
     return _lens.GalaxyRedshiftDist(alpha, beta, z_mean)(z_mean)
 
 if False:
     def get_pconv(emu_pars_dict, sourcedist_func, prec=7):
         """
         Signature:   get_pconv(emu_pars_dict, sourcedist_func, prec=12)
-            
-        Description: Converts a matter power spectrum into a convergence power 
+
+        Description: Converts a matter power spectrum into a convergence power
                      spectrum via the Limber equation (conversion is based on
-                     equation (29) of the review article by Martin Kilbinger 
-                     "Cosmology with cosmic shear observations: a review", July 21,
-                     2015,arXiv:1411.0115v2). REMARK: The g in that equation is a
-                     typo and should be q which is defined in equation (24). 
-                     
-                     The input variable emu_pars_dict is a dictionary containing
-                     the cosmological parameters and sourcedist is a dictionary of
-                     the format {'chi': ..., 'n': ...} containing the a vector of 
-                     comoving distances ("chi") together with the number counts of 
-                     source galaxies at these distances or redshifts, respectively.
-                     
-                     The precision parameter prec is an integer which defines at
-                     how many redshifts the matter power spectrum is emulated for 
-                     integration in the Limber equation. The relation between the 
-                     number of redshifts nz and the parameter prec is given by 
-                     
-                                             nz = 2^prec + 1
-                     
-                     REMARK: The 'chi' vector in the sourcedist dictionary should 
-                     span the range from 0 to chi(z=5).
+                     equation (29) of the review article by Martin Kilbinger
+                     "Cosmology with cosmic shear observations: a review",
+                     July 21, 2015,arXiv:1411.0115v2).
+                     REMARK: The g in that equation is a typo and should be q
+                     which is defined in equation (24).
+
+                     The input variable emu_pars_dict is a dictionary contai-
+                     ning the cosmological parameters and sourcedist is a
+                     dictionary of the format {'chi': ..., 'n': ...} containing
+                     the a vector of comoving distances ("chi") together with
+                     the number counts of source galaxies at these distances
+                     or redshifts, respectively.
+
+                     The precision parameter prec is an integer which defines
+                     at how many redshifts the matter power spectrum is emula-
+                     ted for integration in the Limber equation. The relation
+                     between the number of redshifts len_redshifts and the
+                     parameter prec is given by
+
+                                     len_redshifts = 2^prec + 1
+
+                     REMARK: The 'chi' vector in the sourcedist dictionary
+                     should span the range from 0 to chi(z=5).
 
         Input type:  emu_pars_dict - dictionary
                      sourcedist - function object
                      prec - int
-                     
+
         Ouput type:  dictionary of the form {'l': ..., 'Cl': ...}
         """
+        def limber_prefactor(emu_pars_dict):
+            """
+            * NESTED FUNCTION * (defined inside get_pconv)
+
+            Signature:          LimberPrefactor(emu_pars_dict)
+
+            Description:        Computes the cosmology dependend prefactor
+                                of the integral in the Limber approximation.
+
+            Input type:         emu_pars_dict - dictionary
+
+            Output type:        float
+            """
+            c_inv = 1./_bg.SPEED_OF_LIGHT_IN_KILOMETERS_PER_SECOND
+            h = emu_pars_dict['h']
+            H0 = 100*h
+            Om_m = emu_pars_dict['om_m']/(h*h)
+
+            # compute prefactor of limber equation integral
+            # --> in units of [Mpc^4]
+            prefac = 2.25 * Om_m*Om_m * H0*H0*H0*H0 * c_inv*c_inv*c_inv*c_inv
+
+            # convert prefactor units to [(Mpc/h)^4]
+            prefac *= h*h*h*h
+
+            return prefac
+
+        def eval_lensingefficiency(emu_pars_dict, sd_func, z_vec):
+            """
+            * NESTED FUNCTION * (defined inside get_pconv)
+
+            Signature:  eval_lensingefficiency(emu_pars_dict, sd_func, z_vec)
+
+            Descrition: Evaluates the lensing efficiency function for a given
+                        cosmology and source galaxy distribution function at
+                        a number of different comoving distances (corresponding
+                        to different redshifts).
+
+            Input types: emu_pars_dict - dictionary
+                         sd_func - function object
+                         z_vec - numpy.ndarray
+
+            Output types: numpy.ndarray
+                          numpy.ndarray
+            """
+            chi_lim = _bg.dist_comov(emu_pars_dict, 1e-12, 5.0) # in Mpc/h
+            chi_vec = _bg.dist_comov(emu_pars_dict,
+                                     _np.zeros_like(z_vec),
+                                     z_vec)
+
+            source_dict = {'chi': chi_vec, 'n': sd_func(z_vec)}
+
+            lenseff = _lens.lens_efficiency(source_dict, chi_vec, chi_lim)
+
+            return (chi_vec, lenseff)
+
+        def get_pnonlin_of_l_and_z(emu_pars_dict, z_vec, l_vec):
+            """
+            * NESTED FUNCTION * (defined inside get_pconv)
+
+            Signature:          get_P_of_l_and_z(emu_pars_dict, z_vec, l_vec)
+
+            Description:        This function computes the different k
+                                ranges for the given cosmology at all
+                                different redshifts and computes the power
+                                spectrum for these redshifts at these k modes.
+
+            Input types:        emu_pars_dict - dictionary
+                                z_vec - numpy.ndarray
+                                l_vec - numpy.ndarray
+
+            Output type:        numpy.ndarray
+            """
+            P = get_pnonlin(emu_pars_dict, z_vec) # call EuclidEmulator
+
+            pnonlin_array = []
+            for i, z in enumerate(z_vec):
+                func = _CubicSpline(_np.log10(P['k']),
+                                    _np.log10(P['P_nonlin']['z'+str(i)]))
+                k = _cc.l_to_k(emu_pars_dict, l_vec, z) # needs to be called
+                                                        # inside loop because
+                                                        # different z-values
+                                                        # lead to different
+                                                        # results
+
+                # evaluate the interpolating function of Pnl for all k in the
+                # range allowed by EuclidEmulator (this range is given by
+                # P['k'])
+                pmatternl = [10.0**func(_np.log10(kk)) for kk in k
+                             if kk >= P['k'].min() and kk <= P['k'].max()]
+                # for k values below the lower bound or above the upper bound
+                # of this k range, set the contributions to 0.0
+                p_toosmall = [0.0 for kk in k if kk < P['k'].min()]
+                p_toobig = [0.0 for kk in k if kk > P['k'].max()]
+
+                pnonlin_array.append(_np.array(p_toosmall +
+                                               pmatternl +
+                                               p_toobig))
+
+            # get the non-linear matter power spectrum in units of [(Mpc/h)^3]
+            return _np.asarray(pnonlin_array).transpose()
+
+        # =====================================
         if _Class.__module__ not in _sys.modules:
-            print("You have not imported neither classee nor classy.\n \
+            print "You have not imported neither classee nor classy.\n \
                    Emulating convergence power spectrum is hence not\n \
-                   possible.")
+                   possible."
             return None
 
-
-        c = _bg.SPEED_OF_LIGHT_IN_KILOMETERS_PER_SECOND # speed of light
-        c_inv = 1./c
-        h = emu_pars_dict['h']
-        H0 = 100*h
-        Om_m = emu_pars_dict['om_m']/(h*h)
-        
-        nz = int(2**prec + 1)
-        nl = int(1e4)
-        
-        z_vec = _np.logspace(_np.log10(5e-2), _np.log10(4.999999), nz)
+        z_vec = _np.logspace(_np.log10(5e-2),
+                             _np.log10(4.999999),
+                             2**prec + 1)
         a_inv_vec = 1.+z_vec
-        chi_lim = _bg.dist_comov(emu_pars_dict, 1e-12, 5.0) # in Mpc/h
-        chi_vec = []
-        pnonlin_array = []
-        
-        l_vec = _np.linspace(1e1,2e3, nl)
 
-        P = get_pnonlin(emu_pars_dict, z_vec) # call EuclidEmulator
-        chi_vec = _bg.dist_comov(emu_pars_dict, _np.zeros_like(z_vec), z_vec)
+        len_l_vec = int(1e4)
+        l_vec = _np.linspace(1e1, 2e3, len_l_vec)
 
-        for i,z in enumerate(z_vec):
-            f = _CubicSpline(_np.log10(P['k']), _np.log10(P['P_nonlin']['z'+str(i)]))
-            k = _cc.l_to_k(emu_pars_dict, l_vec, z) # needs to be called inside loop
-                                                   # because different z-values
-                                                   # lead to different results
+        # get the lensing efficiency
+        chi_vec, q_vec = eval_lensingefficiency(emu_pars_dict,
+                                                sourcedist_func,
+                                                z_vec)
+        assert len(z_vec) == len(chi_vec)
 
-            # evaluate the interpolating function of Pnl for all k in the range
-            # allowed by EuclidEmulator (this range is given by P['k'])
-            pmatternl = [10.0**f(_np.log10(kk)) for kk in k 
-                         if (kk >= P['k'].min() 
-                         and kk <= P['k'].max())]
-            # for k values below the lower bound or above the upper bound of 
-            # this k range, set the contributions to 0.0
-            p_toosmall = [0.0 for kk in k if kk < P['k'].min()]
-            p_toobig = [0.0 for kk in k if kk > P['k'].max()]
 
-            pnonlin_array.append(_np.array(p_toosmall + pmatternl + p_toobig))
+        # get the matter power spectrum at the correct k modes
+        pnonlin_array = get_pnonlin_of_l_and_z(emu_pars_dict, z_vec, l_vec)
 
-        # get the non-linear matter power spectrum in units of [(Mpc/h)^3]
-        pnonlin_array = _np.asarray(pnonlin_array).transpose()
-            
-        # compute prefactor of limber equation integral --> in units of [Mpc^4]
-        prefac = 2.25*Om_m*Om_m * H0 * H0 * H0 * H0 * c_inv * c_inv * c_inv * c_inv
-        
-        # convert prefactor units to [(Mpc/h)^4]
-        prefac = prefac * h * h * h * h
-
-        # compose the integrand
-        assert (len(z_vec) == len(chi_vec))
-        assert (len(chi_vec) == len(a_inv_vec))
-        assert all([len(chi_vec) == len(pnonlin_array[i]) 
+        assert all([len(chi_vec) == len(pnonlin_array[i])
                     for i in range(len(pnonlin_array))])
-        
-        source_dict = {'chi': chi_vec, 'n': sourcedist_func(z_vec)}
-        
-        q_vec = _lens.lens_efficiency(source_dict, chi_vec, chi_lim)
-     
-        integrand = _np.array([q_vec * q_vec * a_inv_vec * a_inv_vec * 
-                              pnonlin_array[i] for i in range(nl)])
 
-        assert(integrand.shape == pnonlin_array.shape)
-        
-        # perform integral (bear in mind that only the product of the 
+        # Compose integrand
+        integrand = _np.array([q_vec*q_vec * a_inv_vec*a_inv_vec *
+                               pnonlin_array[i] for i in range(len_l_vec)])
+
+        assert integrand.shape == pnonlin_array.shape
+
+        # perform integral (bear in mind that only the product of the
         # integral and the prefac is truely dimensionless) and return
-        Pconv = {'l': l_vec, 
-                 'Cl': prefac*_romb(integrand, chi_vec[1]-chi_vec[0])}
-        
-        return Pconv
+        return {'l': l_vec,
+                'Cl': limber_prefactor(emu_pars_dict)*
+                      _romb(integrand, chi_vec[1]-chi_vec[0])}
