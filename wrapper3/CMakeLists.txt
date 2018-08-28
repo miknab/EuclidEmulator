@@ -47,4 +47,4 @@ target_link_libraries ( EuclidEmulator_BackEnd eucemu )
 
 # Install
 install( TARGETS EuclidEmulator_BackEnd DESTINATION ${PYTHON_MODULE_PATH} )
-install( DIRECTORY e2py DESTINATION ${PYTHON_MODULE_PATH} )
+install( DIRECTORY e2py3 DESTINATION ${PYTHON_MODULE_PATH} )
