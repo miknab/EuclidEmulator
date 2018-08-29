@@ -36,8 +36,13 @@ include( UseCython )
 #    that has a return value "Python_SITELIB" which is basically just what we need.
 #    But we decided not to rely on it as because it is so recent.
  
-get_filename_component( PYEXPATH ${PYTHON_EXECUTABLE} DIRECTORY )
-set( PYTHON_MODULE_PATH "${PYEXPATH}/../lib/python${PYTHON_VERSION_MAJOR}.${PYTHON_VERSION_MINOR}/site-packages" )
+execute_process ( COMMAND 
+                  python -c "from distutils.sysconfig import get_python_lib; print(get_python_lib())"
+                  OUTPUT_VARIABLE PYTHON_SITE_PACKAGES
+                  OUTPUT_STRIP_TRAILING_WHITESPACE
+                )
+
+message( "Path to python site-packages: ${PYTHON_SITE_PACKAGES}" )
 
 # Compile
 cython_add_module( EuclidEmulator_BackEnd ${CYTHON_SOURCE_FILE} )
@@ -46,5 +51,5 @@ cython_add_module( EuclidEmulator_BackEnd ${CYTHON_SOURCE_FILE} )
 target_link_libraries ( EuclidEmulator_BackEnd eucemu )
 
 # Install
-install( TARGETS EuclidEmulator_BackEnd DESTINATION ${PYTHON_MODULE_PATH} )
-install( DIRECTORY e2py3 DESTINATION ${PYTHON_MODULE_PATH} )
+install( TARGETS EuclidEmulator_BackEnd DESTINATION ${PYTHON_SITE_PACKAGES} )
+install( DIRECTORY e2py3 DESTINATION ${PYTHON_SITE_PACKAGES} )
