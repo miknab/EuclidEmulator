@@ -37,7 +37,7 @@ include( UseCython )
 #    But we decided not to rely on it as because it is so recent.
  
 execute_process ( COMMAND 
-                  python -c "from distutils.sysconfig import get_python_lib; print(get_python_lib())"
+                  ${PYTHON_EXECUTABLE} -c "from distutils.sysconfig import get_python_lib; print(get_python_lib())"
                   OUTPUT_VARIABLE PYTHON_SITE_PACKAGES
                   OUTPUT_STRIP_TRAILING_WHITESPACE
                 )
@@ -51,5 +51,6 @@ cython_add_module( EuclidEmulator_BackEnd ${CYTHON_SOURCE_FILE} )
 target_link_libraries ( EuclidEmulator_BackEnd eucemu )
 
 # Install
+message ( "Installig to ${PYTHON_SITE_PACKAGES}")
 install( TARGETS EuclidEmulator_BackEnd DESTINATION ${PYTHON_SITE_PACKAGES} )
-install( DIRECTORY e2py3 DESTINATION ${PYTHON_SITE_PACKAGES} )
+install( DIRECTORY e2py DESTINATION ${PYTHON_SITE_PACKAGES} )
