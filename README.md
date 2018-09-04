@@ -31,9 +31,13 @@ If you have not done so already, either download this repository or clone it to 
 EuclidEmulator comes with a command line interface (CLI) and a full-fledged python package. You can choose whether you want to install only one of these tools or both. We recommend to install the python package as it's usage is less error-prone than that of the CLI and it offers much more utilities. In the following we will restrict our description on the python package (if you are interested in the CLI, please consult the wiki).
 Now, inside the `EuclidEmulator` directory type
 ```bash
-   cd wrapper
+   cd wrapper2
 ```
-Create a new build folder, enter it and run CMake, i.e.: 
+if you want to install the python2 version of the EuclidEmulator wrapper, while, if you want the python3 version you enter the `wrapper3` directory like
+```bash
+   cd wrapper3
+```
+All the subsequent steps are identical for both python versions. Create a new build folder, enter it and run CMake, i.e.: 
 ```bash
    mkdir build
    cd build
@@ -53,7 +57,7 @@ in order to compile and install the code.
 REMARK: If you don't have root acces on the machine you want to build this software on, we recommend to install this software inside a virtual environment (see documentation/wiki for more info).
 
 ### Usage
-Now you are ready to use the software. In a python script or in a jupyter notebook (with a python2 kernel) you can import the package via <br/>
+Now you are ready to use the software. In a python script or in a jupyter notebook (with a kernel of the corresponding python version) you can import the package via <br/>
 ```python
    import e2py
 ```
