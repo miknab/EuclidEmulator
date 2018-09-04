@@ -33,7 +33,7 @@ Now, inside the `EuclidEmulator` directory type
 ```bash
    cd wrapper2
 ```
-if you want to install the python2 version of the EuclidEmulator wrapper, while, if you want the python3 version you enter the `wrapper3` directory like
+if you want to install the python2 version of the EuclidEmulator wrapper, whereas if you want the python3 version you enter the `wrapper3` directory like
 ```bash
    cd wrapper3
 ```
