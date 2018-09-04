@@ -9,8 +9,7 @@ If you use EuclidEmulator in any way (for a publication or otherwise), please ci
 
 STAY TUNED:
 1) We are working on a new feature for the python wrapper allowing to easily and quickly calculate convergence power spectra.
-2) We plan to write a python3 version of the wrapper.
-3) We plan a fully revised version of the emulator that includes neutrino physics.
+2) We plan a fully revised version of the emulator that includes neutrino physics.
 
 ## Quick start
 ### Prerequisites
@@ -19,7 +18,7 @@ In any case you need:
  * CMake (see https://cmake.org)
 
 In order to use the python wrapper, you need in addition:
- * Python2.7 together with cython, numpy, scipy and pandas (only for python wrapper)
+ * Python together with cython, numpy, scipy and pandas (only for python wrapper)
  * Our own patch of the CLASS code (see https://github.com/miknab/ClassPatch) (only for python wrapper)
  
 ### Get the code
@@ -29,7 +28,7 @@ If you have not done so already, either download this repository or clone it to 
 ```
 
 ### Building and installation
-EuclidEmulator comes with a command line interface (CLI) and a full-fledged python2.7 package. You can choose whether you want to install only one of these tools or both. We recommend to install the python package as it's usage is less error-prone than that of the CLI and it offers much more utilities. In the following we will restrict our description on the python package (if you are interested in the CLI, please consult the wiki).
+EuclidEmulator comes with a command line interface (CLI) and a full-fledged python package. You can choose whether you want to install only one of these tools or both. We recommend to install the python package as it's usage is less error-prone than that of the CLI and it offers much more utilities. In the following we will restrict our description on the python package (if you are interested in the CLI, please consult the wiki).
 Now, inside the `EuclidEmulator` directory type
 ```bash
    cd wrapper
@@ -54,7 +53,7 @@ in order to compile and install the code.
 REMARK: If you don't have root acces on the machine you want to build this software on, we recommend to install this software inside a virtual environment (see documentation/wiki for more info).
 
 ### Usage
-Now you are ready to use the software. In a python2.7 script or in a jupyter notebook (with a python2 kernel) you can import the package via <br/>
+Now you are ready to use the software. In a python script or in a jupyter notebook (with a python2 kernel) you can import the package via <br/>
 ```python
    import e2py
 ```
