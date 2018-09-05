@@ -1,50 +1,42 @@
 import sys
-from PyQt5.QtCore import *
-from PyQt5.QtGui import *
-from PyQt5.QtWidgets import *
+from PyQt5 import QtGui
+from PyQt5.QtWidgets import QApplication, QLabel, QLineEdit, QSlider, QTextEdit, QWidget, QPushButton, QVBoxLayout, \
+    QHBoxLayout, QFileDialog, QGridLayout
+from PyQt5.QtCore import Qt
 
-app = QApplication(sys.argv)
-w = QWidget()
-glay = QGridLayout(w)
-glay.addWidget(QLabel("Cosmology"), 0, 0, 1, 6)
-glay.addWidget(QLabel("Plot"), 0, 9, 10, 6)
-glay.addWidget(QLabel("Omb_lb"), 1, 0, 1, 2)
-glay.addWidget(QLabel("Omb_le"), 1, 2, 1, 2)
-glay.addWidget(QLabel("Omb_sld"), 1, 4, 1, 2)
-glay.addWidget(QLabel("Om0_lb"), 2, 0, 1, 2)
-glay.addWidget(QLabel("Om0_le"), 2, 2, 1, 2)
-glay.addWidget(QLabel("Om0_sld"), 2, 4, 1, 2)
-glay.addWidget(QLabel("ns_lb"), 3, 0, 1, 2)
-glay.addWidget(QLabel("ns_le"), 3, 2, 1, 2)
-glay.addWidget(QLabel("ns_sld"), 3, 4, 1, 2)
-glay.addWidget(QLabel("h_lb"), 4, 0, 1, 2)
-glay.addWidget(QLabel("h_le"), 4, 2, 1, 2)
-glay.addWidget(QLabel("h_sld"), 4, 4, 1, 2)
-glay.addWidget(QLabel("w0_lb"), 5, 0, 1, 2)
-glay.addWidget(QLabel("w0_le"), 5, 2, 1, 2)
-glay.addWidget(QLabel("w0_sld"), 5, 4, 1, 2)
-glay.addWidget(QLabel("sig8_lb"), 6, 0, 1, 2)
-glay.addWidget(QLabel("sig8_le"), 6, 2, 1, 2)
-glay.addWidget(QLabel("sig8_sld"), 6, 4, 1, 2)
-glay.addWidget(QLabel("z_lb"), 7, 0, 1, 2)
-glay.addWidget(QLabel("z_le"), 7, 2, 1, 2)
-glay.addWidget(QLabel("z_sld"), 7, 4, 1, 2)
+class Window(QWidget):
+    def __init__(self):
+            # super().__init() is the python3-specific syntax
+            super(Window, self).__init__()  # this syntax is compatible with python2 & python3
+            self.init_ui()
 
-glay.addWidget(QLabel("Configuration"), 9, 0, 1, 6)
-glay.addWidget(QLabel("Plin(k)_chkbx"), 10, 0, 1, 3)
-glay.addWidget(QLabel("Pnonlin(k)_chkbx"), 11, 0, 1, 3)
-glay.addWidget(QLabel("Boost(k)_chkbx"), 12, 0, 1, 3)
-glay.addWidget(QLabel("config4"), 10, 3, 1, 3)
-glay.addWidget(QLabel("config5"), 11, 3, 1, 3)
-glay.addWidget(QLabel("config6"), 12, 3, 1, 3)
+    def init_ui(self):
+        glay = QGridLayout()
 
-glay.addWidget(QLabel("Save data button"), 11, 10, 1, 2)
-glay.addWidget(QLabel("Save plot button"), 11, 12, 1, 2)
-qsrand(QTime.currentTime().msec())
+        parList = ["Omega_b", "Omega_m", "n_s", "h", "w_0", "sigma_8", "z"]
 
-for label in w.findChildren(QLabel):
-    color = QColor(qrand() % 256, qrand() % 256, qrand() % 256)
-    label.setStyleSheet('.QLabel{{background: rgb({}, {}, {});}}'.format(color.red(), color.green(), color.blue()))
+        for idx, label in enumerate(parList): 
+            CreateCosmoField(glay, label, idx)
 
-w.show()
+        self.setWindowTitle("EuclidEmulator")
+        self.setLayout(glay)
+
+        self.show()
+    
+def CreateCosmoField(layout, label, row):
+    qlab = QLabel(label)
+    qle = QLineEdit()
+    qsld = QSlider(Qt.Horizontal)
+    qsld.setMinimum(0)
+    qsld.setMaximum(1000)
+    qsld.setValue(500)
+    qsld.setTickInterval(100)
+    qsld.setTickPosition(QSlider.TicksBelow)
+
+    layout.addWidget(qlab, row, 0, 2, 1)
+    layout.addWidget(qle, row, 2, 2, 1)
+    layout.addWidget(qsld, row, 4, 2, 1)
+
+app = QApplication(sys.argv)  # create application loop
+a_window = Window()
 sys.exit(app.exec_())
