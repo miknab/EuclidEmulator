@@ -1,15 +1,18 @@
 # EuclidEmulator (version 1.1)
 This repository contains the main source code of the EuclidEmulator, a fast and accurate tool to estimate the non-linear correction to the matter power spectrum. EuclidEmulator is roughly seven orders of magnitude faster than an N-body simulation that yields results at the same level of accuracy.
 
-Authors:   M. Knabenhans, J. Stadel<br/>
-Date:      August 2018<br/>
-Reference: Knabenhans et al., 2018, arXiv pre-print (submitted)<br/>
+Authors:   M. Knabenhans & J. Stadel<br/>
+Date of last update:      September 2018<br/>
+Reference: Knabenhans et al., 2018, arXiv pre-print: https://arxiv.org/abs/1809.04695, submitted to MNRAS<br/>
 
 If you use EuclidEmulator in any way (for a publication or otherwise), please cite this paper.
 
 STAY TUNED:
 1) We are working on a new feature for the python wrapper allowing to easily and quickly calculate convergence power spectra.
 2) We plan a fully revised version of the emulator that includes neutrino physics.
+
+## Contact information
+If you have any questions and/or remarks related to this work, please do not hesitate to send me an email (mischakATphysik.uzh.ch)
 
 ## Quick start
 ### Prerequisites
