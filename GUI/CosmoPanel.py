@@ -4,7 +4,9 @@ from PyQt5.QtWidgets import QApplication, QLabel, QLineEdit, QSlider, QTextEdit,
     QHBoxLayout, QFileDialog, QGridLayout
 from PyQt5.QtCore import Qt
 
-def CreateCosmoField(layout, (label, parrange), row):
+import PlotPanel as PP
+
+def CreateCosmoField(layout, (label, parrange), row, canvas):
 
     minimum = 0
     maximum = 1000
@@ -25,15 +27,21 @@ def CreateCosmoField(layout, (label, parrange), row):
     qsld.setTickInterval(int(maximum/10))
     qsld.setTickPosition(QSlider.TicksBelow)
 
-    qsld.valueChanged.connect(lambda: v_change(qsld, qle, parrange, maximum))
-
     layout.addWidget(qlab, row, 0, 2, 1)
     layout.addWidget(qle, row, 2, 2, 1)
     layout.addWidget(qsld, row, 4, 2, 1)
 
-def v_change(sld, le, parrange, maximum):
+    qsld.valueChanged.connect(lambda: v_change(qsld, qle, parrange, maximum, layout, canvas))
+
+def v_change(sld, le, parrange, maximum, layout, canvas):
         my_value = str(linparmap(sld.value(),parrange, maximum))
         le.setText(my_value)
+
+        for sld in layout.findChildren(QSlider):
+            print(sld.value())
+
+        # Need to get CosmoDict and z
+        #canvas.plot(CosmoDict, z)
 
 def linparmap(val,parrange,maximum):
         del_old = maximum  # del_old = value range of slider (in Qt this are
