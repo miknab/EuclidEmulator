@@ -22,7 +22,7 @@ In any case you need:
 
 In order to use the python wrapper, you need in addition:
  * Python together with cython, numpy, scipy and pandas (only for python wrapper)
- * Our own patch of the CLASS code (see https://github.com/miknab/ClassPatch) (only for python wrapper)
+ * CLASS code (see http://class-code.net) with the python wrapper classy (only for python wrapper)
  
 ### Get the code
 If you have not done so already, either download this repository or clone it to your local host (under Linux you can get a gzipped tar-ball via
