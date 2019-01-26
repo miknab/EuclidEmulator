@@ -164,7 +164,7 @@ void EucEmu(double *CosmoParams, double *Redshifts, int len_z, double **kVals, i
     for (ip=0;ip<6;++ip) {
       Pl[ip] = malloc((lmax+1)*sizeof(double));
       assert(Pl[ip] != NULL);
-      x = 2*(CosmoParams[ip] - min[ip])/(max[ip]-min[ip]) - 1.0;
+      x = 2*(CosmoParams[ip] - min[ip])/(max[ip]-min[ip]) - 1.0; 
       gsl_sf_legendre_Pl_array(lmax,x,Pl[ip]);
       for (l=0;l<=lmax;++l) Pl[ip][l] *= sqrt(2.0*l + 1.0); // normalize the Pls
       if (bVerbose) {
@@ -271,4 +271,5 @@ void EucEmu(double *CosmoParams, double *Redshifts, int len_z, double **kVals, i
     int retval;
     retval = munmap (retFid.handle, retFid.size);
     assert(retval == 0);
+    close(fd);
 }
