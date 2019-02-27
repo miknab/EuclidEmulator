@@ -171,7 +171,7 @@ def emu_to_class(emu_pars_dict):
                        'n_s': n_s,
                        'h': h,
                        'w0_fld': w_0,
-                       'A_s': a_s
+                       'sigma8': sigma_8
                       }
 
     return class_pars_dict
