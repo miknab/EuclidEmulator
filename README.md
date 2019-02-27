@@ -3,7 +3,7 @@ This repository contains the main source code of the EuclidEmulator, a fast and 
 
 Authors:   M. Knabenhans & J. Stadel<br/>
 Date of last update:      September 2018<br/>
-Reference: Knabenhans et al., 2018, arXiv pre-print: https://arxiv.org/abs/1809.04695, submitted to MNRAS<br/>
+Reference: Knabenhans et al. (2019), MNRAS, 484, 5509-5529 (https://arxiv.org/abs/1809.04695)<br/>
 
 If you use EuclidEmulator in any way (for a publication or otherwise), please cite this paper.
 
