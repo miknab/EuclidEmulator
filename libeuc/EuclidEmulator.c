@@ -44,8 +44,8 @@ void EucEmu(double *CosmoParams, double *Redshifts, int len_z, double **kVals, i
     const double omega_rad = 4.183709411969527e-5; /* corresponds to 2.755 K Tcmb */
     const int bVerbose = 0;
     const int nCoef[11] = {175,82,82,82,88,139,82,82,139,82,40};//{76,76,76,82,82,199,82,82};
-    const double min[6] = {0.0215,0.1306,0.9283,0.6155,-1.3,0.7591};
-    const double max[6] = {0.0235,0.1546,1.0027,0.7307,-0.7,0.8707};
+    const double min[6] = {0.0217,0.1326,0.9345,0.6251,-1.25,0.7684}; //{0.0215,0.1306,0.9283,0.6155,-1.3,0.7591};
+    const double max[6] = {0.0233,0.1526,0.9965,0.7211,-0.75,0.8614}; //{0.0235,0.1546,1.0027,0.7307,-0.7,0.8707};
 
     CSM csm;
 

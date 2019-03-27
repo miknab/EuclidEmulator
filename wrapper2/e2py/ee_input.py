@@ -36,7 +36,7 @@ def check_param_range(par_dict, csm_index=0):
     om_b_range = [0.0217, 0.0233]
     om_m_range = [0.1326, 0.1526]
     n_s_range = [0.9345, 0.9965]
-    h_range = [0.6251, 0.9965]
+    h_range = [0.6251, 0.7211]
     w_0_range = [-1.250, -0.750]
     sigma_8_range = [0.7684, 0.8614]
 
