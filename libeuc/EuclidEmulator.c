@@ -63,6 +63,12 @@ void EucEmu(double *CosmoParams, double *Redshifts, int len_z, double **kVals, i
     off_t size;
     struct stat s;
 
+    /* Test validity of input cosmology */
+    int cparcounter; 
+    for(cparcounter=0;cparcounter<6;++cparcounter) {
+        assert(CosmoParams[cparcounter]>=min[cparcounter] && CosmoParams[cparcounter]<=max[cparcounter]); 
+    }
+
     int fd = open(PATH_TO_EUCLIDEMULATOR_DATA_FILE"/ee.dat", O_RDONLY);
 
     int zcounter,i,di,ip,iz,ic,j,l,lmax;
