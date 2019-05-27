@@ -21,12 +21,11 @@
 
 int main(int argc, char* argv[]){
 
-    fprintf(stderr, "# EuclidEmulator Version %d.%d Copyright (C) 2018 Mischa Knabenhans & Joachim Stadel\n",
-            EUCLID_EMULATOR_VERSION_MAJOR,
-            EUCLID_EMULATOR_VERSION_MINOR);
-    fprintf(stderr, "# This program comes with ABSOLUTELY NO WARRANTY; for details type `show w'.\n");
-    fprintf(stderr, "# This is free software, and you are welcome to redistribute it\n");
-    fprintf(stderr, "# under certain conditions; type `show c' for details.\n");
+    fprintf(stderr, "#EuclidEmulator Copyright (C) 2018 Mischa Knabenhans & Joachim Stadel\n")
+    fprintf(stderr, "#This program comes with ABSOLUTELY NO WARRANTY.\n")
+    fprintf(stderr, "#This is free software, and you are welcome to redistribute it\n")
+    fprintf(stderr, "#under certain conditions. See http://www.gnu.org/licenses/ for further\n")
+    fprintf(stderr, "#information.")
 
     fprintf(stderr,"#\n");
     fprintf(stderr,"# Units:\n");
