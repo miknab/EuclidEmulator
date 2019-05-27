@@ -60,38 +60,32 @@ def check_param_range(par_dict, csm_index=0):
 
     if om_b_not_in_range:
         raise ValueError("Parameter range violation in cosmology %d: \
-                          om_b is set to %f, but should be in the interval \
-                          [0.0217, 0.0233]."
+om_b is set to %f, but should be in the interval [0.0217, 0.0233]."
                          %(csm_index, par_dict['om_b']))
 
     if om_m_not_in_range:
         raise ValueError("Parameter range violation in cosmology %d: \
-                          om_m is set to %f, but should be in the interval \
-                          [0.1326, 0.1526]."
+om_m is set to %f, but should be in the interval [0.1326, 0.1526]."
                          %(csm_index, par_dict['om_m']))
 
     if n_s_not_in_range:
         raise ValueError("Parameter range violation in cosmology %d: \
-                          n_s is set to %f, but should be in the interval \
-                          [0.9345, 0.9965]."
+n_s is set to %f, but should be in the interval [0.9345, 0.9965]."
                          %(csm_index, par_dict['n_s']))
 
     if h_not_in_range:
         raise ValueError("Parameter range violation in cosmology %d: \
-                          h is set to %f, but should be in the interval \
-                          [0.6251, 0.9965]."
+h is set to %f, but should be in the interval [0.6251, 0.7211]."
                          %(csm_index, par_dict['h']))
 
     if w_0_not_in_range:
         raise ValueError("Parameter range violation in cosmology %d: \
-                          w_0 is set to %f, but should be in the interval \
-                          [-1.250, -0.750]."
+w_0 is set to %f, but should be in the interval [-1.250, -0.750]."
                          %(csm_index, par_dict['w_0']))
 
     if sigma_8_not_in_range:
         raise ValueError("Parameter range violation in cosmology %d: \
-                          sigma_8 is set to %f, but should be in the interval \
-                          [0.7684, 0.8614]."
+sigma_8 is set to %f, but should be in the interval [0.7684, 0.8614]."
                          %(csm_index, par_dict['sigma_8']))
 
 ######################################################
