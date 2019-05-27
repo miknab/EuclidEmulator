@@ -3,3 +3,11 @@ OLD
 **/*.pyc
 **/.nfs*
 **/build*
+**/lib
+**/include
+**/bin
+**/share
+**/._*
+lib/*
+bin/*
+include/*
