@@ -98,33 +98,39 @@ def get_boost(emu_pars_dict, redshifts, kvec=None):
         for i in range(len_redshifts):
             tmp = boost_data.boost[i*len_kvec:(i+1)*len_kvec]
             if not(kvec is None):
-                bvals['z'+str(i)] = _CubicSpline(_np.log10(kvals), _np.log10(tmp.reshape(k_shape)))(_np.log10(kvec))
-                kvals = kvec
+                bvals['z'+str(i)] = 10.0**_CubicSpline(_np.log10(kvals),
+                                                       _np.log10(tmp.reshape(k_shape))
+                                                      )(_np.log10(kvec))
             else:
                 bvals['z'+str(i)] = tmp.reshape(k_shape)
     else:
-    
         tmp = boost_data.boost
         if not(kvec is None):
-            bvals = _CubicSpline(_np.log10(kvals), _np.log10(tmp.reshape(k_shape)))(_np.log10(kvec))
-            kvals = kvec
+            bvals = 10.0**_CubicSpline(_np.log10(kvals), 
+                                       _np.log10(tmp.reshape(k_shape))
+                                      )(_np.log10(kvec))
         else:
             bvals = tmp.reshape(k_shape)
 
+    if not(kvec is None):       # This could probably be done cleaner!
+        kvals = kvec
+
     return {'k': kvals, 'B': bvals}
 
-def get_pnonlin(emu_pars_dict, redshifts):
+def get_pnonlin(emu_pars_dict, redshifts, kvec=None):
     """
-    Signature:   get_pnonlin(emu_pars_dict, redshifts)
+    Signature:   get_pnonlin(emu_pars_dict, redshifts [, kvec])
 
     Description: Computes the linear power spectrum and the non-linear boost
-                 separately for a given redshift z and cosmology defined by
-                 EmuParsArr (a numpy array containing the values for the 6 LCDM
-                 parameters) and then returns the product of these two which is
-                 the non-linear DM-only power spectrum.
+                 separately for a given redshift z (or for a list or numpy.ndarray
+                 of redshifts), a given cosmology defined in emu_pars_dic (a python
+                 dictionary containing the values for the 6 LCDM parameters) and
+                 optionally a list or numpy.ndarray of k modes. Then it returns the
+                 product of these two which is the non-linear DM-only power spectrum.
 
     Input types: python dictionary (with the six cosmological parameters)
-                 iterable (list, numpy array)
+                 float or iterable (list, numpy.ndarray) (with redshifts)
+                 :OPTIONAL: iterable (list, numpy.ndarray) (with k modes)
 
     Output type: python dictionary
 
@@ -143,7 +149,7 @@ def get_pnonlin(emu_pars_dict, redshifts):
     for z in redshifts:
         assert z <= 5.0, "EuclidEmulator allows only redshifts z <= 5.0.\n"
 
-    boost_dict = get_boost(emu_pars_dict, redshifts)
+    boost_dict = get_boost(emu_pars_dict, redshifts, kvec)
 
     kvec = boost_dict['k']
     Bk = boost_dict['B']
