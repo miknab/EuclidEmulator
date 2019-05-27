@@ -66,6 +66,9 @@ def get_boost(emu_pars_dict, redshifts, kvec=None):
 
     Related:     get_plin, get_pnonlin
     """
+    # Check cosmological parameter ranges
+    _inp.check_param_range(emu_pars_dict)
+
     if isinstance(redshifts, (int, float)):
         redshifts = _np.asarray([redshifts])
     else:
@@ -140,6 +143,9 @@ def get_pnonlin(emu_pars_dict, redshifts, kvec=None):
         print "You have not imported neither classee nor classy.\n \
                Emulating full power spectrum is hence not possible."
         return None
+
+    # Check cosmological parameter ranges
+    _inp.check_param_range(emu_pars_dict)
 
     if isinstance(redshifts, (int, float)):
         redshifts = _np.asarray([redshifts])
