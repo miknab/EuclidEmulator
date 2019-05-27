@@ -1,5 +1,5 @@
 DataOutput
 OLD
-*/*.pyc
-*/.nfs*
-*/build
+**/*.pyc
+**/.nfs*
+**/build*
