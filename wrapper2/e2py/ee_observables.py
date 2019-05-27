@@ -47,17 +47,20 @@ except ImportError:
     print "        to emulate boost factors. You won't be able to compute"
     print "        full power spectra, though."
 
-def get_boost(emu_pars_dict, redshifts):
+def get_boost(emu_pars_dict, redshifts, kvec=None):
     """
-    Signature:   get_boost(emu_pars_dict, redshifts)
+    Signature:   get_boost(emu_pars_dict, redshifts [, kvec])
 
     Description: Computes the non-linear boost factor for a cosmology
-                 defined in EmuParsArr (a numpy array containing the
-                 values for the 6 LCDM parameters) at specified
-                 redshift stored in a list or numpy.array.
+                 defined in emu_pars_dict (a python dictionary containing
+                 the values for the 6 LCDM parameters) at specified
+                 redshift stored in a list or numpy.ndarray. Optionally, 
+                 a list or numpy.ndarray of k modes can be passed to the
+                 function via the keyword argument "kvec".
 
     Input types: python dictionary (with the six cosmological parameters)
-                 list or numpy.array
+                 list or numpy.ndarray (with redshift values)
+                 :OPTIONAL: list or numpy.ndarray (with k mode values)
 
     Output type: python dictionary
 
