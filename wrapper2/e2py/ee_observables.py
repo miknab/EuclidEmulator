@@ -97,9 +97,19 @@ def get_boost(emu_pars_dict, redshifts, kvec=None):
         bvals = {}
         for i in range(len_redshifts):
             tmp = boost_data.boost[i*len_kvec:(i+1)*len_kvec]
-            bvals['z'+str(i)] = tmp.reshape(k_shape)
+            if not(kvec is None):
+                bvals['z'+str(i)] = _CubicSpline(_np.log10(kvals), _np.log10(tmp.reshape(k_shape)))(_np.log10(kvec))
+                kvals = kvec
+            else:
+                bvals['z'+str(i)] = tmp.reshape(k_shape)
     else:
-        bvals = boost_data.boost.reshape(k_shape)
+    
+        tmp = boost_data.boost
+        if not(kvec is None):
+            bvals = _CubicSpline(_np.log10(kvals), _np.log10(tmp.reshape(k_shape)))(_np.log10(kvec))
+            kvals = kvec
+        else:
+            bvals = tmp.reshape(k_shape)
 
     return {'k': kvals, 'B': bvals}
 
