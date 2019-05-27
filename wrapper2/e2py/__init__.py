@@ -15,9 +15,10 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 print('EuclidEmulator Copyright (C) 2018 Mischa Knabenhans & Joachim Stadel')
-print('This program comes with ABSOLUTELY NO WARRANTY; for details type "show w".')
+print('This program comes with ABSOLUTELY NO WARRANTY.')
 print('This is free software, and you are welcome to redistribute it')
-print('under certain conditions; type "show c" for details.')
+print('under certain conditions. See http://www.gnu.org/licenses/ for further')
+print('information.')
 
 from ee_input import *
 from ee_observables import *
