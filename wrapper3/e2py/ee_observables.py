@@ -47,9 +47,9 @@ except ImportError:
     print("        to emulate boost factors. You won't be able to compute")
     print("        full power spectra, though.")
 
-def get_boost(emu_pars_dict, redshifts, kvec=None):
+def get_boost(emu_pars_dict, redshifts, kvec=None, verbose=True):
     """
-    Signature:   get_boost(emu_pars_dict, redshifts [, kvec])
+    Signature:   get_boost(emu_pars_dict, redshifts [, kvec=None, verbose=True])
 
     Description: Computes the non-linear boost factor for a cosmology
                  defined in emu_pars_dict (a python dictionary containing
@@ -60,8 +60,19 @@ def get_boost(emu_pars_dict, redshifts, kvec=None):
 
     Input types: python dictionary (with the six cosmological parameters)
                  list or numpy.ndarray (with redshift values)
-                 :OPTIONAL: list or numpy.ndarray (with k mode values)
+
+                 :OPTIONAL:
+                 list or numpy.ndarray (with k mode values)
+                 boolean (verbosity)
+                 
+    Output type: python dictionary
+
+    Related:     get_plin, get_pnonlin
     """
+
+    # Check cosmological parameter ranges
+    _inp.check_param_range(emu_pars_dict)
+
     if isinstance(redshifts, (int, float)):
         redshifts = _np.asarray([redshifts])
     else:
@@ -81,7 +92,7 @@ def get_boost(emu_pars_dict, redshifts, kvec=None):
                                            emu_pars_dict['h'],
                                            emu_pars_dict['w_0'],
                                            emu_pars_dict['sigma_8']]),
-                                redshifts)
+                                redshifts, verbose)
 
     kvals = boost_data.k
     k_shape = kvals.shape
@@ -113,9 +124,9 @@ def get_boost(emu_pars_dict, redshifts, kvec=None):
 
     return {'k': kvals, 'B': bvals}
 
-def get_pnonlin(emu_pars_dict, redshifts, kvec=None):
+def get_pnonlin(emu_pars_dict, redshifts, kvec=None, verbose=True):
     """
-    Signature:   get_pnonlin(emu_pars_dict, redshifts [, kvec])
+    Signature:   get_pnonlin(emu_pars_dict, redshifts [, kvec=None, verbose=True])
 
     Description: Computes the linear power spectrum and the non-linear boost
                  separately for a given redshift z (or for a list or numpy.ndarray
@@ -126,7 +137,10 @@ def get_pnonlin(emu_pars_dict, redshifts, kvec=None):
 
     Input types: python dictionary (with the six cosmological parameters)
                  float or iterable (list, numpy.ndarray) (with redshifts)
-                 :OPTIONAL: iterable (list, numpy.ndarray) (with k modes)
+
+                 :OPTIONAL:
+                 list or numpy.ndarray (with k mode values)
+                 boolean (verbosity)
 
     Output type: python dictionary
 
@@ -137,6 +151,9 @@ def get_pnonlin(emu_pars_dict, redshifts, kvec=None):
                Emulating full power spectrum is hence not possible.")
         return None
 
+    # Check cosmological parameter ranges
+    _inp.check_param_ranges(emu_pars_dict)
+
     if isinstance(redshifts, (int, float)):
         redshifts = _np.asarray([redshifts])
     else:
@@ -145,7 +162,7 @@ def get_pnonlin(emu_pars_dict, redshifts, kvec=None):
     for z in redshifts:
         assert z <= 5.0, "EuclidEmulator allows only redshifts z <= 5.0.\n"
 
-    boost_dict = get_boost(emu_pars_dict, redshifts, kvec)
+    boost_dict = get_boost(emu_pars_dict, redshifts, kvec, verbose)
 
     kvec = boost_dict['k']
     Bk = boost_dict['B']
