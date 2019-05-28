@@ -34,7 +34,7 @@ int main(int argc, char* argv[]){
 
     // Check number of input arguments: 8 arguments are expected:
     // 1 executable name + 6 cosmological parameter + 1 redshift value
-    assert(argc>=8);
+    assert(argc>=9);
 
     // Convert input arguments into appropriate format
     double omega_b = atof(argv[1]);
@@ -47,13 +47,15 @@ int main(int argc, char* argv[]){
 
     double cosmo_params[6] = {omega_b, omega_m, n_s, h, w_0, sigma_8};
     
-    int nz = argc-7; 
+    int nz = argc-8; 
     zvec = malloc( nz*sizeof(double) );
     int counter;
     for(counter = 0; counter < nz; counter++){
         zvec[counter] = atof(argv[7+counter]);
         assert(zvec[counter]<=5.0); 
     }
+
+    const int verbose = atoi(argv[argc-1]); // 1: some verbosity; 2: full verbosity
  
     // The radiation density is fixed by the CMB temperature (which is 
     // fixed as well for our purposes).
@@ -95,7 +97,7 @@ int main(int argc, char* argv[]){
     */
 
     // Call the emulator
-    EucEmu(&cosmo_params[0], &zvec[0], nz, &k_values, &length_k_values, &boost, &length_boost);
+    EucEmu(&cosmo_params[0], &zvec[0], nz, &k_values, &length_k_values, &boost, &length_boost, verbose);
 
     assert(length_k_values == length_boost);
 

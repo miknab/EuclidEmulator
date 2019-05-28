@@ -36,13 +36,12 @@
 #include "cosmo.h"
 #include "EuclidEmulator.h"
 
-void EucEmu(double *CosmoParams, double *Redshifts, int len_z, double **kVals, int *nkVals, double **Boost, int *nBoost){
+void EucEmu(double *CosmoParams, double *Redshifts, int len_z, double **kVals, int *nkVals, double **Boost, int *nBoost, const int bVerbose){
 
     const int nSteps = 100;
     const int nk = 1099;
     const int nz = nSteps+1;
     const double omega_rad = 4.183709411969527e-5; /* corresponds to 2.755 K Tcmb */
-    const int bVerbose = 0;
     const int nCoef[11] = {175,82,82,82,88,139,82,82,139,82,40};//{76,76,76,82,82,199,82,82};
     const double min[6] = {0.0217,0.1326,0.9345,0.6251,-1.25,0.7684}; //{0.0215,0.1306,0.9283,0.6155,-1.3,0.7591};
     const double max[6] = {0.0233,0.1526,0.9965,0.7211,-0.75,0.8614}; //{0.0235,0.1546,1.0027,0.7307,-0.7,0.8707};
@@ -139,7 +138,7 @@ void EucEmu(double *CosmoParams, double *Redshifts, int len_z, double **kVals, i
     /*
     ** Print out the interaction matrix. [optional]
     */
-    if (bVerbose) {
+    if (bVerbose>=2) {
       //printf("Printing interaction matrix...\n");
       fprintf(stderr,"lmax = %d\n",lmax);
       for (i=0;i<11;++i) {
@@ -173,7 +172,7 @@ void EucEmu(double *CosmoParams, double *Redshifts, int len_z, double **kVals, i
       x = 2*(CosmoParams[ip] - min[ip])/(max[ip]-min[ip]) - 1.0; 
       gsl_sf_legendre_Pl_array(lmax,x,Pl[ip]);
       for (l=0;l<=lmax;++l) Pl[ip][l] *= sqrt(2.0*l + 1.0); // normalize the Pls
-      if (bVerbose) {
+      if (bVerbose>=2) {
 	for (l=0;l<=lmax;++l) fprintf(stderr,"%1d %.14f\n",l,Pl[ip][l]);
 	fprintf(stderr,"\n");
       }
@@ -192,13 +191,13 @@ void EucEmu(double *CosmoParams, double *Redshifts, int len_z, double **kVals, i
 	*/
 	prod = 1.0;
 	for (ip=0;ip<6;++ip) prod *= Pl[ip][(int)index[i][ic*6 + ip]];
-	if (bVerbose && i==5 && coef[i][ic] != 0) {
+	if (bVerbose>=2 && i==5 && coef[i][ic] != 0) {
 	    fprintf(stderr,"PCA%02d Product %2d %.14f\n",i,ic,prod);
 	    }
 	prod *= coef[i][ic];
 	lamb[i] += prod;
       }
-      if (bVerbose) {
+      if (bVerbose>=2) {
 	  fprintf(stderr,"Eigenvalue %1d %.14f\n",i,lamb[i]);
 	  }
     }
@@ -261,7 +260,9 @@ void EucEmu(double *CosmoParams, double *Redshifts, int len_z, double **kVals, i
                 }
             }
         }
-        fprintf(stderr, "# Computed %d of %d boost factors.\n", zcounter+1, len_z);
+        if (bVerbose>=1) {
+            fprintf(stderr, "# Computed %d of %d boost factors.\n", zcounter+1, len_z);
+        }
     } 
        
    for (j=0;j<len_z*nk;++j) {

@@ -48,4 +48,4 @@ struct FID{
 };
 
 // Actual emulator function
-void EucEmu(double *CosmoParams, double *Redshifts, int len_z, double **kVals, int *nkVals, double **Boost, int *nBoost);
+void EucEmu(double *CosmoParams, double *Redshifts, int len_z, double **kVals, int *nkVals, double **Boost, int *nBoost, const int verbose);
