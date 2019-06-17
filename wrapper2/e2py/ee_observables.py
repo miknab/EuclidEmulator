@@ -57,7 +57,9 @@ def get_boost(emu_pars_dict, redshifts, kvec=None, verbose=True):
                  redshift stored in a list or numpy.ndarray.
                  Optionally, a list or numpy.ndarray of k modes can be
                  passed to the function via the keyword argument "kvec".
-                 Then, by setting verbose=False, it is 
+                 Then, by setting verbose=False, it is possible to fully
+                 suppress any verbose information about how the code
+                 progresses. 
 
     Input types: python dictionary (with the six cosmological parameters)
                  list or numpy.ndarray (with redshift values)
