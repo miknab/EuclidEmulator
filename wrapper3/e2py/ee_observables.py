@@ -152,7 +152,7 @@ def get_pnonlin(emu_pars_dict, redshifts, kvec=None, verbose=True):
         return None
 
     # Check cosmological parameter ranges
-    _inp.check_param_ranges(emu_pars_dict)
+    _inp.check_param_range(emu_pars_dict)
 
     if isinstance(redshifts, (int, float)):
         redshifts = _np.asarray([redshifts])
