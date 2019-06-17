@@ -11,3 +11,4 @@ OLD
 lib/*
 bin/*
 include/*
+wrapper2/build_for_testing/*
