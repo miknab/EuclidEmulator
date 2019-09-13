@@ -35,8 +35,25 @@ include( UseCython )
 # 2) There is a function "FindPython" in CMake 3.12 (most recent version of CMake in Aug 2018).
 #    that has a return value "Python_SITELIB" which is basically just what we need.
 #    But we decided not to rely on it as because it is so recent.
- 
+
+#    ---------------------------------- I M P O R T A N T ---------------------------------------     #
+#       ...for users without root access to the machine they try to build EuclidEmulator on.          #
+#                                                                                                     #
+#    You have two options to build EuclidEmulator on a machine without root access:                   #
+#                                                                                                     #
+#    Option A:  Build EuclidEmulator within a virtual environment.                                    #
+#                                                                                                     #
+#    Option B:  Modify this cmake file. To do so, please read each of the following comment line      #
+#               carefully and follow the step-by-step instructions.                                   #
+#                                                                                                     #
+#    For further info, please consult the EuclidEmulator wiki page (https://github.com/miknab/        #
+#    EuclidEmulator/wiki/II)-From-download-to-installation).                                          #
+#                                                                                                     # 
+#    ---------------------------------------------------------------------------------------------    #
+
 get_filename_component( PYEXPATH ${PYTHON_EXECUTABLE} DIRECTORY )
+
+# Modifications for "Option B": edit the path in quotes setting the variable 'PYTHON_MODULE_PATH'. 
 set( PYTHON_MODULE_PATH "${PYEXPATH}/../lib/python${PYTHON_VERSION_MAJOR}.${PYTHON_VERSION_MINOR}/site-packages" )
 
 # Compile
