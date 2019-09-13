@@ -47,7 +47,7 @@ except ImportError:
     print("        to emulate boost factors. You won't be able to compute")
     print("        full power spectra, though.")
 
-def get_boost(emu_pars_dict, redshifts, kvec=None, verbose=True):
+def get_boost(emu_pars_dict, redshifts, kvec=None, verbose=True, return_ds='dict'):
     """
     Signature:   get_boost(emu_pars_dict, redshifts [, kvec=None, verbose=True])
 
@@ -56,7 +56,10 @@ def get_boost(emu_pars_dict, redshifts, kvec=None, verbose=True):
                  the values for the 6 LCDM parameters) at specified
                  redshift stored in a list or numpy.ndarray. Optionally, 
                  a list or numpy.ndarray of k modes can be passed to the
-                 function via the keyword argument "kvec".
+                 function via the keyword argument "kvec", verbose outpute
+                 can be suppressed by setting 'verbose' to 'False' and the
+                 the return data structure can be either a python dictionary
+                 (default) or a numpy.ndarray (set 'return_ds="array"').
 
     Input types: python dictionary (with the six cosmological parameters)
                  list or numpy.ndarray (with redshift values)
@@ -64,11 +67,16 @@ def get_boost(emu_pars_dict, redshifts, kvec=None, verbose=True):
                  :OPTIONAL:
                  list or numpy.ndarray (with k mode values)
                  boolean (verbosity)
+                 string (return data structure)
                  
-    Output type: python dictionary
+    Output type: python dictionary (default) or
+                 numpy.ndarray (if 'return_ds="array"')
 
     Related:     get_plin, get_pnonlin
     """
+    
+    # Check validity of return data structure
+    assert (return_ds=='dict' or return_ds=='array')
 
     # Check cosmological parameter ranges
     _inp.check_param_range(emu_pars_dict)
@@ -122,7 +130,15 @@ def get_boost(emu_pars_dict, redshifts, kvec=None, verbose=True):
     if not(kvec is None):       # This could probably be done cleaner!
         kvals = kvec
 
-    return {'k': kvals, 'B': bvals}
+    if return_ds=='dict':
+        return {'k': kvals, 'B': bvals}
+
+    elif return_ds=='array':
+        return _np.c_[kvals, _np.array(list(bvals.values())]
+
+    else:
+        # The code should never make it here
+        _sys.exit(1)
 
 def get_pnonlin(emu_pars_dict, redshifts, kvec=None, verbose=True):
     """
