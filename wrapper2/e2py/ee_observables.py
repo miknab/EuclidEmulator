@@ -47,9 +47,9 @@ except ImportError:
     print "        to emulate boost factors. You won't be able to compute"
     print "        full power spectra, though."
 
-def get_boost(emu_pars_dict, redshifts, kvec=None, verbose=True, return_ds='dict'):
+def get_boost(emu_pars_dict, redshifts, kvec=None, verbose=True, return_ds='array'):
     """
-    Signature:   get_boost(emu_pars_dict, redshifts [, kvec=None, verbose=True, return_ds='dict'])
+    Signature:   get_boost(emu_pars_dict, redshifts [, kvec=None, verbose=True, return_ds='array'])
 
     Description: Computes the non-linear boost factor for a cosmology
                  defined in emu_pars_dict (a python dictionary containing
@@ -57,9 +57,16 @@ def get_boost(emu_pars_dict, redshifts, kvec=None, verbose=True, return_ds='dict
                  redshift stored in a list or numpy.ndarray. Optionally, 
                  a list or numpy.ndarray of k modes can be passed to the
                  function via the keyword argument "kvec", verbose outpute
-                 can be suppressed by setting 'verbose' to 'False' and the
-                 the return data structure can be either a python dictionary
-                 (default) or a numpy.ndarray (set 'return_ds="array"').
+                 can be suppressed by setting 'verbose' to 'False'. The 
+                 keyword argument return_ds_B can be used to define the 
+                 return data structure of the field "B" of the output: it 
+                 can be either a numpy.ndarray (default) or a python
+                 dictionary (set 'return_ds="dict"').
+
+                 NOTICE: If redshift is just a number or an iterable of
+                         length 1, then the data structure of the "B" field
+                         of the return value will ALWAYS be a 1D np.ndarray.
+                         In this case setting return_ds has no effect!
 
     Input types: python dictionary (with the six cosmological parameters)
                  list or numpy.ndarray (with redshift values)
@@ -76,7 +83,7 @@ def get_boost(emu_pars_dict, redshifts, kvec=None, verbose=True, return_ds='dict
     """
 
     # Check validity of return data structure
-    assert (return_ds=='dict' or return_ds=='array')
+    assert (return_ds=='array' or return_ds=='dict')
 
     # Check cosmological parameter ranges
     _inp.check_param_range(emu_pars_dict)
@@ -118,6 +125,10 @@ def get_boost(emu_pars_dict, redshifts, kvec=None, verbose=True, return_ds='dict
                                                       )(_np.log10(kvec))
             else:
                 bvals['z'+str(i)] = tmp.reshape(k_shape)
+
+        if return_ds=='array':
+            bvals = _np.array(list(bvals.values())).T
+
     else:
         tmp = boost_data.boost
         if not(kvec is None):
@@ -130,15 +141,8 @@ def get_boost(emu_pars_dict, redshifts, kvec=None, verbose=True, return_ds='dict
     if not(kvec is None):       # This could probably be done cleaner!
         kvals = kvec
 
-    if return_ds=='dict':
-        return {'k': kvals, 'B': bvals}
+    return {'k': kvals, 'B': bvals}
 
-    elif return_ds=='array':
-        return _np.c_[kvals, _np.array(list(bvals.values())]
-
-    else:
-        # The code should never make it here
-        _sys.exit(1)
 
 def get_pnonlin(emu_pars_dict, redshifts, kvec=None, verbose=True):
     """
