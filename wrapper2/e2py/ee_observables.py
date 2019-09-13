@@ -144,9 +144,9 @@ def get_boost(emu_pars_dict, redshifts, kvec=None, verbose=True, return_ds='arra
     return {'k': kvals, 'B': bvals}
 
 
-def get_pnonlin(emu_pars_dict, redshifts, kvec=None, verbose=True):
+def get_pnonlin(emu_pars_dict, redshifts, kvec=None, verbose=True, return_ds='array'):
     """
-    Signature:   get_pnonlin(emu_pars_dict, redshifts [, kvec=None, verbose=True])
+    Signature:   get_pnonlin(emu_pars_dict, redshifts [, kvec=None, verbose=True, return_ds='array'])
 
     Description: Computes the linear power spectrum and the non-linear boost
                  separately for a given redshift z (or for a list or numpy.ndarray
@@ -154,6 +154,18 @@ def get_pnonlin(emu_pars_dict, redshifts, kvec=None, verbose=True):
                  dictionary containing the values for the 6 LCDM parameters) and
                  optionally a list or numpy.ndarray of k modes. Then it returns the
                  product of these two which is the non-linear DM-only power spectrum.
+                 Optionally, a list or numpy.ndarray of k modes can be passed to the
+                 function via the keyword argument "kvec", verbose outpute can be
+                 suppressed by setting 'verbose' to 'False'. The keyword argument
+                 return_ds_B can be used to define the return data structure of the
+                 field "B" of the output: it can be either a numpy.ndarray (default)
+                 or a python dictionary (set 'return_ds="dict"').
+
+                 NOTICE: If redshift is just a number or an iterable of
+                         length 1, then the data structure of the "B" field
+                         of the return value will ALWAYS be a 1D np.ndarray.
+                         In this case setting return_ds has no effect!
+
 
     Input types: python dictionary (with the six cosmological parameters)
                  float or iterable (list, numpy.ndarray) (with redshifts)
@@ -161,6 +173,7 @@ def get_pnonlin(emu_pars_dict, redshifts, kvec=None, verbose=True):
                  :OPTIONAL:
                  iterable (list, numpy.ndarray) (with k modes)
                  boolean (verbose)
+                 string (data structure of return Pnl and Plin fields)
 
     Output type: python dictionary
 
@@ -170,6 +183,9 @@ def get_pnonlin(emu_pars_dict, redshifts, kvec=None, verbose=True):
         print "You have not imported neither classee nor classy.\n \
                Emulating full power spectrum is hence not possible."
         return None
+
+    # Check validity of return data structure
+    assert (return_ds=='array' or return_ds=='dict')
 
     # Check cosmological parameter ranges
     _inp.check_param_range(emu_pars_dict)
@@ -182,7 +198,7 @@ def get_pnonlin(emu_pars_dict, redshifts, kvec=None, verbose=True):
     for z in redshifts:
         assert z <= 5.0, "EuclidEmulator allows only redshifts z <= 5.0.\n"
 
-    boost_dict = get_boost(emu_pars_dict, redshifts, kvec, verbose)
+    boost_dict = get_boost(emu_pars_dict, redshifts, kvec, verbose, return_ds='dict')
 
     kvec = boost_dict['k']
     Bk = boost_dict['B']
@@ -197,6 +213,11 @@ def get_pnonlin(emu_pars_dict, redshifts, kvec=None, verbose=True):
         pnonlin = {}
         for i, z in enumerate(redshifts):
             pnonlin['z'+str(i)] = plin['z'+str(i)]*Bk['z'+str(i)]
+
+        if return_ds=='array':
+            plin = _np.array(list(plin.values()))
+            pnonlin = _np.array(list(pnonlin.values()))            
+            Bk = _np.array(list(Bk.values()))
 
     return {'k': kvec, 'P_nonlin': pnonlin, 'P_lin': plin, 'B': Bk}
 
