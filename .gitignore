@@ -8,6 +8,7 @@ OLD
 **/bin
 **/share
 **/._*
+GUI/*
 lib/*
 bin/*
 include/*
