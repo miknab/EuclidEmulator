@@ -58,7 +58,7 @@ def get_boost(emu_pars_dict, redshifts, kvec=None, verbose=True, return_ds='arra
                  a list or numpy.ndarray of k modes can be passed to the
                  function via the keyword argument "kvec", verbose outpute
                  can be suppressed by setting 'verbose' to 'False'. The 
-                 keyword argument return_ds_B can be used to define the 
+                 keyword argument return_ds can be used to define the 
                  return data structure of the field "B" of the output: it 
                  can be either a numpy.ndarray (default) or a python
                  dictionary (set 'return_ds="dict"').
@@ -157,9 +157,10 @@ def get_pnonlin(emu_pars_dict, redshifts, kvec=None, verbose=True, return_ds='ar
                  Optionally, a list or numpy.ndarray of k modes can be passed to the
                  function via the keyword argument "kvec", verbose outpute can be
                  suppressed by setting 'verbose' to 'False'. The keyword argument
-                 return_ds_B can be used to define the return data structure of the
-                 field "B" of the output: it can be either a numpy.ndarray (default)
-                 or a python dictionary (set 'return_ds="dict"').
+                 return_ds can be used to define the return data structure of the
+                 fields "P_nonlin", "P_lin" and "B" of the output: they can be either
+                 all numpy.ndarrays (default) or all python dictionary (set
+                 'return_ds="dict"').
 
                  NOTICE: If redshift is just a number or an iterable of
                          length 1, then the data structure of the "B" field
@@ -203,7 +204,7 @@ def get_pnonlin(emu_pars_dict, redshifts, kvec=None, verbose=True, return_ds='ar
     kvec = boost_dict['k']
     Bk = boost_dict['B']
 
-    plin = get_plin(emu_pars_dict, kvec, redshifts)
+    plin = get_plin(emu_pars_dict, kvec, redshifts, return_ds='dict')
     plin = plin['P_lin']
 
     if len(redshifts) == 1:
@@ -221,17 +222,27 @@ def get_pnonlin(emu_pars_dict, redshifts, kvec=None, verbose=True, return_ds='ar
 
     return {'k': kvec, 'P_nonlin': pnonlin, 'P_lin': plin, 'B': Bk}
 
-def get_plin(emu_pars_dict, kvec, redshifts):
+def get_plin(emu_pars_dict, kvec, redshifts, return_ds='array'):
     """
     Signature:   get_plin(emu_pars_dict, kvec, redshifts)
 
     Description: Computes the linear power spectrum at redshift z for a
                  cosmology defined in EmuParsArr (a numpy array containing
                  the values for the 6 LCDM parameters) (uses classy).
+                 The keyword argument return_ds can be used to define 
+                 the return data structure of the field "P_lin" of the
+                 output: it can be either a numpy.ndarray (default)
+                 or a python dictionary (set 'return_ds="dict"').
+
+                 NOTICE: If redshift is just a number or an iterable of
+                         length 1, then the data structure of the "B" field
+                         of the return value will ALWAYS be a 1D np.ndarray.
+                         In this case setting return_ds has no effect!
 
     Input types: python dictionary (with the six cosmological parameters)
                  numpy.ndarray (containing the k modes)
                  numpy.ndarray (containing the redshift values)
+                 string (either 'array' or 'dict')
 
     Output type: if len(redshifts)==1, then numpy.ndarray (containing the
                  linear power spectrum values)
@@ -244,6 +255,8 @@ def get_plin(emu_pars_dict, kvec, redshifts):
         print "You have not imported neither classee nor classy.\n \
                Computing linear power spectrum is hence not possible."
         return None
+
+    assert(return_ds=='array' or return_ds=='dict')
 
     # Convert single redshift input argument to array
     if isinstance(redshifts, (int, float)):
@@ -297,6 +310,9 @@ def get_plin(emu_pars_dict, kvec, redshifts):
                     _np.array([cosmo.pk(k, z)*h*h*h
                                for k in k_classy_arr]).reshape(k_shape)
                     for i, z in enumerate(z_arr)}
+
+    if return_ds=='array':
+        linpower = _np.array(list(linpower.values()))
 
     return {'k': kvec, 'P_lin': linpower}
 
