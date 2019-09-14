@@ -491,9 +491,9 @@ if False:
 
         # =====================================
         if _Class.__module__ not in _sys.modules:
-            print "You have not imported neither classee nor classy.\n \
-                   Emulating convergence power spectrum is hence not\n \
-                   possible."
+            print("You have not imported neither classee nor classy.")
+            print("Emulating convergence power spectrum is hence not")
+            print("possible.")
             return None
 
         z_vec = _np.logspace(_np.log10(5e-2),
