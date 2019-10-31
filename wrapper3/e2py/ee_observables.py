@@ -220,7 +220,7 @@ def get_pnonlin(emu_pars_dict, redshifts, custom_kvec=None, verbose=True):
     kvec = boost_dict['k']
     Bk = boost_dict['B']
 
-    plin = get_plin(emu_pars_dict, custom_kvec, redshifts)
+    plin = get_plin(emu_pars_dict, kvec, redshifts)
     plin = plin['P_lin']
 
     if len(redshifts) == 1:
@@ -231,7 +231,7 @@ def get_pnonlin(emu_pars_dict, redshifts, custom_kvec=None, verbose=True):
         for i, z in enumerate(redshifts):
             pnonlin['z'+str(i)] = plin['z'+str(i)]*Bk['z'+str(i)]
 
-    return {'k': custom_kvec, 'P_nonlin': pnonlin, 'P_lin': plin, 'B': Bk}
+    return {'k': kvec, 'P_nonlin': pnonlin, 'P_lin': plin, 'B': Bk}
 
 def get_plin(emu_pars_dict, custom_kvec, redshifts):
     """
