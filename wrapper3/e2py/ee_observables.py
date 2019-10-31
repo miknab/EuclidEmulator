@@ -113,7 +113,8 @@ def get_boost(emu_pars_dict, redshifts, custom_kvec=None, verbose=True):
                            "the interval [6.87215e-3 h/Mpc, 5.52669h/Mpc]. You are \n"
                            "requesting k modes beyond k_max = 5.52669h/Mpc. \n"
                            "Higher k modes constantly extrapolated.")
-            _warnings.warn(wrn_message)
+            if verbose:
+                _warnings.warn(wrn_message)
             do_extrapolate_above = True
 
         if any(custom_kvec < min(kvals)):
@@ -121,7 +122,8 @@ def get_boost(emu_pars_dict, redshifts, custom_kvec=None, verbose=True):
                            "the interval [6.87215e-3 h/Mpc, 5.52669h/Mpc]. You are \n" 
                            "requesting k modes below k_min = 6.87215h/Mpc. \n"
                            "Lower k modes constantly extrapolated.")
-            _warnings.warn(wrn_message)
+            if verbose:
+                _warnings.warn(wrn_message)
             do_extrapolate_below = True
 
     len_kvals = len(kvals)
