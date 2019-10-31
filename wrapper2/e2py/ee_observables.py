@@ -22,6 +22,7 @@ EuclidEmulator submodule for actual emulation of cosmological observables.
 
 import sys as _sys
 import numpy as _np
+import warnings as _warnings
 import EuclidEmulator_BackEnd as _eeb
 from e2py._internal import _ee_aux as _aux
 from e2py._internal import _ee_background as _bg
@@ -47,9 +48,9 @@ except ImportError:
     print "        to emulate boost factors. You won't be able to compute"
     print "        full power spectra, though."
 
-def get_boost(emu_pars_dict, redshifts, kvec=None, verbose=True):
+def get_boost(emu_pars_dict, redshifts, custom_kvec=None, verbose=True):
     """
-    Signature:   get_boost(emu_pars_dict, redshifts [, kvec=None, verbose=True])
+    Signature:   get_boost(emu_pars_dict, redshifts [, custom_kvec=None, verbose=True])
 
     Description: Computes the non-linear boost factor for a cosmology
                  defined in emu_pars_dict (a python dictionary containing
@@ -99,36 +100,86 @@ def get_boost(emu_pars_dict, redshifts, kvec=None, verbose=True):
     kvals = boost_data.k
     k_shape = kvals.shape
 
-    len_kvec = len(kvals)
+    do_extrapolate_above = False
+    do_extrapolate_below = False
+    if not(custom_kvec is None):
+        upper_mask = custom_kvec < max(kvals)
+        lower_mask = custom_kvec > min(kvals)
+        mask = [u and l for (u,l) in zip(lower_mask, upper_mask)]
+        custom_k_within_range = custom_kvec[mask]
+        custom_k_below = custom_kvec[[not(l) for l in lower_mask]]
+        custom_k_above = custom_kvec[[not(u) for u in upper_mask]]
+
+        if any(custom_kvec > max(kvals)):
+            wrn_message = ("EuclidEmulator emulates the non-linear correction in \n"
+                           "the interval [6.87215e-3 h/Mpc, 5.52669h/Mpc]. You are \n"
+                           "requesting k modes beyond k_max = 5.52669h/Mpc. \n"
+                           "Higher k modes constantly extrapolated.")
+            _warnings.warn(wrn_message)
+            do_extrapolate_above = True
+
+        if any(custom_kvec < min(kvals)):
+            wrn_message = ("EuclidEmulator emulates the non-linear correction in \n"
+                           "the interval [6.87215e-3 h/Mpc, 5.52669h/Mpc]. You are \n" 
+                           "requesting k modes below k_min = 6.87215h/Mpc. \n"
+                           "Lower k modes constantly extrapolated.")
+            _warnings.warn(wrn_message)
+            do_extrapolate_below = True
+
+    len_kvals = len(kvals)
     len_redshifts = len(redshifts)
 
     if len_redshifts > 1:
         bvals = {}
         for i in range(len_redshifts):
-            tmp = boost_data.boost[i*len_kvec:(i+1)*len_kvec]
-            if not(kvec is None):
+            tmp = boost_data.boost[i*len_kvals:(i+1)*len_kvals]
+            if not(custom_kvec is None):
                 bvals['z'+str(i)] = 10.0**_CubicSpline(_np.log10(kvals),
                                                        _np.log10(tmp.reshape(k_shape))
-                                                      )(_np.log10(kvec))
+                                                      )(_np.log10(custom_k_within_range))
+
+                #Extrapolate if necessary
+                if do_extrapolate_below:
+                    # below the k_min of EuclidEmulator, we are in the linear regime where
+                    # the boost factor is unity by construction
+                    b_extrap = _np.ones_like(custom_k_below)
+                    bvals['z'+str(i)]= _np.concatenate((b_extrap, bvals['z'+str(i)]))
+
+                if do_extrapolate_above:
+                    # We extrapolate by setting all b(k > k_max) to b(k_max)
+                    b_extrap = bvals['z'+str(i)][-1] * _np.ones_like(custom_k_above)
+                    bvals['z'+str(i)] = _np.concatenate((bvals['z'+str(i)], b_extrap)) 
             else:
                 bvals['z'+str(i)] = tmp.reshape(k_shape)
     else:
         tmp = boost_data.boost
-        if not(kvec is None):
+        if not(custom_kvec is None):
             bvals = 10.0**_CubicSpline(_np.log10(kvals), 
                                        _np.log10(tmp.reshape(k_shape))
-                                      )(_np.log10(kvec))
+                                      )(_np.log10(custom_k_within_range))
+
+            #Extrapolate if necessary
+            if do_extrapolate_below:
+                # below the k_min of EuclidEmulator, we are in the linear regime where
+                # the boost factor is unity by construction
+                b_extrap = _np.ones_like(custom_k_below)
+                bvals = _np.concatenate((b_extrap,bvals))
+
+            if do_extrapolate_above:
+                # We extrapolate by setting all b(k > k_max) to b(k_max)
+                b_extrap = bvals[-1] * _np.ones_like(custom_k_above)
+                bvals = _np.concatenate((bvals, b_extrap))
         else:
             bvals = tmp.reshape(k_shape)
 
-    if not(kvec is None):       # This could probably be done cleaner!
-        kvals = kvec
+    if not(custom_kvec is None):       # This could probably be done cleaner!
+        kvals = custom_kvec
 
     return {'k': kvals, 'B': bvals}
 
-def get_pnonlin(emu_pars_dict, redshifts, kvec=None, verbose=True):
+def get_pnonlin(emu_pars_dict, redshifts, custom_kvec=None, verbose=True):
     """
-    Signature:   get_pnonlin(emu_pars_dict, redshifts [, kvec=None, verbose=True])
+    Signature:   get_pnonlin(emu_pars_dict, redshifts [, custom_kvec=None, verbose=True])
 
     Description: Computes the linear power spectrum and the non-linear boost
                  separately for a given redshift z (or for a list or numpy.ndarray
@@ -164,7 +215,7 @@ def get_pnonlin(emu_pars_dict, redshifts, kvec=None, verbose=True):
     for z in redshifts:
         assert z <= 5.0, "EuclidEmulator allows only redshifts z <= 5.0.\n"
 
-    boost_dict = get_boost(emu_pars_dict, redshifts, kvec, verbose)
+    boost_dict = get_boost(emu_pars_dict, redshifts, custom_kvec, verbose)
 
     kvec = boost_dict['k']
     Bk = boost_dict['B']
