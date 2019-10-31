@@ -13,3 +13,6 @@ lib/*
 bin/*
 include/*
 wrapper2/build_for_testing/*
+.DS_Store
+SchneiderEtAl.png
+wrapper3/py3build_June2019/
