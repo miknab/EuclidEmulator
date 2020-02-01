@@ -181,9 +181,9 @@ def get_boost(emu_pars_dict, redshifts, custom_kvec=None, verbose=True):
 
     return {'k': kvals, 'B': bvals}
 
-def get_pnonlin(emu_pars_dict, redshifts, kvec=None, verbose=True):
+def get_pnonlin(emu_pars_dict, redshifts, custom_kvec=None, verbose=True):
     """
-    Signature:   get_pnonlin(emu_pars_dict, redshifts [, kvec=None, verbose=True])
+    Signature:   get_pnonlin(emu_pars_dict, redshifts [, custom_kvec=None, verbose=True])
 
     Description: Computes the linear power spectrum and the non-linear boost
                  separately for a given redshift z (or for a list or numpy.ndarray
@@ -219,7 +219,7 @@ def get_pnonlin(emu_pars_dict, redshifts, kvec=None, verbose=True):
     for z in redshifts:
         assert z <= 5.0, "EuclidEmulator allows only redshifts z <= 5.0.\n"
 
-    boost_dict = get_boost(emu_pars_dict, redshifts, kvec, verbose)
+    boost_dict = get_boost(emu_pars_dict, redshifts, custom_kvec, verbose)
 
     kvec = boost_dict['k']
     Bk = boost_dict['B']
@@ -237,9 +237,9 @@ def get_pnonlin(emu_pars_dict, redshifts, kvec=None, verbose=True):
 
     return {'k': kvec, 'P_nonlin': pnonlin, 'P_lin': plin, 'B': Bk}
 
-def get_plin(emu_pars_dict, kvec, redshifts):
+def get_plin(emu_pars_dict, custom_kvec, redshifts):
     """
-    Signature:   get_plin(emu_pars_dict, kvec, redshifts)
+    Signature:   get_plin(emu_pars_dict, custom_kvec, redshifts)
 
     Description: Computes the linear power spectrum at redshift z for a
                  cosmology defined in EmuParsArr (a numpy array containing
@@ -271,10 +271,10 @@ def get_plin(emu_pars_dict, kvec, redshifts):
         assert z <= 5.0, "EuclidEmulator allows only redshifts z <= 5.0.\n"
 
     # Convert single redshift input argument to array
-    if isinstance(kvec, (int, float)):
-        kvec = _np.asarray([kvec])
+    if isinstance(custom_kvec, (int, float)):
+        custom_kvec = _np.asarray([custom_kvec])
     else:
-        kvec = _np.asarray(kvec)
+        custom_kvec = _np.asarray(custom_kvec)
 
     # "Stringify" the input arrays to be understandable for classy.
     z_arr, z_str = _aux.stringify_arr(redshifts)
@@ -292,13 +292,15 @@ def get_plin(emu_pars_dict, kvec, redshifts):
 
     # Create a "Class" instance called "cosmo" and run classy to compute
     # the cosmological quantities.
+    print("BEFORE CLASS!")
     cosmo = _Class()
     cosmo.set(classy_pars)
     cosmo.compute()
+    print("AFTER CLASS!")
 
     # Convert k units: h/Mpc
     h = classy_pars['h']
-    k_classy_arr = h*kvec
+    k_classy_arr = h*custom_kvec
 
     # Get shape of k vector
     k_shape = k_classy_arr.shape
@@ -314,7 +316,7 @@ def get_plin(emu_pars_dict, kvec, redshifts):
                                for k in k_classy_arr]).reshape(k_shape)
                     for i, z in enumerate(z_arr)}
 
-    return {'k': kvec, 'P_lin': linpower}
+    return {'k': custom_kvec, 'P_lin': linpower}
 
 def sgaldist(alpha=2.0, beta=1.5, z_mean=0.9):
     """
