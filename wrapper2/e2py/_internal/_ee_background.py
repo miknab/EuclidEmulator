@@ -29,7 +29,6 @@ REMARK:      The geometry of the Universe is fixed to be flat (i.e.
 
 import numpy as _np
 from scipy.integrate import romb as _romb
-import _ee_cosmoconv as _cc
 
 # UNIVERSAL CONSTANTS (Source: PDG booklet 2018)
 SPEED_OF_LIGHT_IN_KILOMETERS_PER_SECOND = 299792.458
