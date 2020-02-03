@@ -1,4 +1,4 @@
-# EuclidEmulator (version 1.1)
+# EuclidEmulator (version 1.2)
 This repository contains the main source code of the EuclidEmulator, a fast and accurate tool to estimate the non-linear correction to the matter power spectrum. EuclidEmulator is roughly seven orders of magnitude faster than an N-body simulation that yields results at the same level of accuracy.
 
 Authors:   M. Knabenhans & J. Stadel<br/>
