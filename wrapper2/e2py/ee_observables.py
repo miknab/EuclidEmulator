@@ -5,7 +5,7 @@ EuclidEmulator submodule for actual emulation of cosmological observables.
 """
 
 # This file is part of EuclidEmulator
-# Copyright (c) 2018 Mischa Knabenhans
+# Copyright (c) 2018-2020 Mischa Knabenhans
 #
 # EuclidEmulator is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -292,11 +292,10 @@ def get_plin(emu_pars_dict, custom_kvec, redshifts):
 
     # Create a "Class" instance called "cosmo" and run classy to compute
     # the cosmological quantities.
-    print("BEFORE CLASS!")
     cosmo = _Class()
     cosmo.set(classy_pars)
     cosmo.compute()
-    print("AFTER CLASS!")
+
 
     # Convert k units: h/Mpc
     h = classy_pars['h']

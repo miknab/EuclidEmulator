@@ -1,5 +1,5 @@
 # This file is part of EuclidEmulator 
-# Copyright (c) 2018 Mischa Knabenhans
+# Copyright (c) 2018-2020 Mischa Knabenhans
 #
 # EuclidEmulator is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -14,7 +14,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-print('EuclidEmulator Copyright (C) 2018 Mischa Knabenhans & Joachim Stadel')
+print('EuclidEmulator Copyright (C) 2018-2020 Mischa Knabenhans & Joachim Stadel')
 print('This program comes with ABSOLUTELY NO WARRANTY.')
 print('This is free software, and you are welcome to redistribute it')
 print('under certain conditions. See http://www.gnu.org/licenses/ for further')
