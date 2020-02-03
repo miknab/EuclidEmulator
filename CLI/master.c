@@ -1,5 +1,5 @@
 /* This file is part of EuclidEmulator 
- * Copyright (c) 2018 Mischa Knabenhans
+ * Copyright (c) 2018-2020 Mischa Knabenhans
  *
  * EuclidEmulator is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,7 +21,7 @@
 
 int main(int argc, char* argv[]){
 
-    fprintf(stderr, "#EuclidEmulator Copyright (C) 2018 Mischa Knabenhans & Joachim Stadel\n");
+    fprintf(stderr, "#EuclidEmulator Copyright (C) 2018-2020 Mischa Knabenhans & Joachim Stadel\n");
     fprintf(stderr, "#This program comes with ABSOLUTELY NO WARRANTY.\n");
     fprintf(stderr, "#This is free software, and you are welcome to redistribute it\n");
     fprintf(stderr, "#under certain conditions. See http://www.gnu.org/licenses/ for further\n");

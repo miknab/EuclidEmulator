@@ -1,5 +1,5 @@
 # This file is part of EuclidEmulator 
-# Copyright (c) 2018 Mischa Knabenhans
+# Copyright (c) 2018-2020 Mischa Knabenhans
 #
 # EuclidEmulator is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
