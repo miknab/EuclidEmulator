@@ -188,7 +188,7 @@ def class_to_emu(class_pars_dict):
                   'n_s'       (spectral index)
                   'h'         (Hubble parameter)
                   'w0_fld'    (dark energy equation of state parameter)
-                  'A_s'       (spectral amplitude).
+                  'sigma8'    (power spectrum amplitude/variance of over-density field).
 
     Related:      class_to_emu
     """
@@ -202,10 +202,9 @@ def class_to_emu(class_pars_dict):
     n_s = class_pars_dict['n_s']
     h = class_pars_dict['h']
     w_0 = class_pars_dict['w0_fld']
-    a_s = class_pars_dict['A_s']
+    sigma_8 = class_pars_dict['sigma8']
 
     om_m = om_b + om_cdm
-    sigma_8 = _cc.as_to_sigma8(a_s)
 
     emu_pars_dict = {'om_b': om_b,
                      'om_m': om_m,
