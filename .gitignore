@@ -16,3 +16,4 @@ wrapper2/build_for_testing/*
 .DS_Store
 SchneiderEtAl.png
 wrapper3/py3build*/
+mybackups/*
