@@ -164,14 +164,13 @@ def emu_to_class(emu_pars_dict):
     sigma_8 = emu_pars_dict['sigma_8']
 
     om_cdm = om_m - om_b
-    a_s = _cc.sigma8_to_as(sigma_8)
 
     class_pars_dict = {'omega_b': om_b,
                        'omega_cdm': om_cdm,
                        'n_s': n_s,
                        'h': h,
                        'w0_fld': w_0,
-                       'A_s': a_s
+                       'sigma8': sigma_8
                       }
 
     return class_pars_dict
