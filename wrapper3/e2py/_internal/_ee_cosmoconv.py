@@ -41,64 +41,6 @@ def a_to_z(a):
 
     return (1.0/a)-1.0
 
-def sigma8_to_as(sigma8):
-    """
-    Signature:    sigma8_to_as(sigma8)
-
-    Description:  Converts sigma_8 into A_s based on renormalization.
-
-    Input type:   float
-
-    Output type:  float
-
-
-    Remarks:      This conversion is not generic. It is the one used
-                  in the construction process of Euclid emulator and
-                  has to be used whenever a conversion from sigma8
-                  to As is performed in the context of working with
-                  EuclidEmulator.
-
-    Related:      as_to_sigma8
-    """
-    # Check if input is given:
-    if sigma8 is None:
-        raise ValueError("Value of sigma8 is 'None', i.e. sigma8 has \
-                          no assigned value.")
-
-    # Check if input is a real number
-    sigma8_is_complex = isinstance(sigma8, complex)
-    sigma8_is_array = isinstance(sigma8, _np.ndarray)
-    complex_entry = False
-
-    if sigma8_is_array:
-        complex_entry = any([isinstance(val, _np.complex128) for val in sigma8])
-
-    if sigma8_is_complex or complex_entry:
-        raise TypeError("sigma8 must be a real number.")
-
-    a_s = 2.215e-9*(sigma8*sigma8)/(0.8496*0.8496)
-    return a_s
-
-def as_to_sigma8(a_s):
-    """
-    Signature:    as_to_sigma8(a_s)
-
-    Description:  Converts As into sigma8 based on renormalization.
-
-    Input type:   float
-
-    Output type:  float
-
-    Remarks:      This conversion is not generic. It is the one used
-                  in the construction process of Euclid emulator and
-                  has to be used whenever a conversion from As to
-                  sigma8 is performed in the context of working with
-                  EuclidEmulator.
-
-    Related:      sigma8_to_as
-    """
-    sigma_8 = _np.sqrt(0.8496*0.8496*a_s/2.215e-9)
-    return sigma_8
 
 def a_to_hubble(emu_pars_dict, a):
     """
